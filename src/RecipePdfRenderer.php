@@ -131,6 +131,10 @@ a { color: #28664e; }
     {
         $localPath = self::localImagePath($url, $publicRoot);
         if ($localPath !== null) {
+            if (mime_content_type($localPath) === 'image/svg+xml') {
+                $svg = file_get_contents($localPath);
+                return is_string($svg) ? self::svgDataUri($svg) : null;
+            }
             return 'file://' . $localPath;
         }
 
@@ -204,6 +208,11 @@ a { color: #28664e; }
             return null;
         }
 
+        $svgDataUri = self::svgDataUri($imageBytes);
+        if ($svgDataUri !== null) {
+            return $svgDataUri;
+        }
+
         $imageInfo = getimagesizefromstring($imageBytes);
         $mimeType = is_array($imageInfo) ? ($imageInfo['mime'] ?? '') : '';
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -213,6 +222,85 @@ a { color: #28664e; }
         }
 
         return 'data:' . $mimeType . ';base64,' . base64_encode($imageBytes);
+    }
+
+    private static function svgDataUri(string $svg): ?string
+    {
+        if ($svg === '' || strlen($svg) > self::MAX_REMOTE_IMAGE_BYTES
+            || preg_match('/<!DOCTYPE|<!ENTITY/i', $svg)) {
+            return null;
+        }
+
+        $document = new \DOMDocument();
+        $document->resolveExternals = false;
+        $document->substituteEntities = false;
+        $previousErrorMode = libxml_use_internal_errors(true);
+        try {
+            $loaded = $document->loadXML($svg, LIBXML_NONET | LIBXML_NOBLANKS);
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previousErrorMode);
+        }
+
+        $root = $document->documentElement;
+        if (!$loaded || $document->doctype !== null || !($root instanceof \DOMElement)
+            || strtolower($root->localName) !== 'svg'
+            || $root->namespaceURI !== 'http://www.w3.org/2000/svg') {
+            return null;
+        }
+
+        self::sanitizeSvgElement($root);
+        $safeSvg = $document->saveXML($root);
+        return is_string($safeSvg) ? 'data:image/svg+xml;base64,' . base64_encode($safeSvg) : null;
+    }
+
+    private static function sanitizeSvgElement(\DOMElement $element): void
+    {
+        $allowedElements = [
+            'svg', 'g', 'path', 'circle', 'rect', 'ellipse', 'line', 'polyline', 'polygon',
+            'defs', 'lineargradient', 'radialgradient', 'stop', 'clippath', 'mask', 'pattern',
+            'use', 'symbol', 'title', 'desc', 'text', 'tspan',
+        ];
+        $allowedAttributes = [
+            'xmlns', 'xmlns:xlink', 'version', 'viewbox', 'width', 'height', 'preserveaspectratio',
+            'fill', 'fill-opacity', 'fill-rule', 'stroke', 'stroke-width', 'stroke-linecap',
+            'stroke-linejoin', 'stroke-miterlimit', 'stroke-dasharray', 'stroke-dashoffset',
+            'stroke-opacity', 'opacity', 'transform', 'd', 'x', 'y', 'x1', 'y1', 'x2', 'y2',
+            'cx', 'cy', 'r', 'rx', 'ry', 'points', 'offset', 'stop-color', 'stop-opacity',
+            'gradientunits', 'gradienttransform', 'spreadmethod', 'clip-path', 'clip-rule',
+            'mask', 'patternunits', 'patterntransform', 'id', 'href', 'xlink:href', 'font-family',
+            'font-size', 'font-weight', 'text-anchor', 'letter-spacing', 'dominant-baseline',
+        ];
+
+        for ($index = $element->attributes->length - 1; $index >= 0; $index--) {
+            $attribute = $element->attributes->item($index);
+            if ($attribute === null) {
+                continue;
+            }
+            $name = strtolower($attribute->nodeName);
+            $value = trim($attribute->nodeValue ?? '');
+            $isFragmentReference = preg_match('/\A#[A-Za-z_][A-Za-z0-9_.:-]*\z/', $value) === 1;
+            $isLocalUrl = preg_match('/\Aurl\(\s*#[A-Za-z_][A-Za-z0-9_.:-]*\s*\)\z/i', $value) === 1;
+            if (!in_array($name, $allowedAttributes, true)
+                || (in_array($name, ['href', 'xlink:href'], true) && !$isFragmentReference)
+                || (stripos($value, 'url(') !== false && !$isLocalUrl)) {
+                $element->removeAttributeNode($attribute);
+            }
+        }
+
+        for ($child = $element->firstChild; $child !== null;) {
+            $next = $child->nextSibling;
+            if ($child instanceof \DOMElement) {
+                if (in_array(strtolower($child->localName), $allowedElements, true)) {
+                    self::sanitizeSvgElement($child);
+                } else {
+                    $element->removeChild($child);
+                }
+            } elseif ($child->nodeType !== XML_TEXT_NODE) {
+                $element->removeChild($child);
+            }
+            $child = $next;
+        }
     }
 
     private static function localImagePath(string $url, string $publicRoot): ?string

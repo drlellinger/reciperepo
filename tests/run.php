@@ -121,6 +121,17 @@ try {
         ['type' => 'image', 'url' => '/' . basename($temporaryImage), 'alt' => 'Testbild'],
     ], sys_get_temp_dir(), $remainingRemoteImages);
     check(str_contains($localPdfBlocks, 'src="file://' . realpath($temporaryImage) . '"'), 'Lokale Rezeptbilder erhalten eine explizite file-URL für Dompdf.');
+    $temporarySvg = tempnam(sys_get_temp_dir(), 'recipe-logo-test-');
+    file_put_contents($temporarySvg, '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><script>alert(1)</script><path d="M0 0h10v10z" fill="#28664e"/></svg>');
+    $svgPdfBlocks = Recipe\RecipePdfRenderer::renderBlocks([
+        ['type' => 'image', 'url' => '/' . basename($temporarySvg), 'alt' => 'Logo'],
+    ], sys_get_temp_dir(), $remainingRemoteImages);
+    check(str_contains($svgPdfBlocks, 'data:image/svg+xml;base64,'), 'SVG-Logos werden als eingebettete Grafik übernommen.');
+    $svgSource = preg_match('/src="data:image\/svg\+xml;base64,([^"]+)"/', $svgPdfBlocks, $svgMatch) === 1
+        ? base64_decode($svgMatch[1], true)
+        : false;
+    check(is_string($svgSource) && !str_contains($svgSource, '<script') && str_contains($svgSource, '<path'), 'SVG-Logos behalten Grafikpfade, aber keine Skripte.');
+    unlink($temporarySvg);
     unlink($temporaryImage);
     check((bool) preg_match('~\A/uploads/images/[a-f0-9]{32}\.gif\z~', $imageUrl), 'Bild erhält eine öffentliche URL mit zufälligem Dateinamen.');
     check(count($imageRepository->all()) === 1, 'Hochgeladenes Bild erscheint in der Bildliste.');
