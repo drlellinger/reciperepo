@@ -23,7 +23,7 @@ final class RecipeValidator
         if (!is_array($recipe) || ($recipe['version'] ?? null) !== 1) {
             throw new InvalidArgumentException('Das Rezept muss version: 1 enthalten.');
         }
-        self::validateKeys($recipe, ['version', 'title', 'blocks'], 'Rezept');
+        self::validateKeys($recipe, ['version', 'title', 'summary', 'blocks'], 'Rezept');
 
         if (!isset($recipe['title']) || !is_string($recipe['title']) || trim($recipe['title']) === '' || strlen($recipe['title']) > 160) {
             throw new InvalidArgumentException('Der Titel muss zwischen 1 und 160 Zeichen lang sein.');
@@ -31,6 +31,10 @@ final class RecipeValidator
 
         if (!isset($recipe['blocks']) || !is_array($recipe['blocks']) || !array_is_list($recipe['blocks'])) {
             throw new InvalidArgumentException('blocks muss eine geordnete Liste sein.');
+        }
+
+        if (array_key_exists('summary', $recipe) && (!is_string($recipe['summary']) || trim($recipe['summary']) === '')) {
+            throw new InvalidArgumentException('summary muss ein nicht leerer Text sein.');
         }
 
         foreach ($recipe['blocks'] as $index => $block) {

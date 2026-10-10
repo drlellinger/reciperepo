@@ -32,7 +32,7 @@
                     <?php endif; ?>
                     <span class="recipe-row-copy">
                         <span class="recipe-row-title"><?= escape($item['recipe']['title']) ?></span>
-                        <span class="recipe-row-meta"><?= count($item['recipe']['blocks']) ?> <?= count($item['recipe']['blocks']) === 1 ? 'Inhaltsblock' : 'Inhaltsblöcke' ?></span>
+                        <span class="recipe-row-meta"><?= escape($item['recipe']['summary'] ?? 'Keine Kurzbeschreibung hinterlegt.') ?></span>
                     </span>
                     <span class="row-arrow" aria-hidden="true">↗</span>
                 </a>

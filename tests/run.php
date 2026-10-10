@@ -43,6 +43,10 @@ YAML;
 $recipe = RecipeValidator::parse($yaml);
 check($recipe['title'] === 'Zitronenreis', 'Gültiges Rezept wird gelesen.');
 check(count($recipe['blocks']) === 2, 'Text- und Tabellenblock bleiben erhalten.');
+$withSummary = str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: Frische Beilage mit Zitrone.\n", $yaml);
+check(RecipeValidator::parse($withSummary)['summary'] === 'Frische Beilage mit Zitrone.', 'Optionale Kurzbeschreibung wird akzeptiert.');
+rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: []\n", $yaml)), 'Kurzbeschreibung muss Text sein.');
+rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: null\n", $yaml)), 'Explizit leere Kurzbeschreibung wird abgelehnt.');
 check((bool) preg_match('/\A[a-z0-9-]+\z/', RecipeValidator::slug($recipe['title'])), 'Titel ergibt einen sicheren Dateinamen.');
 
 rejects(static fn () => RecipeValidator::parse("version: [\n"), 'Ungültige YAML wird abgelehnt.');

@@ -11,6 +11,7 @@ Das Dokument muss diesem Schema entsprechen:
 ```yaml
 version: 1
 title: Rezepttitel
+summary: Kurze Beschreibung des Gerichts.
 blocks:
   - type: text
     text: "Ein Absatz oder Zubereitungsschritt."
@@ -34,8 +35,9 @@ blocks:
 
 ## Formatregeln
 
-- `version` ist die Zahl `1`. Nur `version`, `title` und `blocks` sind auf oberster Ebene erlaubt.
+- `version` ist die Zahl `1`. Auf oberster Ebene sind nur `version`, `title`, das optionale Feld `summary` und `blocks` erlaubt.
 - `title` ist nicht leer und höchstens 160 UTF-8-Bytes lang.
+- `summary` ist optional. Wenn die Quelle genug Angaben enthält, formuliere daraus eine kurze Beschreibung; erfinde keine Eigenschaften. Wenn keine Kurzbeschreibung sicher ableitbar ist, lass das Feld weg. Ist es vorhanden, muss es ein nicht leerer Text sein.
 - `blocks` ist eine geordnete Liste. Jeder Block hat genau einen bekannten `type` und nur die dafür erlaubten Felder aus dem Schema.
 - `text` benötigt ein nicht leeres Textfeld `text`. Mehrzeilige Absätze oder Schritte können mit `text: |-` geschrieben werden.
 - `table` benötigt eine nicht leere Liste von Textüberschriften `headers` und eine Liste `rows`. Jede Zeile muss gleich viele Zellen wie Überschriften haben. Zellen sind Text oder Zahlen. Mengen mit Einheiten als Text quotieren, zum Beispiel `"200 g"`.

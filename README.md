@@ -31,7 +31,7 @@ Die Beispielkonfigurationen an Serverpfade und PHP-FPM-Socket anpassen und TLS-Z
 
 ## YAML-Format
 
-Ein vollständiges Beispiel liegt in [examples/zitronenreis.yaml](examples/zitronenreis.yaml). Jedes Rezept enthält `version: 1`, einen Titel und geordnete Inhaltsblöcke:
+Ein vollständiges Beispiel liegt in [examples/zitronenreis.yaml](examples/zitronenreis.yaml). Jedes Rezept enthält `version: 1`, einen Titel und geordnete Inhaltsblöcke. `summary` ist ein optionales Textfeld für die Kurzbeschreibung in der Übersicht:
 
 - `text`: `text`
 - `table`: `headers` und `rows`
