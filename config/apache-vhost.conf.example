@@ -2,6 +2,9 @@
     ServerName recipes.example.org
     DocumentRoot /var/www/recipe-collection/public
 
+    # Image and YAML uploads must be larger than the app-level limits.
+    LimitRequestBody 16777216
+
     <Directory /var/www/recipe-collection/public>
         AllowOverride None
         Require all granted
@@ -15,3 +18,8 @@
         Require valid-user
     </LocationMatch>
 </VirtualHost>
+
+# PHP settings in php.ini or /etc/php/*/fpm/php.ini:
+# upload_max_filesize = 16M
+# post_max_size = 16M
+# max_file_uploads = 20

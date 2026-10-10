@@ -4,6 +4,9 @@ server {
     root /var/www/recipe-collection/public;
     index index.php;
 
+    # Allow larger uploads than the default 2MB (APCU/word-size SSO).
+    client_max_body_size 16M;
+
     location ^~ /admin {
         auth_basic "Recipe administration";
         auth_basic_user_file /etc/recipe-collection/.htpasswd;
@@ -25,3 +28,8 @@ server {
         deny all;
     }
 }
+
+# PHP settings in php.ini or /etc/php/*/fpm/php.ini:
+# upload_max_filesize = 16M
+# post_max_size = 16M
+# max_file_uploads = 20

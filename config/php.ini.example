@@ -1,0 +1,12 @@
+; Beispiel für produktive PHP-Uploads.
+; Die App erlaubt bis zu 8 MB pro Bild; damit auch größere Formulare/Uploads laufen,
+; sollten PHP- und Webserver-Limits mindestens 16 M betragen.
+
+upload_max_filesize = 16M
+post_max_size = 16M
+max_file_uploads = 20
+memory_limit = 256M
+
+; An der tatsächlichen PHP-Konfiguration im produktiven Host anpassen, z. B.:
+; /etc/php/8.1/fpm/php.ini
+; /etc/php/8.1/apache2/php.ini
