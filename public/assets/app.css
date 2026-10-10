@@ -14,9 +14,11 @@
     --tomato-soft: #fff0ed;
     --shadow-soft: 0 8px 24px rgba(29, 49, 42, 0.06);
     --radius: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-    font-size: 100%;
-    line-height: 1.5;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
     color: var(--ink);
     background: var(--paper);
     font-optical-sizing: auto;
