@@ -78,6 +78,10 @@ final class RecipeValidator
         }
 
         switch ($block['type']) {
+            case 'heading':
+                self::validateKeys($block, ['type', 'text'], "Inhaltsblock {$number}");
+                self::requireString($block, 'text', $number);
+                break;
             case 'text':
                 self::validateKeys($block, ['type', 'text', 'caption'], "Inhaltsblock {$number}");
                 self::requireString($block, 'text', $number);

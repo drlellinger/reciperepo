@@ -11,6 +11,8 @@ blocks:
       - [Reis, "150 g"]
       - [Zitrone, "1 Stück"]
       - [Gemüsebrühe, "300 ml"]
+  - type: heading
+    text: Zubereitung
   - type: text
     text: |-
       Reis abspülen. Mit Brühe und Zitronenabrieb aufkochen.

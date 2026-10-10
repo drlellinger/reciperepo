@@ -34,6 +34,7 @@ Die Beispielkonfigurationen an Serverpfade und PHP-FPM-Socket anpassen und TLS-Z
 Ein vollständiges Beispiel liegt in [examples/zitronenreis.yaml](examples/zitronenreis.yaml). Jedes Rezept enthält `version: 1`, einen Titel und geordnete Inhaltsblöcke. `summary` und `tags` sind optionale Textfelder auf Rezeptebene. Tags werden als Kategorien in der Übersicht verwendet:
 
 - `text`: `text`
+- `heading`: `text` für eine Kapitelüberschrift
 - `table`: `headers` und `rows`
 - `image`: `url`, `alt`, optional `caption`
 - `video` oder `audio`: `url`, optional `caption`

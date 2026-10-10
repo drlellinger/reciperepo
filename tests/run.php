@@ -33,6 +33,8 @@ version: 1
 title: Zitronenreis
 tags: [Beilage, Vegetarisch]
 blocks:
+    - type: heading
+        text: Zubereitung
   - type: text
     text: Mit Zitrone abschmecken.
   - type: table
@@ -43,7 +45,8 @@ YAML;
 
 $recipe = RecipeValidator::parse($yaml);
 check($recipe['title'] === 'Zitronenreis', 'Gültiges Rezept wird gelesen.');
-check(count($recipe['blocks']) === 2, 'Text- und Tabellenblock bleiben erhalten.');
+check(count($recipe['blocks']) === 3, 'Überschrift, Text- und Tabellenblock bleiben erhalten.');
+check($recipe['blocks'][0]['type'] === 'heading', 'Kapitelüberschrift wird akzeptiert.');
 check($recipe['tags'] === ['Beilage', 'Vegetarisch'], 'Kategorietags werden gelesen.');
 $withSummary = str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: Frische Beilage mit Zitrone.\n", $yaml);
 check(RecipeValidator::parse($withSummary)['summary'] === 'Frische Beilage mit Zitrone.', 'Optionale Kurzbeschreibung wird akzeptiert.');

@@ -63,6 +63,9 @@ function renderBlocks(array $blocks): string
     foreach ($blocks as $block) {
         $caption = isset($block['caption']) ? '<figcaption>' . escape($block['caption']) . '</figcaption>' : '';
         switch ($block['type']) {
+            case 'heading':
+                $html .= '<h2 class="recipe-section-heading">' . escape($block['text']) . '</h2>';
+                break;
             case 'text':
                 $html .= '<div class="recipe-copy">' . nl2br(escape($block['text']), false) . '</div>';
                 break;

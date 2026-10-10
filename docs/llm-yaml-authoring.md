@@ -14,6 +14,8 @@ title: Rezepttitel
 summary: Kurze Beschreibung des Gerichts.
 tags: [Hauptgericht, Asiatisch]
 blocks:
+  - type: heading
+    text: Zutaten
   - type: text
     text: "Ein Absatz oder Zubereitungsschritt."
   - type: table
@@ -42,6 +44,7 @@ blocks:
 - `tags` ist optional und eine Liste eindeutiger, nicht leerer Texte bis jeweils 80 UTF-8-Bytes. Verwende kurze Kategorienamen, die aus dem Dokument klar hervorgehen; ohne sichere Kategorie `tags` weglassen.
 - `blocks` ist eine geordnete Liste. Jeder Block hat genau einen bekannten `type` und nur die dafür erlaubten Felder aus dem Schema.
 - `text` benötigt ein nicht leeres Textfeld `text`. Mehrzeilige Absätze oder Schritte können mit `text: |-` geschrieben werden.
+- `heading` benötigt ein nicht leeres Textfeld `text` und wird als Kapitelüberschrift innerhalb des Rezepts dargestellt. Verwende Überschriften, wenn das Quelldokument erkennbare Abschnitte hat.
 - `table` benötigt eine nicht leere Liste von Textüberschriften `headers` und eine Liste `rows`. Jede Zeile muss gleich viele Zellen wie Überschriften haben. Zellen sind Text oder Zahlen. Mengen mit Einheiten als Text quotieren, zum Beispiel `"200 g"`.
 - `image` benötigt `url` und ein nicht leeres `alt`; `caption` ist optional. `video` und `audio` benötigen `url`; `caption` ist optional. `link` benötigt `url` und nicht leeres `label`.
 - Ein Bild nur dann ausgeben, wenn eine echte URL vorliegt und sich ein sachlicher Alt-Text aus der Quelle ableiten lässt; sonst den Bildblock weglassen.
