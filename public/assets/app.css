@@ -90,6 +90,9 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .download-link span { font-size: 1.1rem; }
 .share-button { margin-left: 8px; cursor: pointer; }
 .share-status { min-height: 1.2em; margin: 8px 0 0; color: var(--green-dark); font-size: 0.82rem; }
+.share-fallback { margin-top: 8px; }
+.share-fallback label { display: grid; max-width: 460px; gap: 5px; color: var(--muted); font-size: 0.8rem; font-weight: 650; }
+.share-fallback input { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid #bdcec1; border-radius: var(--radius); background: var(--surface); color: var(--ink); }
 .recipe-content { padding-top: 28px; }
 .recipe-copy { margin: 0 0 28px; font-size: 1.05rem; line-height: 1.75; white-space: normal; }
 .table-wrap { overflow-x: auto; margin: 24px 0 32px; }

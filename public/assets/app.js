@@ -39,7 +39,15 @@ document.querySelectorAll('button[data-share]').forEach((button) => {
             await navigator.clipboard.writeText(shareData.url);
             if (status) status.textContent = 'Rezeptlink kopiert.';
         } catch {
-            window.prompt('Rezeptlink kopieren:', shareData.url);
+            const fallback = document.querySelector('[data-share-fallback]');
+            const input = fallback?.querySelector('[data-share-url]');
+            if (fallback && input) {
+                input.value = shareData.url;
+                fallback.hidden = false;
+                input.focus();
+                input.select();
+                if (status) status.textContent = 'Link markiert. Zum Kopieren Ctrl+C oder Cmd+C drücken.';
+            }
         }
     });
 });

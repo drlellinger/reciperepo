@@ -20,6 +20,12 @@
             <span aria-hidden="true">↗</span> Rezept teilen
         </button>
         <p class="share-status" role="status" aria-live="polite"></p>
+        <div class="share-fallback" data-share-fallback hidden>
+            <label>
+                <span>Rezeptlink</span>
+                <input type="url" readonly data-share-url>
+            </label>
+        </div>
     </header>
     <div class="recipe-content">
         <?= $blocksHtml ?>
