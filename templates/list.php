@@ -13,69 +13,45 @@
     </div>
 </section>
 
-<div class="collection-controls">
-    <button class="collection-toggle" type="button" aria-expanded="false" aria-controls="collection-controls-panel">
-        Filter
-    </button>
-    <form id="collection-controls-panel" class="collection-controls-form" method="get" action="/">
-        <input type="hidden" name="page" value="1">
-        <label>
-            <span>Sortieren nach</span>
-            <select name="sort">
-                <option value="name" <?= $sort === 'name' ? 'selected' : '' ?>>Name</option>
-                <option value="date" <?= $sort === 'date' ? 'selected' : '' ?>>Zuletzt geändert</option>
-                <option value="category" <?= $sort === 'category' ? 'selected' : '' ?>>Kategorie</option>
-            </select>
-        </label>
-        <label>
-            <span>Kategorie filtern</span>
-            <select name="tag">
-                <option value="">Alle Kategorien</option>
-                <?php foreach ($tags as $tag): ?>
-                    <option value="<?= escape($tag) ?>" <?= $selectedTag === $tag ? 'selected' : '' ?>><?= escape($tag) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-        <label>
-            <span>Gruppieren</span>
-            <select name="group">
-                <option value="none" <?= $groupBy === 'none' ? 'selected' : '' ?>>Keine Gruppierung</option>
-                <option value="tag" <?= $groupBy === 'tag' ? 'selected' : '' ?>>Nach Kategorie</option>
-            </select>
-        </label>
-        <label>
-            <span>Rezepte pro Seite</span>
-            <select name="perPage">
-                <?php foreach ([5, 10, 20, 50] as $choice): ?>
-                    <option value="<?= $choice ?>" <?= $perPage === $choice ? 'selected' : '' ?>><?= $choice ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-        <div class="collection-controls-actions">
-            <button class="button button-filter" type="submit">Anwenden</button>
-            <?php if ($sort !== 'name' || $selectedTag !== '' || $groupBy !== 'none' || $perPage !== 10): ?>
-                <a class="reset-link" href="/">Zurücksetzen</a>
-            <?php endif; ?>
-        </div>
-    </form>
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var panel = document.querySelector('.collection-controls');
-        if (!panel) return;
-
-        var button = panel.querySelector('.collection-toggle');
-        var form = panel.querySelector('.collection-controls-form');
-        if (!button || !form) return;
-
-        button.addEventListener('click', function () {
-            var isOpen = panel.classList.toggle('is-open');
-            button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-            button.textContent = isOpen ? 'Filter schließen' : 'Filter';
-        });
-    });
-</script>
+<form class="collection-controls" method="get" action="/">
+    <input type="hidden" name="page" value="1">
+    <label>
+        <span>Sortieren nach</span>
+        <select name="sort">
+            <option value="name" <?= $sort === 'name' ? 'selected' : '' ?>>Name</option>
+            <option value="date" <?= $sort === 'date' ? 'selected' : '' ?>>Zuletzt geändert</option>
+            <option value="category" <?= $sort === 'category' ? 'selected' : '' ?>>Kategorie</option>
+        </select>
+    </label>
+    <label>
+        <span>Kategorie filtern</span>
+        <select name="tag">
+            <option value="">Alle Kategorien</option>
+            <?php foreach ($tags as $tag): ?>
+                <option value="<?= escape($tag) ?>" <?= $selectedTag === $tag ? 'selected' : '' ?>><?= escape($tag) ?></option>
+            <?php endforeach; ?>
+        </select>
+    </label>
+    <label>
+        <span>Gruppieren</span>
+        <select name="group">
+            <option value="none" <?= $groupBy === 'none' ? 'selected' : '' ?>>Keine Gruppierung</option>
+            <option value="tag" <?= $groupBy === 'tag' ? 'selected' : '' ?>>Nach Kategorie</option>
+        </select>
+    </label>
+    <label>
+        <span>Rezepte pro Seite</span>
+        <select name="perPage">
+            <?php foreach ([5, 10, 20, 50] as $choice): ?>
+                <option value="<?= $choice ?>" <?= $perPage === $choice ? 'selected' : '' ?>><?= $choice ?></option>
+            <?php endforeach; ?>
+        </select>
+    </label>
+    <button class="button button-filter" type="submit">Anwenden</button>
+    <?php if ($sort !== 'name' || $selectedTag !== '' || $groupBy !== 'none' || $perPage !== 10): ?>
+        <a class="reset-link" href="/">Zurücksetzen</a>
+    <?php endif; ?>
+</form>
 
 <?php if ($items === []): ?>
     <section class="empty-state" aria-labelledby="empty-title">
