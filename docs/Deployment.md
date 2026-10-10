@@ -11,7 +11,14 @@ Die lokale PHP-Entwicklungsserver-Variante schützt `/admin` nicht mit HTTP-Basi
 
 ## Deployment auf einem Webserver
 
-Den Webroot auf `public/` setzen. `recipes/`, `.htpasswd` und alle übrigen Projektdateien müssen außerhalb des öffentlichen Webroots bleiben. PHP benötigt Schreibrechte auf `recipes/`. HTTPS ist zwingend, da HTTP-Basisauthentifizierung Zugangsdaten übermittelt.
+Den Webroot auf `public/` setzen. `recipes/`, `.htpasswd` und alle übrigen Projektdateien müssen außerhalb des öffentlichen Webroots bleiben. Der PHP-FPM-Benutzer benötigt Schreibrechte auf `recipes/` und `public/uploads/images/`. Das Bildverzeichnis liegt absichtlich im Webroot, damit hochgeladene Bilder direkt ausgeliefert werden können. Verzeichnisse vor dem ersten Aufruf von `/admin` anlegen und dem PHP-FPM-Benutzer übergeben, zum Beispiel:
+
+```sh
+sudo install -d -o www-data -g www-data -m 0750 /var/www/recipe-collection/recipes
+sudo install -d -o www-data -g www-data -m 0755 /var/www/recipe-collection/public/uploads/images
+```
+
+`www-data` und `/var/www/recipe-collection` durch den Benutzer/die Gruppe des PHP-FPM-Pools und den tatsächlichen Projektpfad ersetzen. HTTPS ist zwingend, da HTTP-Basisauthentifizierung Zugangsdaten übermittelt.
 
 Beispielkonfigurationen:
 
