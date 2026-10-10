@@ -29,18 +29,6 @@
             </label>
             <button class="button button-primary" type="submit">Bild hochladen</button>
         </form>
-        <?php if ($images !== []): ?>
-            <h3 class="image-list-heading">Hochgeladene Bilder</h3>
-            <ul class="image-list">
-                <?php foreach ($images as $image): ?>
-                    <li class="image-list-item">
-                        <img src="<?= escape($image['url']) ?>" alt="" loading="lazy">
-                        <input type="text" value="<?= escape($image['url']) ?>" readonly aria-label="Bild-URL">
-                        <button class="button button-copy" type="button" data-copy="<?= escape($image['url']) ?>">Kopieren</button>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
     </section>
 </div>
 
@@ -62,3 +50,19 @@
         </ul>
     <?php endif; ?>
 </section>
+
+<?php if ($images !== []): ?>
+    <section class="admin-section" aria-labelledby="image-list-title">
+        <h2 id="image-list-title">Hochgeladene Bilder</h2>
+        <ul class="image-list">
+            <?php foreach ($images as $image): ?>
+                <?php $imageUrl = absolutePublicUrl($image['url'], $siteOrigin); ?>
+                <li class="image-list-item">
+                    <img src="<?= escape($image['url']) ?>" alt="" loading="lazy">
+                    <input type="text" value="<?= escape($imageUrl) ?>" readonly aria-label="Bild-URL">
+                    <button class="button button-copy" type="button" data-copy="<?= escape($imageUrl) ?>">Kopieren</button>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </section>
+<?php endif; ?>
