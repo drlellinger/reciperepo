@@ -66,4 +66,4 @@ client_max_body_size 16M;
 LimitRequestBody 16777216
 ```
 
-Danach PHP-FPM oder Nginx/Apache neu starten. Die Beispielkonfigurationen in [config/apache-vhost.conf.example](config/apache-vhost.conf.example) und [config/nginx.conf.example](config/nginx.conf.example) zeigen die nötigen Werte.
+Danach PHP-FPM oder Nginx/Apache neu starten. Die Beispielkonfigurationen in [config/apache-vhost.conf.example](../config/apache-vhost.conf.example) und [config/nginx.conf.example](../config/nginx.conf.example) zeigen die nötigen Werte.
