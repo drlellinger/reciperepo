@@ -9,6 +9,19 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 $checks = 0;
 
+function uploadErrorMessage(int $code): string
+{
+    return match ($code) {
+        UPLOAD_ERR_INI_SIZE => 'Das Bild ist größer als das vom Server erlaubte Limit.',
+        UPLOAD_ERR_FORM_SIZE => 'Die Datei überschreitet das vom Formular erlaubte Limit.',
+        UPLOAD_ERR_PARTIAL => 'Der Upload wurde nur teilweise übertragen.',
+        UPLOAD_ERR_NO_FILE => 'Es wurde keine Datei ausgewählt.',
+        UPLOAD_ERR_CANT_WRITE => 'Das temporäre Verzeichnis konnte nicht beschrieben werden.',
+        UPLOAD_ERR_EXTENSION => 'Ein PHP-Upload-Filter hat den Upload blockiert.',
+        default => 'Das Bild konnte nicht hochgeladen werden.',
+    };
+}
+
 function check(bool $condition, string $message): void
 {
     global $checks;
@@ -28,6 +41,9 @@ function rejects(callable $operation, string $message): void
     }
     check(false, $message);
 }
+
+check(uploadErrorMessage(UPLOAD_ERR_INI_SIZE) === 'Das Bild ist größer als das vom Server erlaubte Limit.', 'PHP-Uploadfehler für zu große Dateien wird korrekt erfasst.');
+check(uploadErrorMessage(UPLOAD_ERR_NO_FILE) === 'Es wurde keine Datei ausgewählt.', 'Fehlender Upload wird korrekt erkannt.');
 
 $yaml = <<<'YAML'
 version: 1

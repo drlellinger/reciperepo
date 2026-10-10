@@ -109,6 +109,19 @@ function validCsrfToken(): bool
     return is_string($provided) && is_string($expected) && $expected !== '' && hash_equals($expected, $provided);
 }
 
+function uploadErrorMessage(int $errorCode): string
+{
+    return match ($errorCode) {
+        UPLOAD_ERR_INI_SIZE => 'Die Datei ist größer als das vom Server erlaubte Limit. Bitte upload_max_filesize und post_max_size prüfen.',
+        UPLOAD_ERR_FORM_SIZE => 'Die Datei überschreitet das vom Formular erlaubte Limit.',
+        UPLOAD_ERR_PARTIAL => 'Der Upload wurde nur teilweise übertragen. Bitte erneut versuchen.',
+        UPLOAD_ERR_NO_FILE => 'Es wurde keine Datei ausgewählt.',
+        UPLOAD_ERR_CANT_WRITE => 'Das temporäre Verzeichnis für den Upload ist nicht beschreibbar.',
+        UPLOAD_ERR_EXTENSION => 'Ein PHP-Upload-Filter hat den Upload blockiert.',
+        default => 'Das Bild konnte nicht hochgeladen werden.',
+    };
+}
+
 if ($method === 'POST' && $isAdmin) {
     if (!validCsrfToken()) {
         redirectToAdmin('Sitzung abgelaufen. Bitte erneut versuchen.', true);
@@ -117,8 +130,12 @@ if ($method === 'POST' && $isAdmin) {
     try {
         if ($path === '/admin/upload') {
             $upload = $_FILES['recipe'] ?? null;
-            if (!is_array($upload) || ($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !is_uploaded_file($upload['tmp_name'] ?? '')) {
-                throw new RuntimeException('Die YAML-Datei konnte nicht hochgeladen werden.');
+            if (!is_array($upload) || ($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+                throw new RuntimeException(uploadErrorMessage((int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE)));
+            }
+            $temporaryPath = (string) ($upload['tmp_name'] ?? '');
+            if ($temporaryPath === '' || !is_uploaded_file($temporaryPath)) {
+                throw new RuntimeException('Die YAML-Datei konnte nicht korrekt übertragen werden.');
             }
             if (($upload['size'] ?? 0) > 1048576) {
                 throw new RuntimeException('Die YAML-Datei darf höchstens 1 MB groß sein.');
@@ -126,7 +143,7 @@ if ($method === 'POST' && $isAdmin) {
             if (!preg_match('/\.ya?ml\z/i', (string) ($upload['name'] ?? ''))) {
                 throw new RuntimeException('Bitte eine Datei mit der Endung .yaml oder .yml auswählen.');
             }
-            $contents = file_get_contents($upload['tmp_name']);
+            $contents = file_get_contents($temporaryPath);
             if ($contents === false) {
                 throw new RuntimeException('Die hochgeladene Datei konnte nicht gelesen werden.');
             }
@@ -137,11 +154,15 @@ if ($method === 'POST' && $isAdmin) {
 
         if ($path === '/admin/upload-image') {
             $upload = $_FILES['image'] ?? null;
-            if (!is_array($upload) || ($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !is_uploaded_file($upload['tmp_name'] ?? '')) {
-                throw new RuntimeException('Das Bild konnte nicht hochgeladen werden.');
+            if (!is_array($upload) || ($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+                throw new RuntimeException(uploadErrorMessage((int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE)));
+            }
+            $temporaryPath = (string) ($upload['tmp_name'] ?? '');
+            if ($temporaryPath === '' || !is_uploaded_file($temporaryPath)) {
+                throw new RuntimeException('Das Bild wurde nicht korrekt übertragen. Bitte erneut versuchen.');
             }
             $imageRepository = new ImageRepository($root . '/public/uploads/images');
-            $url = $imageRepository->save($upload['tmp_name']);
+            $url = $imageRepository->save($temporaryPath);
             redirectToAdmin('Bild hochgeladen: ' . $url);
         }
 
