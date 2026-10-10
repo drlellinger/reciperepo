@@ -30,6 +30,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .site-header { display: flex; align-items: center; justify-content: space-between; min-height: 76px; padding: 0 max(24px, calc((100% - 1120px) / 2)); border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.88); }
 .wordmark { display: inline-flex; align-items: center; gap: 10px; color: var(--green-dark); font-size: 0.98rem; font-weight: 700; text-decoration: none; }
 .wordmark-mark { display: grid; width: 32px; aspect-ratio: 1; place-items: center; border-radius: 50%; background: var(--green); color: #fff; font-family: Georgia, serif; font-size: 1.15rem; }
+.wordmark-logo { display: block; width: 32px; height: 32px; object-fit: contain; }
 .site-nav { display: flex; gap: 24px; }
 .site-nav a { color: var(--muted); font-size: 0.9rem; font-weight: 600; text-decoration: none; }
 .site-nav a:hover, .text-link:hover, .download-link:hover { color: var(--tomato); }
@@ -99,6 +100,7 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
 .quiet-message { margin: 0; color: var(--muted); }
 .not-found { min-height: 45vh; align-content: center; }
 .site-footer { display: flex; justify-content: space-between; padding: 20px max(24px, calc((100% - 1120px) / 2)); border-top: 1px solid var(--line); color: var(--muted); font-size: 0.82rem; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 18px; }
 .site-footer a { color: var(--green-dark); }
 
 @media (max-width: 620px) {

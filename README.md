@@ -41,6 +41,10 @@ Ein vollständiges Beispiel liegt in [examples/zitronenreis.yaml](examples/zitro
 
 Für die automatisierte Übertragung von Rezepten aus Textdokumenten siehe die [LLM-Anleitung](docs/llm-yaml-authoring.md).
 
+## Oberflächenkonfiguration
+
+Navbar, Browser-Titel und Footer lassen sich in [config/app.php](config/app.php) anpassen. `site_name` ändert den angezeigten Namen, `logo_text` ersetzt das Standard-Monogramm; alternativ zeigt `logo_image` ein Logo von einem lokalen Pfad oder einer URL und `logo_alt` setzt dessen Alternativtext. `footer_name` ist unabhängig davon frei wählbar. `privacy_url` und `imprint_url` blenden die Links zu Datenschutzerklärung und Impressum ein; bei `null` bleiben sie verborgen.
+
 Medien- und Link-URLs müssen HTTP(S) verwenden. Beliebiges HTML und eingebettete iframes werden nicht unterstützt. Der Upload akzeptiert Dateien bis 1 MB. Ein Upload mit demselben normalisierten Titel ersetzt das Rezept; ein anderer Titel legt ein neues Rezept an. Der Download auf jeder Rezeptseite liefert die gespeicherte YAML-Datei.
 
 ## Sicherheit und Daten

@@ -11,6 +11,7 @@ header('Referrer-Policy: strict-origin-when-cross-origin');
 header("Content-Security-Policy: default-src 'self'; img-src 'self' https: http:; media-src 'self' https: http:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'");
 
 $root = dirname(__DIR__);
+$appConfig = require $root . '/config/app.php';
 $repository = new RecipeRepository($root . '/recipes');
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $path = rtrim($path, '/') ?: '/';
@@ -33,6 +34,8 @@ function escape(string|int|float|null $value): string
 
 function renderPage(string $template, string $title, array $variables = []): never
 {
+    global $appConfig;
+    $variables['appConfig'] = $appConfig;
     extract($variables, EXTR_SKIP);
     require dirname(__DIR__) . '/templates/header.php';
     require dirname(__DIR__) . '/templates/' . $template . '.php';

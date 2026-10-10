@@ -4,14 +4,12 @@
         <h1>Was kommt heute auf den Tisch?</h1>
         <p class="collection-count"><?= count($items) ?> <?= count($items) === 1 ? 'Rezept' : 'Rezepte' ?></p>
     </div>
-    <a class="text-link" href="/admin">Rezept importieren <span aria-hidden="true">↗</span></a>
 </section>
 
 <?php if ($items === []): ?>
     <section class="empty-state" aria-labelledby="empty-title">
         <p class="empty-kicker" aria-hidden="true">K</p>
         <h2 id="empty-title">Dein Archiv beginnt hier.</h2>
-        <a class="button button-primary" href="/admin">YAML-Rezept importieren</a>
     </section>
 <?php else: ?>
     <section class="recipe-list" aria-label="Alle Rezepte">
