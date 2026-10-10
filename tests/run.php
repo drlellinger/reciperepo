@@ -56,13 +56,18 @@ $normalizedUploads = UploadedFiles::normalize([
 ]);
 check(count($normalizedUploads) === 2 && $normalizedUploads[1]['name'] === 'two.yaml', 'Mehrfach-Uploads werden in einzelne Dateien normalisiert.');
 check(UploadedFiles::normalize(null) === [], 'Fehlende Uploads ergeben eine leere Dateiliste.');
+$remainingRemoteImages = 6;
 $pdfBlocks = Recipe\RecipePdfRenderer::renderBlocks([
     ['type' => 'heading', 'text' => 'Zubereitung'],
     ['type' => 'text', 'text' => 'Mit Zitrone abschmecken.'],
     ['type' => 'video', 'url' => 'https://example.org/video.mp4', 'caption' => 'Video'],
-], dirname(__DIR__) . '/public');
+], dirname(__DIR__) . '/public', $remainingRemoteImages);
 check(str_contains($pdfBlocks, '<h2>Zubereitung</h2>') && str_contains($pdfBlocks, 'Mit Zitrone abschmecken.'), 'PDF-Rezeptblöcke enthalten Überschrift und Text.');
 check(!str_contains($pdfBlocks, '<button') && !str_contains($pdfBlocks, '<video') && !str_contains($pdfBlocks, '<audio'), 'PDF-Rezeptblöcke enthalten keine Buttons oder Medien-Steuerelemente.');
+$privateImageBlocks = Recipe\RecipePdfRenderer::renderBlocks([
+    ['type' => 'image', 'url' => 'http://127.0.0.1/internal.png', 'alt' => 'Privates Bild'],
+], dirname(__DIR__) . '/public', $remainingRemoteImages);
+check(!str_contains($privateImageBlocks, '<img'), 'Private IP-Adressen werden beim PDF-Bildabruf blockiert.');
 
 $yaml = <<<'YAML'
 version: 1
@@ -112,6 +117,10 @@ try {
     $temporaryImage = tempnam(sys_get_temp_dir(), 'recipe-image-test-');
     file_put_contents($temporaryImage, base64_decode('R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', true));
     $imageUrl = $imageRepository->save($temporaryImage);
+    $localPdfBlocks = Recipe\RecipePdfRenderer::renderBlocks([
+        ['type' => 'image', 'url' => '/' . basename($temporaryImage), 'alt' => 'Testbild'],
+    ], sys_get_temp_dir(), $remainingRemoteImages);
+    check(str_contains($localPdfBlocks, 'src="file://' . realpath($temporaryImage) . '"'), 'Lokale Rezeptbilder erhalten eine explizite file-URL für Dompdf.');
     unlink($temporaryImage);
     check((bool) preg_match('~\A/uploads/images/[a-f0-9]{32}\.gif\z~', $imageUrl), 'Bild erhält eine öffentliche URL mit zufälligem Dateinamen.');
     check(count($imageRepository->all()) === 1, 'Hochgeladenes Bild erscheint in der Bildliste.');

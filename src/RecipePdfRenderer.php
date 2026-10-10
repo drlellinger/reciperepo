@@ -8,6 +8,9 @@ use Dompdf\Options;
 
 final class RecipePdfRenderer
 {
+    private const MAX_REMOTE_IMAGES = 6;
+    private const MAX_REMOTE_IMAGE_BYTES = 8388608;
+
     public static function render(array $item, array $appConfig, string $publicRoot): string
     {
         $options = new Options();
@@ -23,7 +26,7 @@ final class RecipePdfRenderer
         return $dompdf->output();
     }
 
-    public static function renderBlocks(array $blocks, string $publicRoot): string
+    public static function renderBlocks(array $blocks, string $publicRoot, int &$remainingRemoteImages): string
     {
         $html = '';
         foreach ($blocks as $block) {
@@ -55,10 +58,10 @@ final class RecipePdfRenderer
                     $html .= '</tbody></table>';
                     break;
                 case 'image':
-                    $imagePath = self::localImagePath($block['url'], $publicRoot);
+                    $imageSource = self::imageSource($block['url'], $publicRoot, $remainingRemoteImages);
                     $html .= '<figure class="recipe-media">';
-                    if ($imagePath !== null) {
-                        $html .= '<img src="' . self::escape($imagePath) . '" alt="' . self::escape($block['alt']) . '">';
+                    if ($imageSource !== null) {
+                        $html .= '<img src="' . self::escape($imageSource) . '" alt="' . self::escape($block['alt']) . '">';
                     } else {
                         $html .= '<p class="media-note">' . self::escape($block['alt']) . '</p>';
                     }
@@ -79,8 +82,9 @@ final class RecipePdfRenderer
 
     private static function document(array $item, array $appConfig, string $publicRoot): string
     {
+        $remainingRemoteImages = self::MAX_REMOTE_IMAGES;
         $logoPath = is_string($appConfig['logo_image'] ?? null)
-            ? self::localImagePath($appConfig['logo_image'], $publicRoot)
+            ? self::imageSource($appConfig['logo_image'], $publicRoot, $remainingRemoteImages)
             : null;
         $brandMark = $logoPath !== null
             ? '<img class="brand-logo" src="' . self::escape($logoPath) . '" alt="' . self::escape($appConfig['logo_alt'] ?? '') . '">'
@@ -119,8 +123,96 @@ a { color: #28664e; }
 </style></head><body>
 <header class="brand">' . $brandMark . '<span>' . self::escape($appConfig['site_name'] ?? '') . '</span></header>
 <section class="recipe-heading"><div class="tags">' . $tags . '</div><h1>' . self::escape($item['recipe']['title']) . '</h1></section>
-<main class="recipe-content">' . self::renderBlocks($item['recipe']['blocks'], $publicRoot) . '</main>
+<main class="recipe-content">' . self::renderBlocks($item['recipe']['blocks'], $publicRoot, $remainingRemoteImages) . '</main>
 </body></html>';
+    }
+
+    private static function imageSource(string $url, string $publicRoot, int &$remainingRemoteImages): ?string
+    {
+        $localPath = self::localImagePath($url, $publicRoot);
+        if ($localPath !== null) {
+            return 'file://' . $localPath;
+        }
+
+        return self::remoteImageDataUri($url, $remainingRemoteImages);
+    }
+
+    private static function remoteImageDataUri(string $url, int &$remainingRemoteImages): ?string
+    {
+        if (!function_exists('curl_init') || $remainingRemoteImages <= 0) {
+            return null;
+        }
+
+        $parts = parse_url($url);
+        if (!is_array($parts)
+            || !in_array(strtolower($parts['scheme'] ?? ''), ['http', 'https'], true)
+            || empty($parts['host'])
+            || isset($parts['user'])
+            || isset($parts['pass'])) {
+            return null;
+        }
+
+        $host = strtolower($parts['host']);
+        $scheme = strtolower($parts['scheme']);
+        $port = (int) ($parts['port'] ?? ($scheme === 'https' ? 443 : 80));
+        if ($port !== ($scheme === 'https' ? 443 : 80) || filter_var($host, FILTER_VALIDATE_IP) !== false) {
+            return null;
+        }
+
+        $addresses = gethostbynamel($host);
+        if (!is_array($addresses) || $addresses === []) {
+            return null;
+        }
+        foreach ($addresses as $address) {
+            if (filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
+                return null;
+            }
+        }
+
+        $remainingRemoteImages--;
+        $imageBytes = '';
+        $curl = curl_init($url);
+        if ($curl === false) {
+            return null;
+        }
+
+        $options = [
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_CONNECTTIMEOUT => 3,
+            CURLOPT_TIMEOUT => 8,
+            CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_PROXY => '',
+            CURLOPT_RESOLVE => [$host . ':' . $port . ':' . $addresses[0]],
+            CURLOPT_USERAGENT => 'RecipeCollection-PDF/1.0',
+            CURLOPT_WRITEFUNCTION => static function ($handle, string $chunk) use (&$imageBytes): int {
+                $length = strlen($chunk);
+                if (strlen($imageBytes) + $length > self::MAX_REMOTE_IMAGE_BYTES) {
+                    return 0;
+                }
+                $imageBytes .= $chunk;
+                return $length;
+            },
+        ];
+        curl_setopt_array($curl, $options);
+        $result = curl_exec($curl);
+        $responseCode = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+        curl_close($curl);
+
+        if ($result === false || $responseCode !== 200 || $imageBytes === '') {
+            return null;
+        }
+
+        $imageInfo = getimagesizefromstring($imageBytes);
+        $mimeType = is_array($imageInfo) ? ($imageInfo['mime'] ?? '') : '';
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!in_array($mimeType, $allowedTypes, true)
+            || (int) ($imageInfo[0] ?? 0) * (int) ($imageInfo[1] ?? 0) > 40000000) {
+            return null;
+        }
+
+        return 'data:' . $mimeType . ';base64,' . base64_encode($imageBytes);
     }
 
     private static function localImagePath(string $url, string $publicRoot): ?string
