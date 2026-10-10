@@ -6,6 +6,7 @@ return [
     'logo_text' => 'K',
     'logo_image' => null,
     'logo_alt' => 'Küchenarchiv',
+    'favicon' => null,
     'footer_name' => 'Küchenarchiv',
     'privacy_url' => null,
     'imprint_url' => null,

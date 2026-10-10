@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light">
     <title><?= escape($title) ?> · <?= escape($appConfig['site_name']) ?></title>
+    <?php if (is_string($appConfig['favicon']) && $appConfig['favicon'] !== ''): ?>
+        <link rel="icon" href="<?= escape($appConfig['favicon']) ?>">
+    <?php endif; ?>
     <link rel="stylesheet" href="/assets/app.css">
     <script src="/assets/app.js" defer></script>
 </head>
