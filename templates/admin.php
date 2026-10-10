@@ -6,10 +6,6 @@
     <span class="admin-count"><?= count($items) ?> <?= count($items) === 1 ? 'Rezept' : 'Rezepte' ?></span>
 </section>
 
-<?php if ($flash !== null): ?>
-    <p class="notice <?= $flash['error'] ? 'notice-error' : 'notice-success' ?>" role="<?= $flash['error'] ? 'alert' : 'status' ?>"><?= escape($flash['message']) ?></p>
-<?php endif; ?>
-
 <div class="upload-panels">
     <section class="admin-section upload-panel" aria-labelledby="recipe-upload-title">
         <h2 id="recipe-upload-title">Rezept-YAML</h2>
