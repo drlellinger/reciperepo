@@ -115,7 +115,9 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .table-wrap:focus-visible { border-radius: 2px; }
 table { width: 100%; border-collapse: collapse; text-align: left; }
 th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); }
-th { background: #e9f0ea; font-size: 0.84rem; }
+tbody tr:nth-child(odd) { background: #e1ece3; }
+tbody tr:nth-child(even) { background: #f8faf8; }
+th { background: #cbded0; font-size: 0.84rem; }
 caption { padding: 8px; font-weight: 650; text-align: left; }
 .recipe-media { margin: 28px 0; }
 .recipe-media img, .recipe-media video { display: block; width: 100%; max-height: 620px; border-radius: var(--radius); object-fit: cover; background: #e0ebe2; }
