@@ -42,8 +42,8 @@ Das Bild-Upload der Anwendung unterstützt bis zu 8 MB pro Datei, daher sollte `
 
 Beispielkonfigurationen:
 
-- [Apache VirtualHost](config/apache-vhost.conf.example)
-- [Nginx mit PHP-FPM](config/nginx.conf.example)
+- [Apache VirtualHost](../config/apache-vhost.conf.example)
+- [Nginx mit PHP-FPM](../config/nginx.conf.example)
 
 Die Beispielkonfigurationen an Serverpfade und PHP-FPM-Socket anpassen und TLS-Zertifikate ergänzen. Zugangsdaten außerhalb des Webroots anlegen, zum Beispiel mit `htpasswd -c /etc/recipe-collection/.htpasswd admin` (Apache `htpasswd`-Werkzeug erforderlich). Bei Apache muss die Konfiguration im HTTPS-VirtualHost stehen. Nginx benötigt `auth_basic` im `/admin`-Location-Block.
 
