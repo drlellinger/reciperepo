@@ -7,7 +7,7 @@ function showToast(message) {
     toast.textContent = message;
     toast.classList.add('toast-visible');
     window.clearTimeout(toastTimer);
-    toastTimer = window.setTimeout(() => toast.classList.remove('toast-visible'), 2800);
+    toastTimer = window.setTimeout(() => toast.classList.remove('toast-visible'), 5000);
 }
 
 document.querySelectorAll('form[data-confirm]').forEach((form) => {

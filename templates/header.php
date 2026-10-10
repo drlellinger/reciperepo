@@ -23,8 +23,8 @@
         <span><?= escape($appConfig['site_name']) ?></span>
     </a>
     <nav class="site-nav" aria-label="Hauptnavigation">
-        <a href="/">Rezepte</a>
-        <a href="/admin">Verwaltung</a>
+        <a href="/" <?= ($path === '/' || str_starts_with($path, '/recipe/')) ? 'aria-current="page"' : '' ?>>Rezepte</a>
+        <a href="/admin" <?= $isAdmin ? 'aria-current="page"' : '' ?>>Verwaltung</a>
     </nav>
 </header>
-<main id="main" class="page-shell">
+<main id="main" class="page-shell" tabindex="-1">

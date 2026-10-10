@@ -35,7 +35,7 @@ function escape(string|int|float|null $value): string
 
 function renderPage(string $template, string $title, array $variables = []): never
 {
-    global $appConfig;
+    global $appConfig, $path, $isAdmin;
     $variables['appConfig'] = $appConfig;
     extract($variables, EXTR_SKIP);
     require dirname(__DIR__) . '/templates/header.php';
@@ -71,7 +71,9 @@ function renderBlocks(array $blocks): string
                 $html .= '<div class="recipe-copy">' . nl2br(escape($block['text']), false) . '</div>';
                 break;
             case 'table':
-                $html .= '<div class="table-wrap"><table><thead><tr>';
+                $tableCaption = isset($block['caption']) ? '<caption>' . escape($block['caption']) . '</caption>' : '';
+                $tableLabel = 'Tabellenbereich: ' . ($block['caption'] ?? 'Rezepttabelle');
+                $html .= '<div class="table-wrap" role="region" aria-label="' . escape($tableLabel) . '" tabindex="0"><table>' . $tableCaption . '<thead><tr>';
                 foreach ($block['headers'] as $header) {
                     $html .= '<th scope="col">' . escape($header) . '</th>';
                 }
@@ -89,13 +91,13 @@ function renderBlocks(array $blocks): string
                 $html .= '<figure class="recipe-media"><img src="' . escape($block['url']) . '" alt="' . escape($block['alt']) . '" loading="lazy">' . $caption . '</figure>';
                 break;
             case 'video':
-                $html .= '<figure class="recipe-media"><video controls preload="metadata" src="' . escape($block['url']) . '"></video>' . $caption . '</figure>';
+                $html .= '<figure class="recipe-media"><video aria-label="' . escape($block['caption'] ?? 'Rezeptvideo') . '" controls preload="metadata" src="' . escape($block['url']) . '"></video>' . $caption . '</figure>';
                 break;
             case 'audio':
-                $html .= '<figure class="recipe-media"><audio controls preload="metadata" src="' . escape($block['url']) . '"></audio>' . $caption . '</figure>';
+                $html .= '<figure class="recipe-media"><audio aria-label="' . escape($block['caption'] ?? 'Rezeptaudio') . '" controls preload="metadata" src="' . escape($block['url']) . '"></audio>' . $caption . '</figure>';
                 break;
             case 'link':
-                $html .= '<p class="recipe-link"><a href="' . escape($block['url']) . '" target="_blank" rel="noopener noreferrer">' . escape($block['label']) . ' ↗</a></p>';
+                $html .= '<p class="recipe-link"><a href="' . escape($block['url']) . '" target="_blank" rel="noopener noreferrer">' . escape($block['label']) . ' <span class="visually-hidden">(öffnet in neuem Tab)</span><span aria-hidden="true">↗</span></a></p>';
                 break;
         }
     }
