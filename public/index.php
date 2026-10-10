@@ -131,41 +131,79 @@ if ($method === 'POST' && $isAdmin) {
 
     try {
         if ($path === '/admin/upload') {
-            $upload = $_FILES['recipe'] ?? null;
-            if (!is_array($upload) || ($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-                throw new RuntimeException(uploadErrorMessage((int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE)));
+            $uploads = Recipe\UploadedFiles::normalize($_FILES['recipe'] ?? null);
+            if ($uploads === []) {
+                throw new RuntimeException('Bitte mindestens eine YAML-Datei auswählen.');
             }
-            $temporaryPath = (string) ($upload['tmp_name'] ?? '');
-            if ($temporaryPath === '' || !is_uploaded_file($temporaryPath)) {
-                throw new RuntimeException('Die YAML-Datei konnte nicht korrekt übertragen werden.');
+
+            $savedCount = 0;
+            $failures = [];
+            foreach ($uploads as $upload) {
+                $filename = (string) ($upload['name'] ?? 'Datei');
+                try {
+                    if (($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+                        throw new RuntimeException(uploadErrorMessage((int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE)));
+                    }
+                    $temporaryPath = (string) ($upload['tmp_name'] ?? '');
+                    if ($temporaryPath === '' || !is_uploaded_file($temporaryPath)) {
+                        throw new RuntimeException('Die Datei konnte nicht korrekt übertragen werden.');
+                    }
+                    if (($upload['size'] ?? 0) > 1048576) {
+                        throw new RuntimeException('Die YAML-Datei darf höchstens 1 MB groß sein.');
+                    }
+                    if (!preg_match('/\.ya?ml\z/i', $filename)) {
+                        throw new RuntimeException('Erlaubt sind Dateiendungen .yaml und .yml.');
+                    }
+                    $contents = file_get_contents($temporaryPath);
+                    if ($contents === false) {
+                        throw new RuntimeException('Die hochgeladene Datei konnte nicht gelesen werden.');
+                    }
+                    $recipe = RecipeValidator::parse($contents);
+                    $repository->save($contents, $recipe);
+                    $savedCount++;
+                } catch (Throwable $exception) {
+                    $failures[] = $filename . ': ' . $exception->getMessage();
+                }
             }
-            if (($upload['size'] ?? 0) > 1048576) {
-                throw new RuntimeException('Die YAML-Datei darf höchstens 1 MB groß sein.');
+
+            if ($failures !== []) {
+                $message = $savedCount > 0 ? $savedCount . ' von ' . count($uploads) . ' Rezepten verarbeitet. ' : '';
+                redirectToAdmin($message . 'Fehler: ' . implode(' ', $failures), true);
             }
-            if (!preg_match('/\.ya?ml\z/i', (string) ($upload['name'] ?? ''))) {
-                throw new RuntimeException('Bitte eine Datei mit der Endung .yaml oder .yml auswählen.');
-            }
-            $contents = file_get_contents($temporaryPath);
-            if ($contents === false) {
-                throw new RuntimeException('Die hochgeladene Datei konnte nicht gelesen werden.');
-            }
-            $recipe = RecipeValidator::parse($contents);
-            $repository->save($contents, $recipe);
-            redirectToAdmin('Rezept gespeichert.');
+            redirectToAdmin($savedCount . ' Rezepte wurden importiert oder aktualisiert.');
         }
 
         if ($path === '/admin/upload-image') {
-            $upload = $_FILES['image'] ?? null;
-            if (!is_array($upload) || ($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-                throw new RuntimeException(uploadErrorMessage((int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE)));
+            $uploads = Recipe\UploadedFiles::normalize($_FILES['image'] ?? null);
+            if ($uploads === []) {
+                throw new RuntimeException('Bitte mindestens ein Bild auswählen.');
             }
-            $temporaryPath = (string) ($upload['tmp_name'] ?? '');
-            if ($temporaryPath === '' || !is_uploaded_file($temporaryPath)) {
-                throw new RuntimeException('Das Bild wurde nicht korrekt übertragen. Bitte erneut versuchen.');
-            }
+
             $imageRepository = new ImageRepository($root . '/public/uploads/images');
-            $url = $imageRepository->save($temporaryPath);
-            redirectToAdmin('Bild hochgeladen: ' . $url);
+            $savedCount = 0;
+            $failures = [];
+            foreach ($uploads as $upload) {
+                $filename = (string) ($upload['name'] ?? 'Datei');
+                try {
+                    if (($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+                        throw new RuntimeException(uploadErrorMessage((int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE)));
+                    }
+                    $temporaryPath = (string) ($upload['tmp_name'] ?? '');
+                    if ($temporaryPath === '' || !is_uploaded_file($temporaryPath)) {
+                        throw new RuntimeException('Das Bild konnte nicht korrekt übertragen werden.');
+                    }
+                    $imageRepository->save($temporaryPath);
+                    $savedCount++;
+                } catch (Throwable $exception) {
+                    $failures[] = $filename . ': ' . $exception->getMessage();
+                }
+            }
+
+            if ($failures !== []) {
+                $message = $savedCount > 0 ? $savedCount . ' von ' . count($uploads) . ' Bildern hochgeladen. ' : '';
+                redirectToAdmin($message . 'Fehler: ' . implode(' ', $failures), true);
+            }
+            redirectToAdmin($savedCount . ' Bilder wurden hochgeladen.');
         }
 
         if (preg_match('~\A/admin/delete/([a-z0-9]+(?:-[a-z0-9]+)*)\z~', $path, $matches)) {

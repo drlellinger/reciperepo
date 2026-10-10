@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Recipe\RecipeRepository;
 use Recipe\RecipeValidator;
 use Recipe\ImageRepository;
+use Recipe\UploadedFiles;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -46,6 +47,15 @@ check(uploadErrorMessage(UPLOAD_ERR_INI_SIZE) === 'Das Bild ist größer als das
 check(uploadErrorMessage(UPLOAD_ERR_NO_FILE) === 'Es wurde keine Datei ausgewählt.', 'Fehlender Upload wird korrekt erkannt.');
 check(\Recipe\Toast::message(['message' => 'Rezept gelöscht.']) === 'Rezept gelöscht.', 'Flash-Nachrichten werden als Toast-Meldung übernommen.');
 check(\Recipe\Toast::message(['message' => '   ']) === null, 'Leere Flash-Nachrichten werden als Toast ignoriert.');
+$normalizedUploads = UploadedFiles::normalize([
+    'name' => ['one.yaml', 'two.yaml'],
+    'type' => ['application/yaml', 'application/yaml'],
+    'tmp_name' => ['/tmp/one', '/tmp/two'],
+    'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_OK],
+    'size' => [10, 20],
+]);
+check(count($normalizedUploads) === 2 && $normalizedUploads[1]['name'] === 'two.yaml', 'Mehrfach-Uploads werden in einzelne Dateien normalisiert.');
+check(UploadedFiles::normalize(null) === [], 'Fehlende Uploads ergeben eine leere Dateiliste.');
 
 $yaml = <<<'YAML'
 version: 1

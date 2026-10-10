@@ -12,8 +12,8 @@
         <form class="upload-form" method="post" action="/admin/upload" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<?= escape($csrfToken) ?>">
             <label class="file-field" for="recipe-file">
-                <span class="file-field-label">YAML-Datei · maximal 1 MB</span>
-                <input id="recipe-file" type="file" name="recipe" accept=".yaml,.yml,application/yaml,text/yaml" required>
+                <span class="file-field-label">YAML-Dateien · jeweils maximal 1 MB</span>
+                <input id="recipe-file" type="file" name="recipe[]" accept=".yaml,.yml,application/yaml,text/yaml" multiple required>
             </label>
             <button class="button button-primary" type="submit">Rezept importieren</button>
         </form>
@@ -24,8 +24,8 @@
         <form class="upload-form" method="post" action="/admin/upload-image" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<?= escape($csrfToken) ?>">
             <label class="file-field" for="image-file">
-                <span class="file-field-label">Bild · JPEG, PNG, GIF oder WebP · maximal 8 MB</span>
-                <input id="image-file" type="file" name="image" accept="image/jpeg,image/png,image/gif,image/webp" required>
+                <span class="file-field-label">Bilder · JPEG, PNG, GIF oder WebP · jeweils maximal 8 MB</span>
+                <input id="image-file" type="file" name="image[]" accept="image/jpeg,image/png,image/gif,image/webp" multiple required>
             </label>
             <button class="button button-primary" type="submit">Bild hochladen</button>
         </form>
