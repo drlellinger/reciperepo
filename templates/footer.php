@@ -10,5 +10,6 @@
         <?php endif; ?>
     </nav>
 </footer>
+<div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>

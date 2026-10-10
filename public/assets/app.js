@@ -1,3 +1,15 @@
+const toast = document.querySelector('[data-toast]');
+let toastTimer;
+
+function showToast(message) {
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.classList.add('toast-visible');
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => toast.classList.remove('toast-visible'), 2800);
+}
+
 document.querySelectorAll('form[data-confirm]').forEach((form) => {
     form.addEventListener('submit', (event) => {
         if (!window.confirm(form.dataset.confirm)) {
@@ -8,27 +20,26 @@ document.querySelectorAll('form[data-confirm]').forEach((form) => {
 
 document.querySelectorAll('button[data-copy]').forEach((button) => {
     button.addEventListener('click', async () => {
-        const status = document.querySelector('.copy-status');
         try {
             await navigator.clipboard.writeText(button.dataset.copy);
-            if (status) status.textContent = 'Bild-URL kopiert.';
+            showToast('Bild-URL kopiert.');
         } catch {
             const input = button.parentElement.querySelector('input');
+            input?.focus();
             input?.select();
-            if (status) status.textContent = 'URL markiert. Zum Kopieren Ctrl+C oder Cmd+C drücken.';
+            showToast('URL markiert. Zum Kopieren Ctrl+C oder Cmd+C drücken.');
         }
     });
 });
 
 document.querySelectorAll('button[data-share]').forEach((button) => {
     button.addEventListener('click', async () => {
-        const status = document.querySelector('.share-status');
         const shareData = { title: button.dataset.shareTitle, url: window.location.href };
 
         if (navigator.share) {
             try {
                 await navigator.share(shareData);
-                if (status) status.textContent = 'Rezept wurde geteilt.';
+                showToast('Rezept wurde geteilt.');
                 return;
             } catch (error) {
                 if (error.name === 'AbortError') return;
@@ -37,7 +48,7 @@ document.querySelectorAll('button[data-share]').forEach((button) => {
 
         try {
             await navigator.clipboard.writeText(shareData.url);
-            if (status) status.textContent = 'Rezeptlink kopiert.';
+            showToast('Rezeptlink kopiert.');
         } catch {
             const fallback = document.querySelector('[data-share-fallback]');
             const input = fallback?.querySelector('[data-share-url]');
@@ -46,7 +57,7 @@ document.querySelectorAll('button[data-share]').forEach((button) => {
                 fallback.hidden = false;
                 input.focus();
                 input.select();
-                if (status) status.textContent = 'Link markiert. Zum Kopieren Ctrl+C oder Cmd+C drücken.';
+                showToast('Link markiert. Zum Kopieren Ctrl+C oder Cmd+C drücken.');
             }
         }
     });

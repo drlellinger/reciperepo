@@ -44,7 +44,6 @@
                     </li>
                 <?php endforeach; ?>
             </ul>
-            <p class="copy-status" role="status" aria-live="polite"></p>
         <?php endif; ?>
     </section>
 </div>
