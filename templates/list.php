@@ -85,16 +85,16 @@
                             <span class="recipe-row-copy">
                                 <span class="recipe-row-title"><?= escape($item['recipe']['title']) ?></span>
                                 <span class="recipe-row-meta"><?= escape($item['recipe']['summary'] ?? 'Keine Kurzbeschreibung hinterlegt.') ?></span>
-                                <?php if (!empty($item['recipe']['tags'])): ?>
-                                    <span class="recipe-tags">
-                                        <?php foreach ($item['recipe']['tags'] as $tag): ?>
-                                            <span class="tag-label"><?= escape($tag) ?></span>
-                                        <?php endforeach; ?>
-                                    </span>
-                                <?php endif; ?>
                             </span>
                             <span class="row-arrow" aria-hidden="true">↗</span>
                         </a>
+                        <?php if (!empty($item['recipe']['tags'])): ?>
+                            <span class="recipe-tags recipe-row-tags">
+                                <?php foreach ($item['recipe']['tags'] as $tag): ?>
+                                    <a class="tag-label" href="/?sort=<?= urlencode($sort) ?>&amp;tag=<?= urlencode($tag) ?>&amp;group=<?= urlencode($groupBy) ?>&amp;perPage=<?= $perPage ?>&amp;page=1"<?= $selectedTag === $tag ? ' aria-current="true"' : '' ?>><?= escape($tag) ?></a>
+                                <?php endforeach; ?>
+                            </span>
+                        <?php endif; ?>
                     </article>
                 <?php endforeach; ?>
             </div>

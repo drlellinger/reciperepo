@@ -69,8 +69,10 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .recipe-row-title { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; font-size: 1.3rem; font-weight: 650; letter-spacing: -0.02em; }
 .recipe-row-meta { color: var(--muted); font-size: 0.82rem; }
 .recipe-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+.recipe-row-tags { margin: -8px 0 14px 96px; }
 .recipe-heading .recipe-tags { margin: 0 0 12px; }
-.tag-label { display: inline-flex; align-items: center; min-height: 23px; padding: 2px 8px; border-radius: 999px; background: #e5eee7; color: #244d39; font-size: 0.73rem; font-weight: 650; }
+.tag-label { display: inline-flex; align-items: center; min-height: 23px; padding: 2px 8px; border-radius: 999px; background: #e5eee7; color: #244d39; font-size: 0.73rem; font-weight: 650; text-decoration: none; transition: box-shadow 140ms ease-out, filter 140ms ease-out, transform 140ms ease-out; }
+.tag-label:hover { transform: translateY(-1px); box-shadow: 0 0 0 3px rgba(40, 102, 78, 0.2); filter: brightness(1.05); }
 .tag-label:nth-child(5n + 1) { background: #e3f0e5; color: #245238; }
 .tag-label:nth-child(5n + 2) { background: #fae8dd; color: #7c3a20; }
 .tag-label:nth-child(5n + 3) { background: #e3edf5; color: #284d6a; }
@@ -165,6 +167,7 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
     .collection-controls .button-filter { align-self: start; }
     .recipe-row-link { grid-template-columns: 60px 1fr auto; gap: 14px; min-height: 84px; }
     .recipe-thumb { width: 60px; height: 58px; }
+    .recipe-row-tags { margin-left: 74px; }
     .upload-form { align-items: stretch; flex-direction: column; }
     .upload-form .button { align-self: start; }
     .upload-panels { grid-template-columns: 1fr; gap: 0; }
