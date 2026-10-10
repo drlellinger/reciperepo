@@ -4,9 +4,11 @@ Eine kleine Rezeptesammlung mit PHP und YAML: Rezepte sind öffentlich lesbar un
 
 ## Voraussetzungen
 
-- PHP 8.1 oder neuer mit `iconv` und den üblichen Datei-/Session-Funktionen
+- PHP 8.1+ mit `fileinfo` und `iconv`
 - Composer
 - Apache mit PHP-FPM/mod_php oder Nginx mit PHP-FPM
+
+Mehr Informationen zum Deployment siehe [hier](docs/Deployment.md)
 
 ## YAML-Format
 
@@ -25,4 +27,8 @@ Für die automatisierte Übertragung von Rezepten aus Textdokumenten siehe die [
 
 Navbar, Browser-Titel und Footer lassen sich in [config/app.php](config/app.php) anpassen.
 
-Medien- und Link-URLs müssen HTTP(S) verwenden. Beliebiges HTML und eingebettete iframes werden nicht unterstützt. Der Upload akzeptiert Dateien bis 1 MB. Ein Upload mit demselben normalisierten Titel ersetzt das Rezept; ein anderer Titel legt ein neues Rezept an. Der Download auf jeder Rezeptseite liefert die gespeicherte YAML-Datei.
+## Rezeptbilder hochladen
+
+In der Verwaltung lassen sich YAML-Dateien und Rezeptbilder getrennt hochladen. Bilder werden als JPEG, PNG, GIF oder WebP bis 8 MB in `public/uploads/images/` gespeichert und sind dort öffentlich abrufbar. Die Verwaltung zeigt Vorschaubilder und die zugehörigen Pfade an. Den kopierten Pfad als `url` eines `image`-Blocks in der Rezept-YAML verwenden, zum Beispiel `/uploads/images/<Dateiname>.jpg`. Externe HTTP(S)-Bild-URLs sind weiterhin zulässig. Für Sicherungen auch `public/uploads/images/` einschließen.
+
+Externe Medien- und Link-URLs müssen HTTP(S) verwenden; Bilder aus der Verwaltung dürfen zusätzlich ihren lokalen Pfad unter `/uploads/images/` verwenden. Beliebiges HTML und eingebettete iframes werden nicht unterstützt. YAML-Dateien dürfen bis 1 MB groß sein, Bilddateien bis 8 MB. Ein YAML-Upload mit demselben normalisierten Titel ersetzt das Rezept; ein anderer Titel legt ein neues Rezept an. Der Download auf jeder Rezeptseite liefert die gespeicherte YAML-Datei.

@@ -5,6 +5,7 @@
   "require": {
     "php": "^8.1",
     "ext-iconv": "*",
+    "ext-fileinfo": "*",
     "symfony/yaml": "^6.4 || ^7.0 || ^8.0"
   },
   "autoload": {

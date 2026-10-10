@@ -48,7 +48,7 @@ blocks:
 - `table` benötigt eine nicht leere Liste von Textüberschriften `headers` und eine Liste `rows`. Jede Zeile muss gleich viele Zellen wie Überschriften haben. Zellen sind Text oder Zahlen. Mengen mit Einheiten als Text quotieren, zum Beispiel `"200 g"`.
 - `image` benötigt `url` und ein nicht leeres `alt`; `caption` ist optional. `video` und `audio` benötigen `url`; `caption` ist optional. `link` benötigt `url` und nicht leeres `label`.
 - Ein Bild nur dann ausgeben, wenn eine echte URL vorliegt und sich ein sachlicher Alt-Text aus der Quelle ableiten lässt; sonst den Bildblock weglassen.
-- URLs müssen vollständig und absolut sein, mit `http://` oder `https://` beginnen und einen Host enthalten. URLs niemals ausdenken. Nur direkte Medien-URLs als `image`, `video` oder `audio` verwenden; andere Webseiten als `link` ausgeben.
+- Externe URLs müssen vollständig und absolut sein, mit `http://` oder `https://` beginnen und einen Host enthalten. URLs niemals ausdenken. Für ein zuvor in der Verwaltung hochgeladenes Bild darf dessen Pfad `/uploads/images/<Dateiname>` als `image.url` übernommen werden. Nur direkte Medien-URLs als `image`, `video` oder `audio` verwenden; andere Webseiten als `link` ausgeben.
 - YAML-Text mit Doppelpunkten, `#`, Anführungszeichen oder möglichen YAML-Sonderwerten sicher quotieren. Beliebiges HTML, iframes, zusätzliche Felder und unbekannte Blocktypen sind nicht erlaubt.
 - Eine Datei darf höchstens 1 MB groß sein.
 

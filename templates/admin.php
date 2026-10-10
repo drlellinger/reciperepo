@@ -10,17 +10,44 @@
     <p class="notice <?= $flash['error'] ? 'notice-error' : 'notice-success' ?>" role="<?= $flash['error'] ? 'alert' : 'status' ?>"><?= escape($flash['message']) ?></p>
 <?php endif; ?>
 
-<section class="admin-section" aria-labelledby="upload-title">
-    <h2 id="upload-title">YAML importieren</h2>
-    <form class="upload-form" method="post" action="/admin/upload" enctype="multipart/form-data">
-        <input type="hidden" name="_csrf" value="<?= escape($csrfToken) ?>">
-        <label class="file-field" for="recipe-file">
-            <span class="file-field-label">Rezeptdatei</span>
-            <input id="recipe-file" type="file" name="recipe" accept=".yaml,.yml,application/yaml,text/yaml" required>
-        </label>
-        <button class="button button-primary" type="submit">Importieren</button>
-    </form>
-</section>
+<div class="upload-panels">
+    <section class="admin-section upload-panel" aria-labelledby="recipe-upload-title">
+        <h2 id="recipe-upload-title">Rezept-YAML</h2>
+        <form class="upload-form" method="post" action="/admin/upload" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="<?= escape($csrfToken) ?>">
+            <label class="file-field" for="recipe-file">
+                <span class="file-field-label">YAML-Datei · maximal 1 MB</span>
+                <input id="recipe-file" type="file" name="recipe" accept=".yaml,.yml,application/yaml,text/yaml" required>
+            </label>
+            <button class="button button-primary" type="submit">Rezept importieren</button>
+        </form>
+    </section>
+
+    <section class="admin-section upload-panel" aria-labelledby="image-upload-title">
+        <h2 id="image-upload-title">Rezeptbilder</h2>
+        <form class="upload-form" method="post" action="/admin/upload-image" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="<?= escape($csrfToken) ?>">
+            <label class="file-field" for="image-file">
+                <span class="file-field-label">Bild · JPEG, PNG, GIF oder WebP · maximal 8 MB</span>
+                <input id="image-file" type="file" name="image" accept="image/jpeg,image/png,image/gif,image/webp" required>
+            </label>
+            <button class="button button-primary" type="submit">Bild hochladen</button>
+        </form>
+        <?php if ($images !== []): ?>
+            <h3 class="image-list-heading">Hochgeladene Bilder</h3>
+            <ul class="image-list">
+                <?php foreach ($images as $image): ?>
+                    <li class="image-list-item">
+                        <img src="<?= escape($image['url']) ?>" alt="" loading="lazy">
+                        <input type="text" value="<?= escape($image['url']) ?>" readonly aria-label="Bild-URL">
+                        <button class="button button-copy" type="button" data-copy="<?= escape($image['url']) ?>">Kopieren</button>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <p class="copy-status" role="status" aria-live="polite"></p>
+        <?php endif; ?>
+    </section>
+</div>
 
 <section class="admin-section" aria-labelledby="recipes-title">
     <h2 id="recipes-title">Rezepte</h2>

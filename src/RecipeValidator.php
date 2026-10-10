@@ -142,13 +142,17 @@ final class RecipeValidator
 
     private static function validateMedia(array $block, int $number): void
     {
-        self::validateUrl($block['url'] ?? null, $number);
+        self::validateUrl($block['url'] ?? null, $number, $block['type'] === 'image');
     }
 
-    private static function validateUrl(mixed $url, int $number): void
+    private static function validateUrl(mixed $url, int $number, bool $allowManagedImage = false): void
     {
         if (!is_string($url)) {
             throw new InvalidArgumentException("Inhaltsblock {$number} benötigt eine URL.");
+        }
+
+        if ($allowManagedImage && preg_match('/\A\/uploads\/images\/[a-f0-9]{32}\.(?:jpg|png|gif|webp)\z/', $url)) {
+            return;
         }
 
         $parts = parse_url($url);

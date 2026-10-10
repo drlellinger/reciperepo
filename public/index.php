@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use Recipe\RecipeRepository;
 use Recipe\RecipeValidator;
+use Recipe\ImageRepository;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -134,6 +135,16 @@ if ($method === 'POST' && $isAdmin) {
             redirectToAdmin('Rezept gespeichert.');
         }
 
+        if ($path === '/admin/upload-image') {
+            $upload = $_FILES['image'] ?? null;
+            if (!is_array($upload) || ($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !is_uploaded_file($upload['tmp_name'] ?? '')) {
+                throw new RuntimeException('Das Bild konnte nicht hochgeladen werden.');
+            }
+            $imageRepository = new ImageRepository($root . '/public/uploads/images');
+            $url = $imageRepository->save($upload['tmp_name']);
+            redirectToAdmin('Bild hochgeladen: ' . $url);
+        }
+
         if (preg_match('~\A/admin/delete/([a-z0-9]+(?:-[a-z0-9]+)*)\z~', $path, $matches)) {
             if (!$repository->delete($matches[1])) {
                 throw new RuntimeException('Das Rezept wurde nicht gefunden.');
@@ -242,6 +253,7 @@ if ($path === '/admin' && $method === 'GET') {
     }
     renderPage('admin', 'Verwaltung', [
         'items' => $repository->all(),
+        'images' => (new ImageRepository($root . '/public/uploads/images'))->all(),
         'csrfToken' => $_SESSION['_csrf'],
         'flash' => takeFlash(),
     ]);

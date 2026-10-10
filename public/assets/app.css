@@ -104,6 +104,10 @@ figcaption { margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
 .admin-heading h1 { margin-bottom: 0; }
 .admin-section { padding: 34px 0; border-bottom: 1px solid var(--line); }
 .admin-section h2 { margin-bottom: 20px; }
+.upload-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.upload-panel { min-width: 0; }
+.upload-panel .upload-form { align-items: stretch; flex-direction: column; }
+.upload-panel .upload-form .button { align-self: start; }
 .upload-form { display: flex; align-items: end; gap: 14px; }
 .file-field { display: grid; flex: 1; gap: 8px; }
 .file-field-label { font-size: 0.88rem; font-weight: 650; }
@@ -115,6 +119,14 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
 .admin-list li { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 58px; border-bottom: 1px solid var(--line); }
 .admin-list li > a { font-weight: 600; text-decoration: none; }
 .admin-list form { margin: 0; }
+.image-list-heading { margin: 24px 0 10px; font-size: 1.1rem; }
+.image-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.image-list-item { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: 8px; }
+.image-list-item img { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; background: #e0ebe2; }
+.image-list-item input { min-width: 0; width: 100%; height: 38px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--muted); font-size: 0.76rem; }
+.button-copy { min-height: 38px; padding: 6px 9px; background: #ecefed; color: #435047; font-size: 0.78rem; }
+.button-copy:hover { background: #e0e5e1; }
+.copy-status { min-height: 1.2em; margin: 7px 0 0; color: var(--green-dark); font-size: 0.8rem; }
 .quiet-message { margin: 0; color: var(--muted); }
 .not-found { min-height: 45vh; align-content: center; }
 .site-footer { display: flex; justify-content: space-between; padding: 20px max(24px, calc((100% - 1120px) / 2)); border-top: 1px solid var(--line); color: var(--muted); font-size: 0.82rem; }
@@ -135,6 +147,9 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
     .recipe-thumb { width: 60px; height: 58px; }
     .upload-form { align-items: stretch; flex-direction: column; }
     .upload-form .button { align-self: start; }
+    .upload-panels { grid-template-columns: 1fr; gap: 0; }
+    .image-list-item { grid-template-columns: 42px minmax(0, 1fr) auto; }
+    .image-list-item img { width: 42px; height: 42px; }
     .site-footer { padding: 18px 20px; }
 }
 

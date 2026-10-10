@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use Recipe\RecipeRepository;
 use Recipe\RecipeValidator;
+use Recipe\ImageRepository;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -35,12 +36,12 @@ tags: [Beilage, Vegetarisch]
 blocks:
     - type: heading
         text: Zubereitung
-  - type: text
-    text: Mit Zitrone abschmecken.
-  - type: table
-    headers: [Zutat, Menge]
-    rows:
-      - [Reis, "150 g"]
+    - type: text
+        text: Mit Zitrone abschmecken.
+    - type: table
+        headers: [Zutat, Menge]
+        rows:
+            - [Reis, "150 g"]
 YAML;
 
 $recipe = RecipeValidator::parse($yaml);
@@ -72,6 +73,17 @@ rejects(static fn () => RecipeValidator::parse($unsafeMedia), 'Nicht-HTTP-Medien
 $directory = sys_get_temp_dir() . '/recipe-tests-' . bin2hex(random_bytes(6));
 try {
     $repository = new RecipeRepository($directory);
+    $imageRepository = new ImageRepository($directory);
+    $temporaryImage = tempnam(sys_get_temp_dir(), 'recipe-image-test-');
+    file_put_contents($temporaryImage, base64_decode('R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', true));
+    $imageUrl = $imageRepository->save($temporaryImage);
+    unlink($temporaryImage);
+    check((bool) preg_match('~\A/uploads/images/[a-f0-9]{32}\.gif\z~', $imageUrl), 'Bild erhält eine öffentliche URL mit zufälligem Dateinamen.');
+    check(count($imageRepository->all()) === 1, 'Hochgeladenes Bild erscheint in der Bildliste.');
+    $imageYaml = "version: 1\ntitle: Bildrezept\nblocks:\n  - type: image\n    url: {$imageUrl}\n    alt: Testbild\n";
+    check(RecipeValidator::parse($imageYaml)['blocks'][0]['url'] === $imageUrl, 'Öffentlicher lokaler Bildpfad ist im Rezept-YAML gültig.');
+    rejects(static fn () => RecipeValidator::parse("version: 1\ntitle: Unsicher\nblocks:\n  - type: image\n    url: /uploads/images/../../index.php\n    alt: Bild\n"), 'Andere lokale Dateipfade werden nicht als Rezeptbild akzeptiert.');
+
     $slug = $repository->save($yaml, $recipe);
     check($slug === 'zitronenreis', 'Neues Rezept erhält einen stabilen Slug.');
     check($repository->find($slug)['recipe']['title'] === 'Zitronenreis', 'Gespeichertes Rezept kann geladen werden.');
