@@ -35,7 +35,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .skip-link:focus { transform: translateY(0); }
 .site-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 24px; min-height: 76px; padding: 12px max(24px, calc((100% - 1120px) / 2)); border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.66); backdrop-filter: blur(18px) saturate(1.2); }
 .wordmark { display: inline-flex; align-items: center; gap: 10px; color: var(--green-dark); font-size: 0.98rem; font-weight: 700; text-decoration: none; letter-spacing: -0.02em; }
-.wordmark-mark { display: grid; width: 32px; aspect-ratio: 1; place-items: center; border-radius: 50%; background: linear-gradient(180deg, #2e7659 0%, var(--green-dark) 100%); color: #fff; font-family: Georgia, serif; font-size: 1.15rem; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24); }
+.wordmark-mark { display: grid; width: 32px; aspect-ratio: 1; place-items: center; border-radius: 50%; background: linear-gradient(180deg, #2e7659 0%, var(--green-dark) 100%); color: #fff; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif; font-size: 1.15rem; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24); }
 .wordmark-logo { display: block; width: 32px; height: 32px; object-fit: contain; }
 .site-nav { display: flex; flex-wrap: wrap; gap: 10px; }
 .site-nav a { display: inline-flex; align-items: center; min-height: 34px; padding: 7px 12px; border: 1px solid transparent; border-radius: 999px; color: var(--muted); font-size: 0.9rem; font-weight: 600; text-decoration: none; letter-spacing: -0.01em; transition: border-color 140ms ease-out, background-color 140ms ease-out, color 140ms ease-out, transform 140ms ease-out; }
@@ -45,7 +45,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .collection-heading, .admin-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
 .eyebrow { margin: 0 0 10px; color: var(--green); font-size: 0.76rem; font-weight: 750; text-transform: uppercase; }
 h1, h2, p { margin-top: 0; }
-h1, h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; }
+h1, h2 { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; font-weight: 600; }
 h1 { max-width: 740px; margin-bottom: 14px; font-size: 3.4rem; line-height: 1.06; }
 h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .collection-count, .admin-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
@@ -64,9 +64,9 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .recipe-row-link { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 20px; min-height: 96px; padding: 12px 10px 12px 4px; border-radius: 16px; text-decoration: none; transition: background-color 160ms ease-out, transform 160ms ease-out; }
 .recipe-row-link:hover { background: rgba(255, 255, 255, 0.4); }
 .recipe-thumb { display: block; width: 72px; height: 68px; border-radius: var(--radius); object-fit: cover; background: #e0ebe2; }
-.recipe-thumb-empty { display: grid; place-items: center; color: var(--green); font-family: Georgia, serif; font-size: 1.6rem; }
+.recipe-thumb-empty { display: grid; place-items: center; color: var(--green); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; font-size: 1.6rem; }
 .recipe-row-copy { display: grid; gap: 3px; }
-.recipe-row-title { font-family: Georgia, "Times New Roman", serif; font-size: 1.28rem; letter-spacing: -0.02em; }
+.recipe-row-title { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; font-size: 1.28rem; letter-spacing: -0.02em; }
 .recipe-row-meta { color: var(--muted); font-size: 0.82rem; }
 .recipe-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
 .recipe-heading .recipe-tags { margin: 0 0 12px; }
@@ -82,7 +82,7 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .recipe-row-link:hover .row-arrow { transform: translate(2px, -2px); }
 .empty-state { display: grid; justify-items: center; gap: 10px; padding: 76px 20px; text-align: center; }
 .empty-state h2 { margin-bottom: 14px; }
-.empty-kicker { display: grid; width: 54px; aspect-ratio: 1; place-items: center; margin: 0 0 12px; border-radius: 50%; background: #e1eee5; color: var(--green); font-family: Georgia, serif; font-size: 1.8rem; }
+.empty-kicker { display: grid; width: 54px; aspect-ratio: 1; place-items: center; margin: 0 0 12px; border-radius: 50%; background: #e1eee5; color: var(--green); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; font-size: 1.8rem; }
 .pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-top: 26px; padding: 14px 16px; border: 1px solid rgba(112, 138, 126, 0.22); border-radius: 999px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); box-shadow: var(--shadow-soft); color: var(--muted); font-size: 0.85rem; }
 .pagination a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border: 1px solid rgba(120, 156, 139, 0.28); border-radius: 999px; background: rgba(255, 255, 255, 0.76); color: var(--green-dark); font-weight: 700; text-decoration: none; }
 .pagination a:hover { border-color: rgba(120, 156, 139, 0.42); background: #f5faf6; }
