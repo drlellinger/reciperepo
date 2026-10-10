@@ -31,8 +31,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .wordmark { display: inline-flex; align-items: center; gap: 10px; color: var(--green-dark); font-size: 0.98rem; font-weight: 700; text-decoration: none; }
 .wordmark-mark { display: grid; width: 32px; aspect-ratio: 1; place-items: center; border-radius: 50%; background: var(--green); color: #fff; font-family: Georgia, serif; font-size: 1.15rem; }
 .wordmark-logo { display: block; width: 32px; height: 32px; object-fit: contain; }
-.site-nav { display: flex; flex-wrap: wrap; gap: 24px; }
-.site-nav a { color: var(--muted); font-size: 0.9rem; font-weight: 600; text-decoration: none; }
+.site-nav { display: flex; flex-wrap: wrap; gap: 10px; }
+.site-nav a { display: inline-flex; align-items: center; min-height: 34px; padding: 7px 12px; border: 1px solid transparent; border-radius: 999px; color: var(--muted); font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: border-color 140ms ease-out, background-color 140ms ease-out, color 140ms ease-out; }
+.site-nav a[aria-current="page"] { border-color: var(--line); background: rgba(40, 102, 78, 0.06); color: var(--green-dark); }
 .site-nav a:hover, .text-link:hover, .download-link:hover { color: var(--tomato); }
 .page-shell { width: min(100% - 48px, 960px); min-height: calc(100vh - 144px); margin: 0 auto; padding: 64px 0 88px; }
 .collection-heading, .admin-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
@@ -42,13 +43,13 @@ h1, h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; }
 h1 { max-width: 740px; margin-bottom: 14px; font-size: 3.4rem; line-height: 1.06; }
 h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .collection-count, .admin-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
-.collection-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.collection-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 18px 18px 16px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255, 255, 255, 0.72); }
 .collection-controls label { display: grid; gap: 5px; }
 .collection-controls label span { color: var(--muted); font-size: 0.78rem; font-weight: 650; }
-.collection-controls select { min-width: 150px; min-height: 42px; padding: 8px 32px 8px 10px; border: 1px solid #bdcec1; border-radius: var(--radius); background: var(--surface); color: var(--ink); font: inherit; }
-.button-filter { min-height: 42px; padding: 8px 14px; background: #e4eee6; color: var(--green-dark); }
-.button-filter:hover { background: #d6e7db; }
-.reset-link { padding: 10px 4px; color: var(--muted); font-size: 0.86rem; }
+.collection-controls select { min-width: 150px; min-height: 42px; padding: 8px 32px 8px 10px; border: 1px solid #bed0c5; border-radius: 12px; background: var(--surface); color: var(--ink); font: inherit; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8); }
+.button-filter { min-height: 42px; padding: 8px 14px; border: 1px solid #c9d9cd; border-radius: 12px; background: linear-gradient(180deg, #f3faf5 0%, #dfeee5 100%); color: var(--green-dark); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.82) inset; }
+.button-filter:hover { background: linear-gradient(180deg, #edf7f0 0%, #d8e9df 100%); }
+.reset-link { display: inline-flex; align-items: center; min-height: 42px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); font-size: 0.86rem; text-decoration: none; }
 .text-link, .download-link { color: var(--green-dark); font-size: 0.92rem; font-weight: 700; text-decoration: none; }
 .text-link span { display: inline-block; margin-left: 4px; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); white-space: nowrap; }
@@ -75,6 +76,10 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .empty-state { display: grid; justify-items: center; gap: 10px; padding: 76px 20px; text-align: center; }
 .empty-state h2 { margin-bottom: 14px; }
 .empty-kicker { display: grid; width: 54px; aspect-ratio: 1; place-items: center; margin: 0 0 12px; border-radius: 50%; background: #e1eee5; color: var(--green); font-family: Georgia, serif; font-size: 1.8rem; }
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-top: 26px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.72); color: var(--muted); font-size: 0.85rem; }
+.pagination a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--green-dark); font-weight: 700; text-decoration: none; }
+.pagination a:hover { border-color: #bdd1c6; background: #f5faf6; }
+.pagination span { padding: 0 4px; }
 .button { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 10px 17px; border: 0; border-radius: var(--radius); cursor: pointer; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: background-color 120ms ease-out, transform 120ms ease-out; }
 .button:active { transform: scale(0.98); }
 .button-primary { background: var(--green); color: #fff; }
