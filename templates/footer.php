@@ -10,7 +10,10 @@
         <?php endif; ?>
     </nav>
 </footer>
-<?php $flashToast = \Recipe\Toast::message($flash ?? null); ?>
-<div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true" <?= $flashToast !== null ? 'data-flash-message="' . escape($flashToast) . '"' : '' ?>></div>
+<?php
+$flashToast = \Recipe\Toast::message($flash ?? null);
+$flashToastIsError = $flashToast !== null && !empty($flash['error']);
+?>
+<div class="toast<?= $flashToast !== null ? ' toast-visible' : '' ?><?= $flashToastIsError ? ' toast-error' : '' ?>" data-toast role="<?= $flashToastIsError ? 'alert' : 'status' ?>" aria-live="<?= $flashToastIsError ? 'assertive' : 'polite' ?>" aria-atomic="true" <?= $flashToast !== null ? 'data-flash-message="' . escape($flashToast) . '"' : '' ?>><?= $flashToast !== null ? escape($flashToast) : '' ?></div>
 </body>
 </html>
