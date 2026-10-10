@@ -204,6 +204,10 @@ if ($path === '/' && $method === 'GET') {
     $selectedTag = is_string($selectedTag) ? $selectedTag : '';
     $groupBy = $_GET['group'] ?? 'none';
     $groupBy = $groupBy === 'tag' ? 'tag' : 'none';
+    $perPage = $_GET['perPage'] ?? '10';
+    $perPage = is_string($perPage) && in_array($perPage, ['5', '10', '20', '50'], true) ? (int) $perPage : 10;
+    $page = $_GET['page'] ?? '1';
+    $page = max(1, (int) $page);
 
     $tags = [];
     foreach ($allItems as $item) {
@@ -234,6 +238,13 @@ if ($path === '/' && $method === 'GET') {
         return $comparison !== 0 ? $comparison : strnatcasecmp($left['recipe']['title'], $right['recipe']['title']);
     });
 
+    $totalCount = count($items);
+    $pageCount = $totalCount === 0 ? 1 : max(1, (int) ceil($totalCount / $perPage));
+    $page = min($page, $pageCount);
+    $visibleStart = $totalCount === 0 ? 0 : ($page - 1) * $perPage + 1;
+    $visibleEnd = min($page * $perPage, $totalCount);
+    $items = array_slice($items, ($page - 1) * $perPage, $perPage);
+
     $groups = [];
     if ($groupBy === 'tag') {
         foreach ($items as $item) {
@@ -261,7 +272,12 @@ if ($path === '/' && $method === 'GET') {
 
     renderPage('list', 'Rezeptsammlung', [
         'items' => $items,
-        'totalCount' => count($allItems),
+        'totalCount' => $totalCount,
+        'visibleStart' => $visibleStart,
+        'visibleEnd' => $visibleEnd,
+        'page' => $page,
+        'pageCount' => $pageCount,
+        'perPage' => $perPage,
         'groups' => $groups,
         'tags' => $tags,
         'selectedTag' => $selectedTag,

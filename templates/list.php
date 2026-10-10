@@ -2,12 +2,19 @@
     <div>
         <h1>Was kommt heute auf den Tisch?</h1>
         <p class="collection-count">
-            <?= count($items) ?> von <?= $totalCount ?> <?= $totalCount === 1 ? 'Rezept' : 'Rezepten' ?>
+            <?php if ($totalCount === 0): ?>
+                0 Rezepte
+            <?php elseif ($totalCount <= $perPage): ?>
+                <?= $totalCount ?> <?= $totalCount === 1 ? 'Rezept' : 'Rezepte' ?>
+            <?php else: ?>
+                <?= $visibleStart ?>–<?= $visibleEnd ?> von <?= $totalCount ?> Rezepten
+            <?php endif; ?>
         </p>
     </div>
 </section>
 
 <form class="collection-controls" method="get" action="/">
+    <input type="hidden" name="page" value="1">
     <label>
         <span>Sortieren nach</span>
         <select name="sort">
@@ -32,8 +39,16 @@
             <option value="tag" <?= $groupBy === 'tag' ? 'selected' : '' ?>>Nach Kategorie</option>
         </select>
     </label>
+    <label>
+        <span>Rezepte pro Seite</span>
+        <select name="perPage">
+            <?php foreach ([5, 10, 20, 50] as $choice): ?>
+                <option value="<?= $choice ?>" <?= $perPage === $choice ? 'selected' : '' ?>><?= $choice ?></option>
+            <?php endforeach; ?>
+        </select>
+    </label>
     <button class="button button-filter" type="submit">Anwenden</button>
-    <?php if ($sort !== 'name' || $selectedTag !== '' || $groupBy !== 'none'): ?>
+    <?php if ($sort !== 'name' || $selectedTag !== '' || $groupBy !== 'none' || $perPage !== 10): ?>
         <a class="reset-link" href="/">Zurücksetzen</a>
     <?php endif; ?>
 </form>
@@ -85,4 +100,16 @@
             </div>
         </section>
     <?php endforeach; ?>
+
+    <?php if ($pageCount > 1): ?>
+        <nav class="pagination" aria-label="Seitennavigation">
+            <?php if ($page > 1): ?>
+                <a href="/?sort=<?= urlencode($sort) ?>&amp;tag=<?= urlencode($selectedTag) ?>&amp;group=<?= urlencode($groupBy) ?>&amp;perPage=<?= $perPage ?>&amp;page=<?= $page - 1 ?>">Vorherige</a>
+            <?php endif; ?>
+            <span>Seite <?= $page ?> von <?= $pageCount ?></span>
+            <?php if ($page < $pageCount): ?>
+                <a href="/?sort=<?= urlencode($sort) ?>&amp;tag=<?= urlencode($selectedTag) ?>&amp;group=<?= urlencode($groupBy) ?>&amp;perPage=<?= $perPage ?>&amp;page=<?= $page + 1 ?>">Nächste</a>
+            <?php endif; ?>
+        </nav>
+    <?php endif; ?>
 <?php endif; ?>
