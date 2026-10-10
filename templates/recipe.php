@@ -8,7 +8,7 @@
         <?php if (!empty($item['recipe']['tags'])): ?>
             <div class="recipe-tags" aria-label="Kategorien">
                 <?php foreach ($item['recipe']['tags'] as $tag): ?>
-                    <span class="tag-label"><?= escape($tag) ?></span>
+                    <a class="tag-label" href="/?tag=<?= urlencode($tag) ?>"><?= escape($tag) ?></a>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
