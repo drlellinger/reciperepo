@@ -26,7 +26,7 @@ Für die automatisierte Übertragung von Rezepten aus Textdokumenten siehe die [
 
 ## Oberflächenkonfiguration
 
-Navbar, Browser-Titel und Footer lassen sich in [config/app.php](config/app.php) anpassen. Für korrekte Linkvorschauen `site_url` auf die öffentliche HTTPS-Adresse setzen. `apple_touch_icon` sollte auf ein quadratisches PNG mit 180 × 180 Pixeln zeigen; ohne eigene Angabe werden Logo oder Favicon verwendet.
+Navbar, Browser-Titel und Footer lassen sich in [config/app.php](config/app.php) anpassen. In `footer_name`, `privacy_url` und `imprint_url` sind Markdown-Links wie `[Kontakt](mailto:post@example.org)` möglich. Bei `privacy_url` und `imprint_url` funktionieren weiterhin reine URLs mit den Standardlabels „Datenschutzerklärung“ und „Impressum“. Rohes HTML und unsichere Linkprotokolle werden nicht ausgegeben. Für korrekte Linkvorschauen `site_url` auf die öffentliche HTTPS-Adresse setzen. `apple_touch_icon` sollte auf ein quadratisches PNG mit 180 × 180 Pixeln zeigen; ohne eigene Angabe werden Logo oder Favicon verwendet.
 
 ## Rezeptbilder hochladen
 

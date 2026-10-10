@@ -47,6 +47,14 @@ check(uploadErrorMessage(UPLOAD_ERR_INI_SIZE) === 'Das Bild ist größer als das
 check(uploadErrorMessage(UPLOAD_ERR_NO_FILE) === 'Es wurde keine Datei ausgewählt.', 'Fehlender Upload wird korrekt erkannt.');
 check(\Recipe\Toast::message(['message' => 'Rezept gelöscht.']) === 'Rezept gelöscht.', 'Flash-Nachrichten werden als Toast-Meldung übernommen.');
 check(\Recipe\Toast::message(['message' => '   ']) === null, 'Leere Flash-Nachrichten werden als Toast ignoriert.');
+$footerName = Recipe\FooterMarkdownRenderer::render('Küchenarchiv · [Kontakt](mailto:post@example.org)');
+check($footerName === 'Küchenarchiv · <a href="mailto:post@example.org">Kontakt</a>', 'Markdown-Links im Footer-Namen werden sicher gerendert.');
+$customPrivacyLink = Recipe\FooterMarkdownRenderer::renderLinkSetting('[Datenschutz](https://example.org/privacy)', 'Datenschutzerklärung');
+check($customPrivacyLink === '<a href="https://example.org/privacy">Datenschutz</a>', 'Footer-Links akzeptieren Markdown mit individuellem Linktext.');
+$legacyPrivacyLink = Recipe\FooterMarkdownRenderer::renderLinkSetting('https://example.org/privacy', 'Datenschutzerklärung');
+check($legacyPrivacyLink === '<a href="https://example.org/privacy">Datenschutzerklärung</a>', 'Bisherige reine Footer-URLs behalten ihr Standardlabel.');
+$unsafeFooterLink = Recipe\FooterMarkdownRenderer::render('[Unsicher](javascript:alert(1))');
+check(!str_contains($unsafeFooterLink, '<a ') && str_contains($unsafeFooterLink, 'javascript:'), 'Unsichere Markdown-Linkprotokolle werden nicht als Links ausgegeben.');
 $normalizedUploads = UploadedFiles::normalize([
     'name' => ['one.yaml', 'two.yaml'],
     'type' => ['application/yaml', 'application/yaml'],

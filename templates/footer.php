@@ -1,12 +1,12 @@
 </main>
 <footer class="site-footer">
-    <span><?= escape($appConfig['footer_name']) ?></span>
+    <span><?= \Recipe\FooterMarkdownRenderer::render((string) $appConfig['footer_name']) ?></span>
     <nav class="footer-links" aria-label="Rechtliche Informationen">
         <?php if (is_string($appConfig['privacy_url']) && $appConfig['privacy_url'] !== ''): ?>
-            <a href="<?= escape($appConfig['privacy_url']) ?>">Datenschutzerklärung</a>
+            <?= \Recipe\FooterMarkdownRenderer::renderLinkSetting($appConfig['privacy_url'], 'Datenschutzerklärung') ?>
         <?php endif; ?>
         <?php if (is_string($appConfig['imprint_url']) && $appConfig['imprint_url'] !== ''): ?>
-            <a href="<?= escape($appConfig['imprint_url']) ?>">Impressum</a>
+            <?= \Recipe\FooterMarkdownRenderer::renderLinkSetting($appConfig['imprint_url'], 'Impressum') ?>
         <?php endif; ?>
     </nav>
 </footer>
