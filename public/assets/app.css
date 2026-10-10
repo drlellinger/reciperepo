@@ -62,9 +62,9 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .text-link span { display: inline-block; margin-left: 4px; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); white-space: nowrap; }
 .recipe-list { margin-top: 8px; }
-.recipe-row { border-bottom: 1px solid var(--line); }
+.recipe-row { border-bottom: 1px solid var(--line); border-radius: 16px; transition: background-color 160ms ease-out; }
+.recipe-row:hover { background: rgba(255, 255, 255, 0.4); }
 .recipe-row-link { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 20px; min-height: 96px; padding: 12px 10px 12px 4px; border-radius: 16px; text-decoration: none; transition: background-color 160ms ease-out, transform 160ms ease-out; }
-.recipe-row-link:hover { background: rgba(255, 255, 255, 0.4); }
 .recipe-thumb { display: block; width: 72px; height: 68px; border-radius: var(--radius); object-fit: cover; background: #e0ebe2; }
 .recipe-thumb-empty { display: grid; place-items: center; color: var(--green); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; font-size: 1.6rem; }
 .recipe-row-copy { display: grid; gap: 3px; }
@@ -83,7 +83,7 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .recipe-group + .recipe-group { margin-top: 30px; }
 .group-title { margin: 24px 0 8px; color: var(--green-dark); font-size: 1.4rem; }
 .row-arrow { color: var(--green); font-size: 1.15rem; transition: transform 140ms ease-out; }
-.recipe-row-link:hover .row-arrow { transform: translate(2px, -2px); }
+.recipe-row:hover .row-arrow { transform: translate(2px, -2px); }
 .empty-state { display: grid; justify-items: center; gap: 10px; padding: 76px 20px; text-align: center; }
 .empty-state h2 { margin-bottom: 14px; }
 .empty-kicker { display: grid; width: 54px; aspect-ratio: 1; place-items: center; margin: 0 0 12px; border-radius: 50%; background: #e1eee5; color: var(--green); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; font-size: 1.8rem; }
@@ -214,7 +214,7 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
     .button-filter { border-color: rgba(139, 199, 162, 0.32); background: linear-gradient(180deg, #344b3a, #293c30); color: #d2ead9; box-shadow: none; }
     .button-filter:hover { background: linear-gradient(180deg, #3b5542, #304735); }
     .reset-link { background: rgba(255, 255, 255, 0.04); }
-    .recipe-row-link:hover { background: rgba(255, 255, 255, 0.06); }
+    .recipe-row:hover { background: rgba(255, 255, 255, 0.06); }
     .recipe-thumb, .recipe-media img, .recipe-media video, .image-list-item img { background: #29382e; }
     .tag-label, .tag-label:nth-child(5n + 1) { background: #294333; color: #c9ead2; }
     .tag-label:nth-child(5n + 2) { background: #49352d; color: #f2c4a7; }
