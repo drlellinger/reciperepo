@@ -10,6 +10,11 @@ function showToast(message) {
     toastTimer = window.setTimeout(() => toast.classList.remove('toast-visible'), 5000);
 }
 
+const flashMessage = toast?.dataset.flashMessage;
+if (flashMessage) {
+    window.setTimeout(() => showToast(flashMessage), 50);
+}
+
 document.querySelectorAll('form[data-confirm]').forEach((form) => {
     form.addEventListener('submit', (event) => {
         if (!window.confirm(form.dataset.confirm)) {

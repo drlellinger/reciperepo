@@ -44,6 +44,8 @@ function rejects(callable $operation, string $message): void
 
 check(uploadErrorMessage(UPLOAD_ERR_INI_SIZE) === 'Das Bild ist größer als das vom Server erlaubte Limit.', 'PHP-Uploadfehler für zu große Dateien wird korrekt erfasst.');
 check(uploadErrorMessage(UPLOAD_ERR_NO_FILE) === 'Es wurde keine Datei ausgewählt.', 'Fehlender Upload wird korrekt erkannt.');
+check(\Recipe\Toast::message(['message' => 'Rezept gelöscht.']) === 'Rezept gelöscht.', 'Flash-Nachrichten werden als Toast-Meldung übernommen.');
+check(\Recipe\Toast::message(['message' => '   ']) === null, 'Leere Flash-Nachrichten werden als Toast ignoriert.');
 
 $yaml = <<<'YAML'
 version: 1

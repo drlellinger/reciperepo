@@ -10,6 +10,7 @@
         <?php endif; ?>
     </nav>
 </footer>
-<div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
+<?php $flashToast = \Recipe\Toast::message($flash ?? null); ?>
+<div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true" <?= $flashToast !== null ? 'data-flash-message="' . escape($flashToast) . '"' : '' ?>></div>
 </body>
 </html>
