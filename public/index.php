@@ -291,6 +291,13 @@ if ($path === '/' && $method === 'GET') {
                 $groups[''][] = $item;
                 continue;
             }
+            if ($selectedTag !== '') {
+                $itemTags = array_values(array_filter($itemTags, static fn (string $tag): bool => $tag !== $selectedTag));
+            }
+            if ($itemTags === []) {
+                $groups[''][] = $item;
+                continue;
+            }
             foreach ($itemTags as $tag) {
                 $groups[$tag][] = $item;
             }

@@ -61,7 +61,7 @@
 <?php else: ?>
     <?php foreach ($groups as $groupName => $groupItems): ?>
         <section class="recipe-group" aria-label="<?= $groupName === '' ? 'Rezeptliste' : 'Kategorie ' . escape($groupName) ?>">
-            <?php if ($groupBy === 'tag'): ?>
+            <?php if ($groupBy === 'tag' && ($groupName !== '' || $selectedTag === '')): ?>
                 <h2 class="group-title"><?= $groupName === '' ? 'Ohne Kategorie' : escape($groupName) ?></h2>
             <?php endif; ?>
             <div class="recipe-list">
