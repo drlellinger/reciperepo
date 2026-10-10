@@ -13,6 +13,8 @@
     --tomato: #b74434;
     --tomato-soft: #fff0ed;
     --shadow-soft: 0 8px 24px rgba(29, 49, 42, 0.06);
+    --toast-background: #1d312a;
+    --toast-foreground: #fff;
     --radius: 12px;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
     font-size: 16px;
@@ -149,7 +151,7 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
 .button-copy:hover { background: #e0e5e1; }
 .quiet-message { margin: 0; color: var(--muted); }
 .not-found { min-height: 45vh; align-content: center; }
-.toast { position: fixed; z-index: 10; bottom: max(20px, env(safe-area-inset-bottom)); left: 50%; width: max-content; max-width: calc(100vw - 40px); padding: 11px 16px; transform: translate(-50%, 8px); border: 1px solid var(--line); border-radius: var(--radius); background: var(--ink); box-shadow: 0 8px 28px rgb(32 55 46 / 18%); color: #fff; font-size: 0.88rem; opacity: 0; pointer-events: none; transition: opacity 160ms ease-out, transform 160ms ease-out; }
+.toast { position: fixed; z-index: 10; bottom: max(20px, env(safe-area-inset-bottom)); left: 50%; width: max-content; max-width: calc(100vw - 40px); padding: 11px 16px; transform: translate(-50%, 8px); border: 1px solid var(--line); border-radius: var(--radius); background: var(--toast-background); box-shadow: 0 8px 28px rgb(32 55 46 / 18%); color: var(--toast-foreground); font-size: 0.88rem; opacity: 0; pointer-events: none; transition: opacity 160ms ease-out, transform 160ms ease-out; }
 .toast-visible { transform: translate(-50%, 0); opacity: 1; }
 .site-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 20px max(24px, calc((100% - 1120px) / 2)); border-top: 1px solid var(--line); color: var(--muted); font-size: 0.82rem; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 18px; }
@@ -200,6 +202,8 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
         --tomato: #ff9a8c;
         --tomato-soft: #482e2a;
         --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.24);
+        --toast-background: #263a2d;
+        --toast-foreground: #e8efe9;
     }
 
     body { background: radial-gradient(circle at top, #26342b, #1a241e 34%, var(--paper) 72%); }
