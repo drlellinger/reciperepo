@@ -16,6 +16,9 @@
         <a class="download-link" href="/download?recipe=<?= escape($item['slug']) ?>" download>
             <span aria-hidden="true">↓</span> YAML herunterladen
         </a>
+        <a class="download-link" href="/recipe/<?= escape($item['slug']) ?>/pdf" download>
+            <span aria-hidden="true">↓</span> PDF herunterladen
+        </a>
         <button class="download-link share-button" type="button" data-share data-share-title="<?= escape($item['recipe']['title']) ?>">
             <span aria-hidden="true">↗</span> Rezept teilen
         </button>

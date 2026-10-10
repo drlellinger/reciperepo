@@ -270,6 +270,21 @@ if ($path === '/download' && $method === 'GET') {
     exit;
 }
 
+if (preg_match('~\A/recipe/([a-z0-9]+(?:-[a-z0-9]+)*)/pdf\z~', $path, $matches) && $method === 'GET') {
+    $item = $repository->find($matches[1]);
+    if ($item === null) {
+        http_response_code(404);
+        exit;
+    }
+
+    $pdf = Recipe\RecipePdfRenderer::render($item, $appConfig, $root . '/public');
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: attachment; filename="' . $item['slug'] . '.pdf"');
+    header('Content-Length: ' . strlen($pdf));
+    echo $pdf;
+    exit;
+}
+
 if ($path === '/' && $method === 'GET') {
     $allItems = $repository->all();
     $sort = $_GET['sort'] ?? 'name';

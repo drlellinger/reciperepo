@@ -1,6 +1,6 @@
 # reciperepo
 
-Eine kleine Rezeptesammlung mit PHP und YAML: Rezepte sind öffentlich lesbar und einzeln herunterladbar. Der Adminbereich nutzt HTTP-Basisauthentifizierung des Webservers.
+Eine kleine Rezeptesammlung mit PHP und YAML: Rezepte sind öffentlich lesbar und einzeln als YAML oder A4-PDF herunterladbar. Der Adminbereich nutzt HTTP-Basisauthentifizierung des Webservers.
 
 ## Voraussetzungen
 
@@ -30,5 +30,7 @@ Navbar, Browser-Titel und Footer lassen sich in [config/app.php](config/app.php)
 ## Rezeptbilder hochladen
 
 In der Verwaltung lassen sich YAML-Dateien und Rezeptbilder getrennt hochladen. Bilder werden als JPEG, PNG, GIF oder WebP bis 8 MB in `public/uploads/images/` gespeichert und sind dort öffentlich abrufbar. Die Verwaltung zeigt Vorschaubilder und die zugehörigen Pfade an. Den kopierten Pfad als `url` eines `image`-Blocks in der Rezept-YAML verwenden, zum Beispiel `/uploads/images/<Dateiname>.jpg`. Externe HTTP(S)-Bild-URLs sind weiterhin zulässig. Für Sicherungen auch `public/uploads/images/` einschließen.
+
+Der PDF-Download verwendet Dompdf und bildet Rezeptkopf, Kategorien und Inhaltsblöcke im A4-Hochformat ab. Logo und Name werden aus der Oberflächenkonfiguration übernommen. Lokale Bilder unter `public/` erscheinen im PDF; externe Bilder werden aus Sicherheitsgründen nicht vom Server abgerufen.
 
 Externe Medien- und Link-URLs müssen HTTP(S) verwenden; Bilder aus der Verwaltung dürfen zusätzlich ihren lokalen Pfad unter `/uploads/images/` verwenden. Beliebiges HTML und eingebettete iframes werden nicht unterstützt. YAML-Dateien dürfen bis 1 MB groß sein, Bilddateien bis 8 MB. Ein YAML-Upload mit demselben normalisierten Titel ersetzt das Rezept; ein anderer Titel legt ein neues Rezept an. Der Download auf jeder Rezeptseite liefert die gespeicherte YAML-Datei.
