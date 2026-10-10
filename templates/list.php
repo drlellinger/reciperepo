@@ -13,9 +13,11 @@
     </div>
 </section>
 
-<details class="collection-controls">
-    <summary>Filter & Sortierung</summary>
-    <form class="collection-controls-form" method="get" action="/">
+<div class="collection-controls">
+    <button class="collection-toggle" type="button" aria-expanded="false" aria-controls="collection-controls-panel">
+        Filter
+    </button>
+    <form id="collection-controls-panel" class="collection-controls-form" method="get" action="/">
         <input type="hidden" name="page" value="1">
         <label>
             <span>Sortieren nach</span>
@@ -56,7 +58,24 @@
             <?php endif; ?>
         </div>
     </form>
-</details>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var panel = document.querySelector('.collection-controls');
+        if (!panel) return;
+
+        var button = panel.querySelector('.collection-toggle');
+        var form = panel.querySelector('.collection-controls-form');
+        if (!button || !form) return;
+
+        button.addEventListener('click', function () {
+            var isOpen = panel.classList.toggle('is-open');
+            button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            button.textContent = isOpen ? 'Filter schließen' : 'Filter';
+        });
+    });
+</script>
 
 <?php if ($items === []): ?>
     <section class="empty-state" aria-labelledby="empty-title">
