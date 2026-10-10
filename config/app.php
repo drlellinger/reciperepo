@@ -7,6 +7,8 @@ return [
     'logo_image' => null,
     'logo_alt' => 'Küchenarchiv',
     'favicon' => null,
+    'apple_touch_icon' => null,
+    'site_url' => null,
     'footer_name' => 'Küchenarchiv',
     'privacy_url' => null,
     'imprint_url' => null,

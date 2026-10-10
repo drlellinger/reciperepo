@@ -25,7 +25,7 @@ Für die automatisierte Übertragung von Rezepten aus Textdokumenten siehe die [
 
 ## Oberflächenkonfiguration
 
-Navbar, Browser-Titel und Footer lassen sich in [config/app.php](config/app.php) anpassen.
+Navbar, Browser-Titel und Footer lassen sich in [config/app.php](config/app.php) anpassen. Für korrekte Linkvorschauen `site_url` auf die öffentliche HTTPS-Adresse setzen. `apple_touch_icon` sollte auf ein quadratisches PNG mit 180 × 180 Pixeln zeigen; ohne eigene Angabe werden Logo oder Favicon verwendet.
 
 ## Rezeptbilder hochladen
 

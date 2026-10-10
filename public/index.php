@@ -33,10 +33,46 @@ function escape(string|int|float|null $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+function siteOrigin(): string
+{
+    global $appConfig;
+    $configuredUrl = $appConfig['site_url'] ?? null;
+    $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
+    $candidate = is_string($configuredUrl) && trim($configuredUrl) !== ''
+        ? trim($configuredUrl)
+        : $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '');
+    $parts = parse_url($candidate);
+    if (!is_array($parts)
+        || !in_array(strtolower($parts['scheme'] ?? ''), ['http', 'https'], true)
+        || empty($parts['host'])
+        || isset($parts['user'])
+        || isset($parts['pass'])
+        || isset($parts['query'])
+        || isset($parts['fragment'])
+        || !in_array($parts['path'] ?? '', ['', '/'], true)
+        || filter_var($candidate, FILTER_VALIDATE_URL) === false) {
+        return '';
+    }
+
+    return strtolower($parts['scheme']) . '://' . $parts['host'] . (isset($parts['port']) ? ':' . $parts['port'] : '');
+}
+
+function absolutePublicUrl(string $url, string $origin): string
+{
+    if (preg_match('~\Ahttps?://~i', $url)) {
+        return $url;
+    }
+    return $origin . '/' . ltrim($url, '/');
+}
+
 function renderPage(string $template, string $title, array $variables = []): never
 {
     global $appConfig, $path, $isAdmin;
     $variables['appConfig'] = $appConfig;
+    $variables['siteOrigin'] = siteOrigin();
+    $variables['pageUrl'] = $variables['siteOrigin'] . $path;
+    $variables['description'] ??= $title;
+    $variables['socialType'] ??= 'website';
     extract($variables, EXTR_SKIP);
     require dirname(__DIR__) . '/templates/header.php';
     require dirname(__DIR__) . '/templates/' . $template . '.php';
@@ -346,9 +382,23 @@ if ($path === '/admin' && $method === 'GET') {
 if (preg_match('~\A/recipe/([a-z0-9]+(?:-[a-z0-9]+)*)\z~', $path, $matches) && $method === 'GET') {
     $item = $repository->find($matches[1]);
     if ($item !== null) {
+        $socialImage = null;
+        $socialImageAlt = '';
+        foreach ($item['recipe']['blocks'] as $block) {
+            if ($block['type'] === 'image') {
+                $socialImage = $block['url'];
+                $socialImageAlt = $block['alt'];
+                break;
+            }
+        }
+        $socialImage ??= $appConfig['logo_image'] ?? $appConfig['favicon'];
         renderPage('recipe', $item['recipe']['title'], [
             'item' => $item,
             'blocksHtml' => renderBlocks($item['recipe']['blocks']),
+            'description' => $item['recipe']['summary'] ?? $item['recipe']['title'],
+            'socialImage' => $socialImage,
+            'socialImageAlt' => $socialImageAlt !== '' ? $socialImageAlt : $appConfig['logo_alt'],
+            'socialType' => 'article',
         ]);
     }
 }

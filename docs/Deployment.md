@@ -47,6 +47,8 @@ Beispielkonfigurationen:
 
 Die Beispielkonfigurationen an Serverpfade und PHP-FPM-Socket anpassen und TLS-Zertifikate ergänzen. Zugangsdaten außerhalb des Webroots anlegen, zum Beispiel mit `htpasswd -c /etc/recipe-collection/.htpasswd admin` (Apache `htpasswd`-Werkzeug erforderlich). Bei Apache muss die Konfiguration im HTTPS-VirtualHost stehen. Nginx benötigt `auth_basic` im `/admin`-Location-Block.
 
+In `config/app.php` für `site_url` die öffentliche HTTPS-Basisadresse ohne Pfad eintragen, zum Beispiel `https://rezepte.example.org`. Diese Adresse wird für absolute Open-Graph- und Twitter-Bild-/Seiten-URLs verwendet. Für iOS-Homescreen-Icons empfiehlt sich ein quadratisches PNG mit 180 × 180 Pixeln unter `apple_touch_icon`; andernfalls verwendet die Seite, sofern konfiguriert, Logo oder Favicon. Auf einzelnen Rezeptseiten wird das erste Rezeptbild für Linkvorschauen verwendet.
+
 ## 413 Fehler bei Uploads
 
 Wenn beim Hochladen von YAML oder Bildern ein HTTP 413 erscheint, liegt das normalerweise nicht am PHP-Code der App, sondern an Server-Limits:
