@@ -166,7 +166,7 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
     .collection-heading { align-items: start; flex-direction: column; gap: 16px; }
     .collection-controls { border-radius: 16px; }
     .collection-toggle { width: 100%; justify-content: center; }
-    .collection-controls-form { display: none; padding: 14px; }
+    .collection-controls-form { padding: 14px; }
     .collection-controls.is-open .collection-controls-form { display: flex; }
     .collection-controls-form { align-items: stretch; flex-direction: column; }
     .collection-controls select { width: 100%; }
