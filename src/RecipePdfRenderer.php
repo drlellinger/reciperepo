@@ -131,9 +131,19 @@ a { color: #28664e; }
     {
         $localPath = self::localImagePath($url, $publicRoot);
         if ($localPath !== null) {
-            if (mime_content_type($localPath) === 'image/svg+xml') {
+            $mimeType = mime_content_type($localPath);
+            if ($mimeType === 'image/svg+xml') {
                 $svg = file_get_contents($localPath);
                 return is_string($svg) ? self::svgDataUri($svg) : null;
+            }
+            if ($mimeType === 'image/jpeg') {
+                $imageBytes = file_get_contents($localPath);
+                if (is_string($imageBytes)) {
+                    $orientedImage = self::normalizeJpegOrientation($imageBytes, $localPath);
+                    if ($orientedImage !== $imageBytes) {
+                        return 'data:image/jpeg;base64,' . base64_encode($orientedImage);
+                    }
+                }
             }
             return 'file://' . $localPath;
         }
@@ -221,7 +231,80 @@ a { color: #28664e; }
             return null;
         }
 
+        if ($mimeType === 'image/jpeg') {
+            $imageBytes = self::normalizeJpegOrientation($imageBytes);
+        }
+
         return 'data:' . $mimeType . ';base64,' . base64_encode($imageBytes);
+    }
+
+    private static function normalizeJpegOrientation(string $imageBytes, ?string $imagePath = null): string
+    {
+        $temporaryPath = null;
+        if ($imagePath === null) {
+            $temporaryPath = tempnam(sys_get_temp_dir(), 'recipe-exif-');
+            if ($temporaryPath === false || file_put_contents($temporaryPath, $imageBytes) === false) {
+                if (is_string($temporaryPath) && is_file($temporaryPath)) {
+                    unlink($temporaryPath);
+                }
+                return $imageBytes;
+            }
+            $imagePath = $temporaryPath;
+        }
+
+        try {
+            $metadata = @exif_read_data($imagePath, 'IFD0', true);
+        } finally {
+            if ($temporaryPath !== null && is_file($temporaryPath)) {
+                unlink($temporaryPath);
+            }
+        }
+
+        $orientation = (int) ($metadata['IFD0']['Orientation'] ?? $metadata['Orientation'] ?? 1);
+        if ($orientation < 2 || $orientation > 8) {
+            return $imageBytes;
+        }
+
+        $image = @imagecreatefromstring($imageBytes);
+        if ($image === false) {
+            return $imageBytes;
+        }
+
+        $rotation = match ($orientation) {
+            3 => 180,
+            5, 6 => 270,
+            7, 8 => 90,
+            default => 0,
+        };
+        $flip = match ($orientation) {
+            2, 5 => IMG_FLIP_HORIZONTAL,
+            4 => IMG_FLIP_VERTICAL,
+            7 => IMG_FLIP_HORIZONTAL,
+            default => null,
+        };
+
+        if ($rotation !== 0) {
+            $background = imagecolorallocate($image, 255, 255, 255);
+            $rotatedImage = imagerotate($image, $rotation, $background);
+            if ($rotatedImage === false) {
+                imagedestroy($image);
+                return $imageBytes;
+            }
+            imagedestroy($image);
+            $image = $rotatedImage;
+        }
+
+        if ($flip !== null && !imageflip($image, $flip)) {
+            imagedestroy($image);
+            return $imageBytes;
+        }
+
+        ob_start();
+        $encoded = imagejpeg($image, null, 90);
+        $orientedBytes = ob_get_clean();
+        imagedestroy($image);
+
+        return $encoded && is_string($orientedBytes) ? $orientedBytes : $imageBytes;
     }
 
     private static function svgDataUri(string $svg): ?string

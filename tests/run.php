@@ -132,6 +132,24 @@ try {
         : false;
     check(is_string($svgSource) && !str_contains($svgSource, '<script') && str_contains($svgSource, '<path'), 'SVG-Logos behalten Grafikpfade, aber keine Skripte.');
     unlink($temporarySvg);
+    $jpegImage = imagecreatetruecolor(2, 3);
+    ob_start();
+    imagejpeg($jpegImage);
+    $jpegBytes = ob_get_clean();
+    imagedestroy($jpegImage);
+    $exifPayload = "Exif\0\0II*\0\x08\0\0\0\x01\0\x12\x01\x03\0\x01\0\0\0\x06\0\0\0\0\0\0\0";
+    $jpegBytes = substr($jpegBytes, 0, 2) . "\xFF\xE1" . pack('n', strlen($exifPayload) + 2) . $exifPayload . substr($jpegBytes, 2);
+    $temporaryJpeg = tempnam(sys_get_temp_dir(), 'recipe-orientation-test-');
+    file_put_contents($temporaryJpeg, $jpegBytes);
+    $orientedPdfBlocks = Recipe\RecipePdfRenderer::renderBlocks([
+        ['type' => 'image', 'url' => '/' . basename($temporaryJpeg), 'alt' => 'Hochkantbild'],
+    ], sys_get_temp_dir(), $remainingRemoteImages);
+    $orientedImageBytes = preg_match('/src="data:image\/jpeg;base64,([^"]+)"/', $orientedPdfBlocks, $jpegMatch) === 1
+        ? base64_decode($jpegMatch[1], true)
+        : false;
+    $orientedDimensions = is_string($orientedImageBytes) ? getimagesizefromstring($orientedImageBytes) : false;
+    check(is_array($orientedDimensions) && $orientedDimensions[0] === 3 && $orientedDimensions[1] === 2, 'JPEGs mit EXIF-Hochkantorientierung werden vor dem PDF gedreht.');
+    unlink($temporaryJpeg);
     unlink($temporaryImage);
     check((bool) preg_match('~\A/uploads/images/[a-f0-9]{32}\.gif\z~', $imageUrl), 'Bild erhält eine öffentliche URL mit zufälligem Dateinamen.');
     check(count($imageRepository->all()) === 1, 'Hochgeladenes Bild erscheint in der Bildliste.');

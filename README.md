@@ -4,7 +4,7 @@ Eine kleine Rezeptesammlung mit PHP und YAML: Rezepte sind öffentlich lesbar un
 
 ## Voraussetzungen
 
-- PHP 8.1+ mit `fileinfo` und `iconv`
+- PHP 8.1+ mit `fileinfo`, `iconv`, `exif` und `gd`
 - PHP-Erweiterung `curl` für externe Bilder in PDF-Dateien
 - Composer
 - Apache mit PHP-FPM/mod_php oder Nginx mit PHP-FPM

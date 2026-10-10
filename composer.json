@@ -5,6 +5,8 @@
   "require": {
     "php": "^8.1",
     "ext-curl": "*",
+    "ext-exif": "*",
+    "ext-gd": "*",
     "ext-iconv": "*",
     "ext-fileinfo": "*",
     "dompdf/dompdf": "^3.1",
