@@ -227,7 +227,10 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
     .pagination a:hover { border-color: rgba(139, 199, 162, 0.5); background: #293d30; }
     .download-link, .button-copy { border-color: var(--line); background: #29352d; color: #d0dbd2; }
     .download-link:hover, .button-copy:hover { background: #35443a; color: var(--ink); }
-    th { background: #29382e; }
+    .table-wrap { border: 1px solid rgba(186, 207, 192, 0.38); border-radius: 8px; background: #202b24; }
+    tbody tr:nth-child(odd) { background: #2b3d30; }
+    tbody tr:nth-child(even) { background: #202b24; }
+    th { background: #3d5946; }
     input[type="file"] { border-color: var(--line); }
     input[type="file"]::file-selector-button { background: #344638; color: #d2ead9; }
     .notice { background: #263a2d; }
