@@ -13,7 +13,7 @@
     </div>
 </section>
 
-<details class="collection-controls" open>
+<details class="collection-controls">
     <summary>Filter & Sortierung</summary>
     <form class="collection-controls-form" method="get" action="/">
         <input type="hidden" name="page" value="1">
@@ -57,17 +57,6 @@
         </div>
     </form>
 </details>
-
-<script>
-if (window.matchMedia('(max-width: 620px)').matches) {
-    document.addEventListener('DOMContentLoaded', function () {
-        var controls = document.querySelector('.collection-controls');
-        if (controls) {
-            controls.removeAttribute('open');
-        }
-    });
-}
-</script>
 
 <?php if ($items === []): ?>
     <section class="empty-state" aria-labelledby="empty-title">
