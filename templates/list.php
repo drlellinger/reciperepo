@@ -13,45 +13,50 @@
     </div>
 </section>
 
-<form class="collection-controls" method="get" action="/">
-    <input type="hidden" name="page" value="1">
-    <label>
-        <span>Sortieren nach</span>
-        <select name="sort">
-            <option value="name" <?= $sort === 'name' ? 'selected' : '' ?>>Name</option>
-            <option value="date" <?= $sort === 'date' ? 'selected' : '' ?>>Zuletzt geändert</option>
-            <option value="category" <?= $sort === 'category' ? 'selected' : '' ?>>Kategorie</option>
-        </select>
-    </label>
-    <label>
-        <span>Kategorie filtern</span>
-        <select name="tag">
-            <option value="">Alle Kategorien</option>
-            <?php foreach ($tags as $tag): ?>
-                <option value="<?= escape($tag) ?>" <?= $selectedTag === $tag ? 'selected' : '' ?>><?= escape($tag) ?></option>
-            <?php endforeach; ?>
-        </select>
-    </label>
-    <label>
-        <span>Gruppieren</span>
-        <select name="group">
-            <option value="none" <?= $groupBy === 'none' ? 'selected' : '' ?>>Keine Gruppierung</option>
-            <option value="tag" <?= $groupBy === 'tag' ? 'selected' : '' ?>>Nach Kategorie</option>
-        </select>
-    </label>
-    <label>
-        <span>Rezepte pro Seite</span>
-        <select name="perPage">
-            <?php foreach ([5, 10, 20, 50] as $choice): ?>
-                <option value="<?= $choice ?>" <?= $perPage === $choice ? 'selected' : '' ?>><?= $choice ?></option>
-            <?php endforeach; ?>
-        </select>
-    </label>
-    <button class="button button-filter" type="submit">Anwenden</button>
-    <?php if ($sort !== 'name' || $selectedTag !== '' || $groupBy !== 'none' || $perPage !== 10): ?>
-        <a class="reset-link" href="/">Zurücksetzen</a>
-    <?php endif; ?>
-</form>
+<details class="collection-controls">
+    <summary>Filter & Sortierung</summary>
+    <form class="collection-controls-form" method="get" action="/">
+        <input type="hidden" name="page" value="1">
+        <label>
+            <span>Sortieren nach</span>
+            <select name="sort">
+                <option value="name" <?= $sort === 'name' ? 'selected' : '' ?>>Name</option>
+                <option value="date" <?= $sort === 'date' ? 'selected' : '' ?>>Zuletzt geändert</option>
+                <option value="category" <?= $sort === 'category' ? 'selected' : '' ?>>Kategorie</option>
+            </select>
+        </label>
+        <label>
+            <span>Kategorie filtern</span>
+            <select name="tag">
+                <option value="">Alle Kategorien</option>
+                <?php foreach ($tags as $tag): ?>
+                    <option value="<?= escape($tag) ?>" <?= $selectedTag === $tag ? 'selected' : '' ?>><?= escape($tag) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <label>
+            <span>Gruppieren</span>
+            <select name="group">
+                <option value="none" <?= $groupBy === 'none' ? 'selected' : '' ?>>Keine Gruppierung</option>
+                <option value="tag" <?= $groupBy === 'tag' ? 'selected' : '' ?>>Nach Kategorie</option>
+            </select>
+        </label>
+        <label>
+            <span>Rezepte pro Seite</span>
+            <select name="perPage">
+                <?php foreach ([5, 10, 20, 50] as $choice): ?>
+                    <option value="<?= $choice ?>" <?= $perPage === $choice ? 'selected' : '' ?>><?= $choice ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <div class="collection-controls-actions">
+            <button class="button button-filter" type="submit">Anwenden</button>
+            <?php if ($sort !== 'name' || $selectedTag !== '' || $groupBy !== 'none' || $perPage !== 10): ?>
+                <a class="reset-link" href="/">Zurücksetzen</a>
+            <?php endif; ?>
+        </div>
+    </form>
+</details>
 
 <?php if ($items === []): ?>
     <section class="empty-state" aria-labelledby="empty-title">

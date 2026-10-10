@@ -49,10 +49,14 @@ h1, h2 { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helv
 h1 { max-width: 740px; margin-bottom: 14px; font-size: 3.4rem; line-height: 1.06; }
 h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .collection-count, .admin-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
-.collection-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 18px 18px 16px; border: 1px solid rgba(112, 138, 126, 0.24); border-radius: 20px; background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(18px) saturate(1.15); box-shadow: var(--shadow-soft); }
+.collection-controls { margin: 0; border: 1px solid rgba(112, 138, 126, 0.24); border-radius: 20px; background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(18px) saturate(1.15); box-shadow: var(--shadow-soft); }
+.collection-controls summary { display: none; list-style: none; cursor: pointer; }
+.collection-controls summary::-webkit-details-marker { display: none; }
+.collection-controls-form { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 18px 18px 16px; }
 .collection-controls label { display: grid; gap: 5px; }
 .collection-controls label span { color: var(--muted); font-size: 0.78rem; font-weight: 650; letter-spacing: 0.01em; }
 .collection-controls select { min-width: 150px; min-height: 42px; padding: 8px 32px 8px 10px; border: 1px solid rgba(100, 128, 116, 0.28); border-radius: 12px; background: rgba(255, 255, 255, 0.8); color: var(--ink); font: inherit; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8); }
+.collection-controls-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .button-filter { min-height: 42px; padding: 8px 14px; border: 1px solid rgba(120, 156, 139, 0.32); border-radius: 12px; background: linear-gradient(180deg, #f4faf5 0%, #deefe3 100%); color: var(--green-dark); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.72) inset; }
 .button-filter:hover { background: linear-gradient(180deg, #edf8f1 0%, #d9ebdf 100%); }
 .reset-link { display: inline-flex; align-items: center; min-height: 42px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); font-size: 0.86rem; text-decoration: none; background: rgba(255, 255, 255, 0.28); }
@@ -160,7 +164,13 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
     .page-shell { width: min(100% - 40px, 960px); padding: 42px 0 62px; }
     h1 { font-size: 2.4rem; }
     .collection-heading { align-items: start; flex-direction: column; gap: 16px; }
-    .collection-controls { align-items: stretch; flex-direction: column; }
+    .collection-controls { border-radius: 16px; }
+    .collection-controls summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 14px 12px; font-size: 0.92rem; font-weight: 700; color: var(--green-dark); }
+    .collection-controls summary::after { content: 'Filter'; display: inline-flex; align-items: center; justify-content: center; min-height: 30px; padding: 0 10px; border: 1px solid rgba(120, 156, 139, 0.32); border-radius: 999px; background: rgba(255, 255, 255, 0.7); font-size: 0.74rem; font-weight: 700; color: var(--green-dark); }
+    .collection-controls[open] > summary { border-bottom: 1px solid rgba(112, 138, 126, 0.18); }
+    .collection-controls-form { display: none; padding: 14px; }
+    .collection-controls[open] .collection-controls-form { display: flex; }
+    .collection-controls-form { align-items: stretch; flex-direction: column; }
     .collection-controls select { width: 100%; }
     .collection-controls .button-filter { align-self: start; }
     .recipe-row-link { grid-template-columns: 60px 1fr auto; gap: 14px; min-height: 84px; }
