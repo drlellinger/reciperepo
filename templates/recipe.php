@@ -16,6 +16,10 @@
         <a class="download-link" href="/download?recipe=<?= escape($item['slug']) ?>" download>
             <span aria-hidden="true">↓</span> YAML herunterladen
         </a>
+        <button class="download-link share-button" type="button" data-share data-share-title="<?= escape($item['recipe']['title']) ?>">
+            <span aria-hidden="true">↗</span> Rezept teilen
+        </button>
+        <p class="share-status" role="status" aria-live="polite"></p>
     </header>
     <div class="recipe-content">
         <?= $blocksHtml ?>

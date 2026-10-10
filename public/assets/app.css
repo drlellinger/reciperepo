@@ -88,6 +88,8 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .download-link { display: inline-flex; min-height: 38px; align-items: center; gap: 8px; padding: 7px 13px; border: 1px solid #d8ded9; border-radius: 999px; background: #ecefed; color: #435047; font-size: 0.82rem; }
 .download-link:hover { background: #e0e5e1; color: #29372e; }
 .download-link span { font-size: 1.1rem; }
+.share-button { margin-left: 8px; cursor: pointer; }
+.share-status { min-height: 1.2em; margin: 8px 0 0; color: var(--green-dark); font-size: 0.82rem; }
 .recipe-content { padding-top: 28px; }
 .recipe-copy { margin: 0 0 28px; font-size: 1.05rem; line-height: 1.75; white-space: normal; }
 .table-wrap { overflow-x: auto; margin: 24px 0 32px; }
