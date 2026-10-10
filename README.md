@@ -30,7 +30,7 @@ Navbar, Browser-Titel und Footer lassen sich in [config/app.php](config/app.php)
 
 ## Rezeptbilder hochladen
 
-In der Verwaltung lassen sich YAML-Dateien und Rezeptbilder getrennt hochladen. Bilder werden als JPEG, PNG, GIF oder WebP bis 8 MB in `public/uploads/images/` gespeichert und sind dort öffentlich abrufbar. Die Verwaltung zeigt Vorschaubilder und die zugehörigen Pfade an. Den kopierten Pfad als `url` eines `image`-Blocks in der Rezept-YAML verwenden, zum Beispiel `/uploads/images/<Dateiname>.jpg`. Externe HTTP(S)-Bild-URLs sind weiterhin zulässig. Für Sicherungen auch `public/uploads/images/` einschließen.
+In der Verwaltung lassen sich YAML-Dateien und Rezeptbilder getrennt hochladen. Bilder werden als JPEG, PNG, GIF oder WebP bis 8 MB in `public/uploads/images/` gespeichert und sind dort öffentlich abrufbar. JPEG-, PNG- und WebP-Dateien werden beim Upload neu encodiert, um Metadaten wie GPS-Standorte zu entfernen; JPEG-EXIF-Ausrichtung wird dabei in die Bildpixel übernommen. Animierte GIFs bleiben unverändert, damit ihre Animation erhalten bleibt. Die Verwaltung zeigt Vorschaubilder und die zugehörigen Pfade an. Den kopierten Pfad als `url` eines `image`-Blocks in der Rezept-YAML verwenden, zum Beispiel `/uploads/images/<Dateiname>.jpg`. Externe HTTP(S)-Bild-URLs sind weiterhin zulässig. Für Sicherungen auch `public/uploads/images/` einschließen.
 
 Der PDF-Download verwendet Dompdf und bildet Rezeptkopf, Kategorien und Inhaltsblöcke im A4-Hochformat ab. Logo und Name werden aus der Oberflächenkonfiguration übernommen. Lokale Bilder unter `public/` und externe HTTP(S)-Bilder erscheinen im PDF. Externe Bilder werden mit Größen- und Zeitlimits geladen; private IP-Adressen und Weiterleitungen werden blockiert.
 

@@ -47,9 +47,7 @@ final class ImageRepository
         }
 
         try {
-            if (!copy($temporaryPath, $temporaryTarget)) {
-                throw new RuntimeException('Das Bild konnte nicht gespeichert werden.');
-            }
+            ImageSanitizer::write($temporaryPath, $temporaryTarget, $mimeType);
             chmod($temporaryTarget, 0644);
             if (!rename($temporaryTarget, $this->directory . '/' . $filename)) {
                 throw new RuntimeException('Das Bild konnte nicht veröffentlicht werden.');
