@@ -160,8 +160,77 @@ if ($path === '/download' && $method === 'GET') {
 }
 
 if ($path === '/' && $method === 'GET') {
-    $items = $repository->all();
-    renderPage('list', 'Rezeptsammlung', ['items' => $items]);
+    $allItems = $repository->all();
+    $sort = $_GET['sort'] ?? 'name';
+    $sort = is_string($sort) && in_array($sort, ['name', 'date', 'category'], true) ? $sort : 'name';
+    $selectedTag = $_GET['tag'] ?? '';
+    $selectedTag = is_string($selectedTag) ? $selectedTag : '';
+    $groupBy = $_GET['group'] ?? 'none';
+    $groupBy = $groupBy === 'tag' ? 'tag' : 'none';
+
+    $tags = [];
+    foreach ($allItems as $item) {
+        foreach ($item['recipe']['tags'] ?? [] as $tag) {
+            $tags[$tag] = $tag;
+        }
+    }
+    natcasesort($tags);
+    $tags = array_values($tags);
+    if ($selectedTag !== '' && !in_array($selectedTag, $tags, true)) {
+        $selectedTag = '';
+    }
+
+    $items = array_values(array_filter($allItems, static fn (array $item): bool => $selectedTag === '' || in_array($selectedTag, $item['recipe']['tags'] ?? [], true)));
+    usort($items, static function (array $left, array $right) use ($sort): int {
+        if ($sort === 'date') {
+            $comparison = $right['modifiedAt'] <=> $left['modifiedAt'];
+        } elseif ($sort === 'category') {
+            $leftTags = $left['recipe']['tags'] ?? [];
+            $rightTags = $right['recipe']['tags'] ?? [];
+            natcasesort($leftTags);
+            natcasesort($rightTags);
+            $comparison = strnatcasecmp((string) (reset($leftTags) ?: ''), (string) (reset($rightTags) ?: ''));
+        } else {
+            $comparison = strnatcasecmp($left['recipe']['title'], $right['recipe']['title']);
+        }
+
+        return $comparison !== 0 ? $comparison : strnatcasecmp($left['recipe']['title'], $right['recipe']['title']);
+    });
+
+    $groups = [];
+    if ($groupBy === 'tag') {
+        foreach ($items as $item) {
+            $itemTags = $item['recipe']['tags'] ?? [];
+            if ($itemTags === []) {
+                $groups[''][] = $item;
+                continue;
+            }
+            foreach ($itemTags as $tag) {
+                $groups[$tag][] = $item;
+            }
+        }
+        uksort($groups, static function (string $left, string $right): int {
+            if ($left === '') {
+                return 1;
+            }
+            if ($right === '') {
+                return -1;
+            }
+            return strnatcasecmp($left, $right);
+        });
+    } else {
+        $groups = ['' => $items];
+    }
+
+    renderPage('list', 'Rezeptsammlung', [
+        'items' => $items,
+        'totalCount' => count($allItems),
+        'groups' => $groups,
+        'tags' => $tags,
+        'selectedTag' => $selectedTag,
+        'sort' => $sort,
+        'groupBy' => $groupBy,
+    ]);
 }
 
 if ($path === '/admin' && $method === 'GET') {

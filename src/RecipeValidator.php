@@ -23,7 +23,7 @@ final class RecipeValidator
         if (!is_array($recipe) || ($recipe['version'] ?? null) !== 1) {
             throw new InvalidArgumentException('Das Rezept muss version: 1 enthalten.');
         }
-        self::validateKeys($recipe, ['version', 'title', 'summary', 'blocks'], 'Rezept');
+        self::validateKeys($recipe, ['version', 'title', 'summary', 'tags', 'blocks'], 'Rezept');
 
         if (!isset($recipe['title']) || !is_string($recipe['title']) || trim($recipe['title']) === '' || strlen($recipe['title']) > 160) {
             throw new InvalidArgumentException('Der Titel muss zwischen 1 und 160 Zeichen lang sein.');
@@ -35,6 +35,20 @@ final class RecipeValidator
 
         if (array_key_exists('summary', $recipe) && (!is_string($recipe['summary']) || trim($recipe['summary']) === '')) {
             throw new InvalidArgumentException('summary muss ein nicht leerer Text sein.');
+        }
+
+        if (array_key_exists('tags', $recipe)) {
+            if (!is_array($recipe['tags']) || !array_is_list($recipe['tags'])) {
+                throw new InvalidArgumentException('tags muss eine Liste von Textwerten sein.');
+            }
+            foreach ($recipe['tags'] as $tag) {
+                if (!is_string($tag) || trim($tag) === '' || trim($tag) !== $tag || strlen($tag) > 80) {
+                    throw new InvalidArgumentException('Jeder Tag muss nicht leer und höchstens 80 UTF-8-Bytes lang sein.');
+                }
+            }
+            if (count(array_unique(array_map('strtolower', $recipe['tags']))) !== count($recipe['tags'])) {
+                throw new InvalidArgumentException('Tags dürfen nicht doppelt vorkommen.');
+            }
         }
 
         foreach ($recipe['blocks'] as $index => $block) {

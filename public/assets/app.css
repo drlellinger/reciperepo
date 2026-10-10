@@ -42,6 +42,13 @@ h1, h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; }
 h1 { max-width: 740px; margin-bottom: 14px; font-size: 3.4rem; line-height: 1.06; }
 h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .collection-count, .admin-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.collection-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.collection-controls label { display: grid; gap: 5px; }
+.collection-controls label span { color: var(--muted); font-size: 0.78rem; font-weight: 650; }
+.collection-controls select { min-width: 150px; min-height: 42px; padding: 8px 32px 8px 10px; border: 1px solid #bdcec1; border-radius: var(--radius); background: var(--surface); color: var(--ink); font: inherit; }
+.button-filter { min-height: 42px; padding: 8px 14px; background: #e4eee6; color: var(--green-dark); }
+.button-filter:hover { background: #d6e7db; }
+.reset-link { padding: 10px 4px; color: var(--muted); font-size: 0.86rem; }
 .text-link, .download-link { color: var(--green-dark); font-size: 0.92rem; font-weight: 700; text-decoration: none; }
 .text-link span { display: inline-block; margin-left: 4px; }
 .recipe-list { margin-top: 8px; }
@@ -52,6 +59,10 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .recipe-row-copy { display: grid; gap: 3px; }
 .recipe-row-title { font-family: Georgia, "Times New Roman", serif; font-size: 1.28rem; }
 .recipe-row-meta { color: var(--muted); font-size: 0.82rem; }
+.recipe-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+.tag-label { display: inline-flex; align-items: center; min-height: 23px; padding: 2px 8px; border-radius: 999px; background: #e5eee7; color: var(--green-dark); font-size: 0.73rem; font-weight: 650; }
+.recipe-group + .recipe-group { margin-top: 30px; }
+.group-title { margin: 24px 0 8px; color: var(--green-dark); font-size: 1.4rem; }
 .row-arrow { color: var(--green); font-size: 1.15rem; transition: transform 140ms ease-out; }
 .recipe-row-link:hover .row-arrow { transform: translate(2px, -2px); }
 .empty-state { display: grid; justify-items: center; gap: 10px; padding: 76px 20px; text-align: center; }
@@ -110,6 +121,9 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
     .page-shell { width: min(100% - 40px, 960px); padding: 42px 0 62px; }
     h1 { font-size: 2.4rem; }
     .collection-heading { align-items: start; flex-direction: column; gap: 16px; }
+    .collection-controls { align-items: stretch; flex-direction: column; }
+    .collection-controls select { width: 100%; }
+    .collection-controls .button-filter { align-self: start; }
     .recipe-row-link { grid-template-columns: 60px 1fr auto; gap: 14px; min-height: 84px; }
     .recipe-thumb { width: 60px; height: 58px; }
     .upload-form { align-items: stretch; flex-direction: column; }

@@ -26,10 +26,10 @@ final class RecipeRepository
                 'slug' => basename($path, '.yaml'),
                 'yaml' => $contents,
                 'recipe' => RecipeValidator::parse($contents),
+                'modifiedAt' => (int) filemtime($path),
             ];
         }
 
-        usort($recipes, static fn (array $left, array $right): int => strcasecmp($left['recipe']['title'], $right['recipe']['title']));
         return $recipes;
     }
 
@@ -45,7 +45,12 @@ final class RecipeRepository
             throw new RuntimeException('Die Rezeptdatei konnte nicht gelesen werden.');
         }
 
-        return ['slug' => $slug, 'yaml' => $contents, 'recipe' => RecipeValidator::parse($contents)];
+        return [
+            'slug' => $slug,
+            'yaml' => $contents,
+            'recipe' => RecipeValidator::parse($contents),
+            'modifiedAt' => (int) filemtime($path),
+        ];
     }
 
     public function save(string $contents, array $recipe): string

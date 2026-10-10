@@ -31,6 +31,7 @@ function rejects(callable $operation, string $message): void
 $yaml = <<<'YAML'
 version: 1
 title: Zitronenreis
+tags: [Beilage, Vegetarisch]
 blocks:
   - type: text
     text: Mit Zitrone abschmecken.
@@ -43,10 +44,14 @@ YAML;
 $recipe = RecipeValidator::parse($yaml);
 check($recipe['title'] === 'Zitronenreis', 'Gültiges Rezept wird gelesen.');
 check(count($recipe['blocks']) === 2, 'Text- und Tabellenblock bleiben erhalten.');
+check($recipe['tags'] === ['Beilage', 'Vegetarisch'], 'Kategorietags werden gelesen.');
 $withSummary = str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: Frische Beilage mit Zitrone.\n", $yaml);
 check(RecipeValidator::parse($withSummary)['summary'] === 'Frische Beilage mit Zitrone.', 'Optionale Kurzbeschreibung wird akzeptiert.');
 rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: []\n", $yaml)), 'Kurzbeschreibung muss Text sein.');
 rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: null\n", $yaml)), 'Explizit leere Kurzbeschreibung wird abgelehnt.');
+rejects(static fn () => RecipeValidator::parse(str_replace('tags: [Beilage, Vegetarisch]', 'tags: Asiatisch', $yaml)), 'Tags müssen eine Liste sein.');
+rejects(static fn () => RecipeValidator::parse(str_replace('tags: [Beilage, Vegetarisch]', 'tags: [Asiatisch, asiatisch]', $yaml)), 'Doppelte Tags werden abgelehnt.');
+rejects(static fn () => RecipeValidator::parse(str_replace('tags: [Beilage, Vegetarisch]', 'tags: [" Asiatisch", "Curry"]', $yaml)), 'Tags mit Rand-Leerzeichen werden abgelehnt.');
 check((bool) preg_match('/\A[a-z0-9-]+\z/', RecipeValidator::slug($recipe['title'])), 'Titel ergibt einen sicheren Dateinamen.');
 
 rejects(static fn () => RecipeValidator::parse("version: [\n"), 'Ungültige YAML wird abgelehnt.');
@@ -67,6 +72,7 @@ try {
     $slug = $repository->save($yaml, $recipe);
     check($slug === 'zitronenreis', 'Neues Rezept erhält einen stabilen Slug.');
     check($repository->find($slug)['recipe']['title'] === 'Zitronenreis', 'Gespeichertes Rezept kann geladen werden.');
+    check($repository->find($slug)['modifiedAt'] > 0, 'Änderungszeit wird für die Datumssortierung bereitgestellt.');
 
     $replacement = str_replace('Mit Zitrone abschmecken.', 'Mit frischer Zitrone abschmecken.', $yaml);
     $repository->save($replacement, RecipeValidator::parse($replacement));

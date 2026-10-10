@@ -1,6 +1,7 @@
 version: 1
 title: Zitronenreis
 summary: Zitroniger Reis als frische Beilage, einfach in Gemüsebrühe gegart.
+tags: [Beilage, Vegetarisch]
 blocks:
   - type: text
     text: "Ein frischer Reis als Beilage. Ergibt 2 Portionen."
