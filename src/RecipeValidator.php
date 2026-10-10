@@ -1,0 +1,151 @@
+<?php
+declare(strict_types=1);
+
+namespace Recipe;
+
+use InvalidArgumentException;
+use Symfony\Component\Yaml\Yaml;
+
+final class RecipeValidator
+{
+    public static function parse(string $contents): array
+    {
+        if ($contents === '' || strlen($contents) > 1048576) {
+            throw new InvalidArgumentException('Die YAML-Datei ist leer oder größer als 1 MB.');
+        }
+
+        try {
+            $recipe = Yaml::parse($contents, Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
+        } catch (\Throwable $exception) {
+            throw new InvalidArgumentException('Die YAML-Datei kann nicht gelesen werden.', 0, $exception);
+        }
+
+        if (!is_array($recipe) || ($recipe['version'] ?? null) !== 1) {
+            throw new InvalidArgumentException('Das Rezept muss version: 1 enthalten.');
+        }
+        self::validateKeys($recipe, ['version', 'title', 'blocks'], 'Rezept');
+
+        if (!isset($recipe['title']) || !is_string($recipe['title']) || trim($recipe['title']) === '' || strlen($recipe['title']) > 160) {
+            throw new InvalidArgumentException('Der Titel muss zwischen 1 und 160 Zeichen lang sein.');
+        }
+
+        if (!isset($recipe['blocks']) || !is_array($recipe['blocks']) || !array_is_list($recipe['blocks'])) {
+            throw new InvalidArgumentException('blocks muss eine geordnete Liste sein.');
+        }
+
+        foreach ($recipe['blocks'] as $index => $block) {
+            self::validateBlock($block, $index + 1);
+        }
+
+        return $recipe;
+    }
+
+    public static function slug(string $title): string
+    {
+        $asciiTitle = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', trim($title));
+        $slug = strtolower((string) preg_replace('/[^a-z0-9]+/i', '-', $asciiTitle === false ? $title : $asciiTitle));
+        $slug = trim($slug, '-');
+
+        if ($slug === '') {
+            throw new InvalidArgumentException('Aus dem Titel lässt sich kein Dateiname bilden.');
+        }
+
+        return $slug;
+    }
+
+    private static function validateBlock(mixed $block, int $number): void
+    {
+        if (!is_array($block) || !isset($block['type']) || !is_string($block['type'])) {
+            throw new InvalidArgumentException("Inhaltsblock {$number} benötigt einen Typ.");
+        }
+
+        switch ($block['type']) {
+            case 'text':
+                self::validateKeys($block, ['type', 'text', 'caption'], "Inhaltsblock {$number}");
+                self::requireString($block, 'text', $number);
+                break;
+            case 'table':
+                self::validateKeys($block, ['type', 'headers', 'rows', 'caption'], "Inhaltsblock {$number}");
+                self::validateTable($block, $number);
+                break;
+            case 'image':
+                self::validateKeys($block, ['type', 'url', 'alt', 'caption'], "Inhaltsblock {$number}");
+                self::validateMedia($block, $number);
+                self::requireString($block, 'alt', $number);
+                break;
+            case 'video':
+            case 'audio':
+                self::validateKeys($block, ['type', 'url', 'caption'], "Inhaltsblock {$number}");
+                self::validateMedia($block, $number);
+                break;
+            case 'link':
+                self::validateKeys($block, ['type', 'url', 'label', 'caption'], "Inhaltsblock {$number}");
+                self::validateUrl($block['url'] ?? null, $number);
+                self::requireString($block, 'label', $number);
+                break;
+            default:
+                throw new InvalidArgumentException("Inhaltsblock {$number} hat einen unbekannten Typ.");
+        }
+
+        if (isset($block['caption']) && !is_string($block['caption'])) {
+            throw new InvalidArgumentException("Die Beschriftung in Inhaltsblock {$number} muss Text sein.");
+        }
+    }
+
+    private static function validateTable(array $block, int $number): void
+    {
+        $headers = $block['headers'] ?? null;
+        $rows = $block['rows'] ?? null;
+        if (!is_array($headers) || $headers === [] || !array_is_list($headers) || !is_array($rows) || !array_is_list($rows)) {
+            throw new InvalidArgumentException("Tabelle {$number} benötigt headers und rows als Listen.");
+        }
+
+        foreach ($headers as $header) {
+            if (!is_string($header) || trim($header) === '') {
+                throw new InvalidArgumentException("Alle Spaltenüberschriften in Tabelle {$number} müssen Text enthalten.");
+            }
+        }
+
+        foreach ($rows as $row) {
+            if (!is_array($row) || !array_is_list($row) || count($row) !== count($headers)) {
+                throw new InvalidArgumentException("Jede Zeile in Tabelle {$number} muss zu den Spalten passen.");
+            }
+            foreach ($row as $cell) {
+                if (!is_string($cell) && !is_int($cell) && !is_float($cell)) {
+                    throw new InvalidArgumentException("Tabellenzellen in Tabelle {$number} müssen Text oder Zahlen sein.");
+                }
+            }
+        }
+    }
+
+    private static function validateMedia(array $block, int $number): void
+    {
+        self::validateUrl($block['url'] ?? null, $number);
+    }
+
+    private static function validateUrl(mixed $url, int $number): void
+    {
+        if (!is_string($url)) {
+            throw new InvalidArgumentException("Inhaltsblock {$number} benötigt eine URL.");
+        }
+
+        $parts = parse_url($url);
+        if (!is_array($parts) || !in_array(strtolower($parts['scheme'] ?? ''), ['http', 'https'], true) || empty($parts['host']) || isset($parts['user']) || isset($parts['pass'])) {
+            throw new InvalidArgumentException("Inhaltsblock {$number} benötigt eine sichere HTTP(S)-URL.");
+        }
+    }
+
+    private static function requireString(array $block, string $key, int $number): void
+    {
+        if (!isset($block[$key]) || !is_string($block[$key]) || trim($block[$key]) === '') {
+            throw new InvalidArgumentException("Inhaltsblock {$number} benötigt den Textwert {$key}.");
+        }
+    }
+
+    private static function validateKeys(array $value, array $allowed, string $context): void
+    {
+        if (array_diff(array_keys($value), $allowed) !== []) {
+            throw new InvalidArgumentException("{$context} enthält ein unbekanntes Feld.");
+        }
+    }
+}

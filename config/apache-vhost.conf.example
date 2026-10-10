@@ -1,0 +1,17 @@
+<VirtualHost *:443>
+    ServerName recipes.example.org
+    DocumentRoot /var/www/recipe-collection/public
+
+    <Directory /var/www/recipe-collection/public>
+        AllowOverride None
+        Require all granted
+        FallbackResource /index.php
+    </Directory>
+
+    <LocationMatch "^/admin(?:/|$)">
+        AuthType Basic
+        AuthName "Recipe administration"
+        AuthUserFile /etc/recipe-collection/.htpasswd
+        Require valid-user
+    </LocationMatch>
+</VirtualHost>

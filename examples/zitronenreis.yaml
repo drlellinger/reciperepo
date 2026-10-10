@@ -1,0 +1,19 @@
+version: 1
+title: Zitronenreis
+blocks:
+  - type: text
+    text: "Ein frischer Reis als Beilage. Ergibt 2 Portionen."
+  - type: table
+    headers: [Zutat, Menge]
+    rows:
+      - [Reis, "150 g"]
+      - [Zitrone, "1 Stück"]
+      - [Gemüsebrühe, "300 ml"]
+  - type: text
+    text: |-
+      Reis abspülen. Mit Brühe und Zitronenabrieb aufkochen.
+      Zugedeckt bei niedriger Hitze garen und mit Zitronensaft abschmecken.
+  - type: image
+    url: https://example.com/zitronenreis.jpg
+    alt: Zitronenreis in einer Schale
+    caption: "Bild-URL durch eine eigene HTTPS-Adresse ersetzen."
