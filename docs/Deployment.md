@@ -49,6 +49,17 @@ Die Beispielkonfigurationen an Serverpfade und PHP-FPM-Socket anpassen und TLS-Z
 
 In `config/app.php` für `site_url` die öffentliche HTTPS-Basisadresse ohne Pfad eintragen, zum Beispiel `https://rezepte.example.org`. Diese Adresse wird für absolute Open-Graph- und Twitter-Bild-/Seiten-URLs verwendet. Für iOS-Homescreen-Icons empfiehlt sich ein quadratisches PNG mit 180 × 180 Pixeln unter `apple_touch_icon`; andernfalls verwendet die Seite, sofern konfiguriert, Logo oder Favicon. Auf einzelnen Rezeptseiten wird das erste Rezeptbild für Linkvorschauen verwendet.
 
+## Namen und Erscheinungsbild anpassen
+
+Die wichtigsten Angaben liegen in [config/app.php](config/app.php):
+
+- Name der Sammlung und Logo
+- Browser-Titel und Linkvorschauen
+- Footer, Datenschutz und Impressum
+- öffentliche Adresse der Installation
+
+Das mitgelieferte Icon liegt in [public/assets/logo.svg](public/assets/logo.svg). Zusätzlich sind ein Favicon und ein Apple-Touch-Icon enthalten.
+
 ## 413 Fehler bei Uploads
 
 Wenn beim Hochladen von YAML oder Bildern ein HTTP 413 erscheint, liegt das normalerweise nicht am PHP-Code der App, sondern an Server-Limits:

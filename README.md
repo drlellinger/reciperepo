@@ -1,37 +1,58 @@
-# reciperepo
+<p align="center">
+	<img src="public/assets/logo.svg" alt="reciperepo Icon" width="140">
+</p>
 
-Eine kleine Rezeptesammlung mit PHP und YAML: Rezepte sind öffentlich lesbar und einzeln als YAML oder A4-PDF herunterladbar. Der Adminbereich nutzt HTTP-Basisauthentifizierung des Webservers.
+<h1 align="center">reciperepo</h1>
 
-## Voraussetzungen
+<p align="center">
+	Dein ruhiges, persönliches Rezeptarchiv für Küche, Familie und Alltag.
+</p>
 
-- PHP 8.1+ mit `fileinfo`, `iconv`, `exif` und `gd`
-- PHP-Erweiterung `curl` für externe Bilder in PDF-Dateien
-- Composer
-- Apache mit PHP-FPM/mod_php oder Nginx mit PHP-FPM
+<p align="center">
+	Rezepte übersichtlich sammeln, lesen und als PDF mitnehmen.
+</p>
 
-Mehr Informationen zum Deployment siehe [hier](docs/Deployment.md)
+## Deine Rezeptsammlung
 
-## YAML-Format
+reciperepo ist eine kleine, private Rezeptbibliothek für Menschen, die ihre Rezepte selbst besitzen und unkompliziert pflegen möchten. Statt verstreuter Notizen, Screenshots und Links liegen alle Lieblingsrezepte an einem Ort.
 
-Ein vollständiges Beispiel liegt in [examples/zitronenreis.yaml](examples/zitronenreis.yaml). Jedes Rezept enthält `version: 1`, einen Titel und geordnete Inhaltsblöcke. `summary` und `tags` sind optionale Textfelder auf Rezeptebene. Tags werden als Kategorien in der Übersicht verwendet:
+Die Sammlung ist öffentlich lesbar und funktioniert auf dem Computer, Tablet und Smartphone. Die Verwaltung bleibt geschützt und ist für die Person gedacht, die Rezepte hinzufügt und aktualisiert.
 
-- `text`: `text`
-- `heading`: `text` für eine Kapitelüberschrift
-- `table`: `headers` und `rows`
-- `image`: `url`, `alt`, optional `caption`
-- `video` oder `audio`: `url`, optional `caption`
-- `link`: `url` und `label`
+## Was dich erwartet
 
-Für die automatisierte Übertragung von Rezepten aus Textdokumenten siehe die [LLM-Anleitung](docs/llm-yaml-authoring.md).
+- **Übersichtliche Sammlung:** Alle Rezepte auf einen Blick, sortierbar nach Name, Änderungsdatum oder Kategorie.
+- **Schnelles Wiederfinden:** Kategorien und eine Suche helfen auch bei einer wachsenden Sammlung.
+- **Angenehmes Lesen:** Titel, Kurzbeschreibung, Zutaten, Zubereitung, Bilder und weiterführende Links werden klar dargestellt.
+- **Für die Küche:** Jede Rezeptseite kann als PDF heruntergeladen werden.
+- **Eigene oder fremde Bilder:** Rezeptbilder lassen sich direkt in der Verwaltung hochladen oder extern einbinden.
+- **Einfach mitzunehmen:** Rezepte liegen als gut lesbare YAML-Dateien vor und können gesichert oder zwischen Installationen übertragen werden.
+- **Respekt vor deinen Daten:** Die Sammlung kommt ohne Benutzerkonto, Werbung und externe Plattform aus.
 
-## Oberflächenkonfiguration
+## Ein Rezept kann so aussehen
 
-Navbar, Browser-Titel und Footer lassen sich in [config/app.php](config/app.php) anpassen. In `footer_name`, `privacy_url` und `imprint_url` sind Markdown-Links wie `[Kontakt](mailto:post@example.org)` möglich. Bei `privacy_url` und `imprint_url` funktionieren weiterhin reine URLs mit den Standardlabels „Datenschutzerklärung“ und „Impressum“. Rohes HTML und unsichere Linkprotokolle werden nicht ausgegeben. Für korrekte Linkvorschauen `site_url` auf die öffentliche HTTPS-Adresse setzen. `apple_touch_icon` sollte auf ein quadratisches PNG mit 180 × 180 Pixeln zeigen; ohne eigene Angabe werden Logo oder Favicon verwendet.
+Ein Rezept besteht aus einem Titel und frei kombinierbaren Abschnitten. Dadurch bleibt es kurz und einfach oder wird so ausführlich, wie du es brauchst.
 
-## Rezeptbilder hochladen
+```yaml
+version: 1
+title: Zitronenreis
+summary: Zitroniger Reis als frische Beilage.
+tags: [Beilage, Vegetarisch]
+blocks:
+	- type: text
+		text: Ergibt 2 Portionen.
+	- type: table
+		headers: [Zutat, Menge]
+		rows:
+			- [Reis, "150 g"]
+			- [Zitrone, "1 Stück"]
+	- type: heading
+		text: Zubereitung
+	- type: text
+		text: |
+			Reis abspülen und in Brühe garen.
+			Mit Zitronensaft abschmecken.
+```
 
-In der Verwaltung lassen sich YAML-Dateien und Rezeptbilder getrennt hochladen. Bilder werden als JPEG, PNG, GIF oder WebP bis 8 MB in `public/uploads/images/` gespeichert und sind dort öffentlich abrufbar. JPEG-, PNG- und WebP-Dateien werden beim Upload neu encodiert, um Metadaten wie GPS-Standorte zu entfernen; JPEG-EXIF-Ausrichtung wird dabei in die Bildpixel übernommen. Animierte GIFs bleiben unverändert, damit ihre Animation erhalten bleibt. Die Verwaltung zeigt Vorschaubilder und die zugehörigen Pfade an. Den kopierten Pfad als `url` eines `image`-Blocks in der Rezept-YAML verwenden, zum Beispiel `/uploads/images/<Dateiname>.jpg`. Externe HTTP(S)-Bild-URLs sind weiterhin zulässig. Für Sicherungen auch `public/uploads/images/` einschließen.
+Neben Text, Überschriften und Zutatenlisten sind auch Bilder, Audio, Videos und Links möglich. Ein vollständiges Beispiel findest du in [examples/zitronenreis.yaml](examples/zitronenreis.yaml).
 
-Der PDF-Download verwendet Dompdf und bildet Rezeptkopf, Kategorien und Inhaltsblöcke im A4-Hochformat ab. Logo und Name werden aus der Oberflächenkonfiguration übernommen. Lokale Bilder unter `public/` und externe HTTP(S)-Bilder erscheinen im PDF. Externe Bilder werden mit Größen- und Zeitlimits geladen; private IP-Adressen und Weiterleitungen werden blockiert.
-
-Externe Medien- und Link-URLs müssen HTTP(S) verwenden; Bilder aus der Verwaltung dürfen zusätzlich ihren lokalen Pfad unter `/uploads/images/` verwenden. Beliebiges HTML und eingebettete iframes werden nicht unterstützt. YAML-Dateien dürfen bis 1 MB groß sein, Bilddateien bis 8 MB. Ein YAML-Upload mit demselben normalisierten Titel ersetzt das Rezept; ein anderer Titel legt ein neues Rezept an. Der Download auf jeder Rezeptseite liefert die gespeicherte YAML-Datei.
+Wenn du vorhandene Notizen in Rezepte umwandeln möchtest, hilft die [KI-Anleitung für YAML-Rezepte](docs/llm-yaml-authoring.md). Ein Rezept kann anschließend über die Verwaltung hochgeladen werden. Bilder lassen sich dort ebenfalls hinzufügen.
