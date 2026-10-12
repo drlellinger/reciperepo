@@ -55,7 +55,7 @@
             </select>
         </label>
         <button class="button button-filter" type="submit">Anwenden</button>
-        <?php if ($search !== '' || $sort !== 'name' || $perPage !== 10): ?>
+        <?php if ($search !== '' || $sort !== 'date' || $perPage !== 10): ?>
             <a class="reset-link" href="/admin">Zurücksetzen</a>
         <?php endif; ?>
     </form>

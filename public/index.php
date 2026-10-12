@@ -436,8 +436,8 @@ if ($path === '/admin' && $method === 'GET') {
     $allItems = $repository->all();
     $search = $_GET['q'] ?? '';
     $search = is_string($search) ? trim($search) : '';
-    $sort = $_GET['sort'] ?? 'name';
-    $sort = is_string($sort) && in_array($sort, ['name', 'date'], true) ? $sort : 'name';
+    $sort = $_GET['sort'] ?? 'date';
+    $sort = is_string($sort) && in_array($sort, ['name', 'date'], true) ? $sort : 'date';
     $perPage = $_GET['perPage'] ?? '10';
     $perPage = is_string($perPage) && in_array($perPage, ['5', '10', '20', '50'], true) ? (int) $perPage : 10;
     $page = $_GET['page'] ?? '1';
