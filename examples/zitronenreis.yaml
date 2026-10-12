@@ -1,23 +1,25 @@
 version: 1
 title: Zitronenreis
-summary: Zitroniger Reis als frische Beilage, einfach in Gemüsebrühe gegart.
+summary: Zitroniger Reis als frische Beilage.
 tags: [Beilage, Vegetarisch]
 blocks:
   - type: text
-    text: "Ein frischer Reis als Beilage. Ergibt 2 Portionen."
+    text: Ergibt 2 Portionen.
   - type: table
     headers: [Zutat, Menge]
     rows:
-      - [Reis, "150 g"]
-      - [Zitrone, "1 Stück"]
-      - [Gemüsebrühe, "300 ml"]
+    - [Reis, "150 g"]
+    - [Zitrone, "1 Stück"]
   - type: heading
     text: Zubereitung
   - type: text
-    text: |-
-      Reis abspülen. Mit Brühe und Zitronenabrieb aufkochen.
-      Zugedeckt bei niedriger Hitze garen und mit Zitronensaft abschmecken.
+    text: |
+     Reis abspülen und in Brühe garen.
+     Mit Zitronensaft abschmecken.
   - type: image
-    url: https://example.com/zitronenreis.jpg
-    alt: Zitronenreis in einer Schale
-    caption: "Bild-URL durch eine eigene HTTPS-Adresse ersetzen."
+    url: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Lemon.jpg"
+    alt: "Eine Zitrone"
+    caption: "Mmmmh lecker"
+  - type: link
+    url: "https://de.wikipedia.org/wiki/Lemon_Tree_(Fools-Garden-Lied)"
+    label: "Ein Song über einen Zitronenbaum"

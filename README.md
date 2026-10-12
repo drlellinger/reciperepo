@@ -64,34 +64,6 @@ blocks:
     label: "Ein Song über einen Zitronenbaum"
 ```
 
-```yaml
-version: 1
-title: Zitronenreis
-summary: Zitroniger Reis als frische Beilage.
-tags: [Beilage, Vegetarisch]
-blocks:
-  - type: text
-    text: Ergibt 2 Portionen.
-  - type: table
-    headers: [Zutat, Menge]
-    rows:
-    - [Reis, "150 g"]
-    - [Zitrone, "1 Stück"]
-  - type: heading
-    text: Zubereitung
-  - type: text
-    text: |
-     Reis abspülen und in Brühe garen.
-     Mit Zitronensaft abschmecken.
-  - type: image
-    url: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Lemon.jpg"
-    alt: "Eine Zitrone"
-    Caption: "Mmmmh lecker"
-  - type: link
-    url: "https://de.wikipedia.org/wiki/Lemon_Tree_(Fools-Garden-Lied)"
-    label: "Ein Song über einen Zitronenbaum"
-```
-
 Neben Text, Überschriften und Zutatenlisten sind auch Bilder, Audio, Videos und Links möglich. Ein vollständiges Beispiel findest du in [examples/zitronenreis.yaml](examples/zitronenreis.yaml).
 
 Wenn du vorhandene Notizen in Rezepte umwandeln möchtest, hilft die [KI-Anleitung für YAML-Rezepte](docs/llm-yaml-authoring.md).
