@@ -27,6 +27,10 @@ $errorPages = [
         'title' => 'Zugriff verweigert',
         'message' => 'Du hast keine Berechtigung, diese Seite aufzurufen.',
     ],
+    '413' => [
+        'title' => 'Datei zu groß',
+        'message' => 'Die hochgeladene Datei ist zu groß. Bitte wähle eine kleinere Datei aus.',
+    ],
     '500' => [
         'title' => 'Ein Fehler ist aufgetreten',
         'message' => 'Die Seite konnte gerade nicht geladen werden. Bitte versuche es später erneut.',
@@ -114,7 +118,7 @@ function adminIsAuthenticated(): bool
         || is_string($_SERVER['REMOTE_USER'] ?? null) && trim($_SERVER['REMOTE_USER']) !== '';
 }
 
-if (preg_match('~\A/error/(401|403|500)\z~', $path, $matches)) {
+if (preg_match('~\A/error/(401|403|413|500)\z~', $path, $matches)) {
     $errorCode = $matches[1];
     http_response_code((int) $errorCode);
     if ($errorCode === '401') {
