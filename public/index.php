@@ -18,6 +18,20 @@ $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $path = rtrim($path, '/') ?: '/';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $isAdmin = $path === '/admin' || str_starts_with($path, '/admin/');
+$errorPages = [
+    '401' => [
+        'title' => 'Anmeldung erforderlich',
+        'message' => 'Für diese Seite ist eine Anmeldung erforderlich.',
+    ],
+    '403' => [
+        'title' => 'Zugriff verweigert',
+        'message' => 'Du hast keine Berechtigung, diese Seite aufzurufen.',
+    ],
+    '500' => [
+        'title' => 'Ein Fehler ist aufgetreten',
+        'message' => 'Die Seite konnte gerade nicht geladen werden. Bitte versuche es später erneut.',
+    ],
+];
 
 if ($isAdmin) {
     session_set_cookie_params([
@@ -92,6 +106,19 @@ function takeFlash(): ?array
     $flash = $_SESSION['flash'] ?? null;
     unset($_SESSION['flash']);
     return is_array($flash) ? $flash : null;
+}
+
+if (preg_match('~\A/error/(401|403|500)\z~', $path, $matches)) {
+    $errorCode = $matches[1];
+    http_response_code((int) $errorCode);
+    if ($errorCode === '401') {
+        header('WWW-Authenticate: Basic realm="Recipe administration"');
+    }
+    renderPage('error', $errorCode . ' · ' . $errorPages[$errorCode]['title'], [
+        'errorCode' => $errorCode,
+        'errorTitle' => $errorPages[$errorCode]['title'],
+        'errorMessage' => $errorPages[$errorCode]['message'],
+    ]);
 }
 
 function renderBlocks(array $blocks): string

@@ -7,6 +7,10 @@ server {
     # Allow larger uploads than the default 2MB (APCU/word-size SSO).
     client_max_body_size 16M;
 
+    error_page 401 /error/401;
+    error_page 403 /error/403;
+    error_page 500 /error/500;
+
     location ^~ /admin {
         auth_basic "Recipe administration";
         auth_basic_user_file /etc/recipe-collection/.htpasswd;
