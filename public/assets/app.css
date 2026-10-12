@@ -133,6 +133,8 @@ figcaption { margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
 .upload-panel { min-width: 0; }
 .upload-panel .upload-form { align-items: stretch; flex-direction: column; }
 .upload-panel .upload-form .button { align-self: start; }
+.admin-controls { margin-bottom: 20px; border-radius: 16px; }
+.admin-controls input[type="search"] { min-width: min(280px, 40vw); min-height: 42px; padding: 8px 10px; border: 1px solid rgba(100, 128, 116, 0.28); border-radius: 12px; background: rgba(255, 255, 255, 0.8); color: var(--ink); }
 .upload-form { display: flex; align-items: end; gap: 14px; }
 .file-field { display: grid; flex: 1; gap: 8px; }
 .file-field-label { font-size: 0.88rem; font-weight: 650; }
@@ -170,6 +172,7 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
     .collection-heading { align-items: start; flex-direction: column; gap: 16px; }
     .collection-controls { align-items: stretch; flex-direction: column; }
     .collection-controls select { width: 100%; }
+    .admin-controls input[type="search"] { width: 100%; min-width: 0; }
     .collection-controls .button-filter { align-self: start; }
     .recipe-row-link { grid-template-columns: 60px 1fr auto; gap: 14px; min-height: 84px; }
     .recipe-thumb { width: 60px; height: 58px; }

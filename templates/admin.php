@@ -3,7 +3,7 @@
         <p class="eyebrow">Küchenarchiv</p>
         <h1>Verwaltung</h1>
     </div>
-    <span class="admin-count"><?= count($items) ?> <?= count($items) === 1 ? 'Rezept' : 'Rezepte' ?></span>
+    <span class="admin-count"><?= $totalCount ?> <?= $totalCount === 1 ? 'Rezept' : 'Rezepte' ?></span>
 </section>
 
 <div class="upload-panels">
@@ -34,8 +34,33 @@
 
 <section class="admin-section" aria-labelledby="recipes-title">
     <h2 id="recipes-title">Rezepte</h2>
-    <?php if ($items === []): ?>
-        <p class="quiet-message">Noch keine Rezepte vorhanden.</p>
+    <form class="collection-controls admin-controls" method="get" action="/admin">
+        <label>
+            <span>Rezepte suchen</span>
+            <input type="search" name="q" value="<?= escape($search) ?>" placeholder="Titel, Slug oder Tag">
+        </label>
+        <label>
+            <span>Sortieren nach</span>
+            <select name="sort">
+                <option value="name" <?= $sort === 'name' ? 'selected' : '' ?>>Name</option>
+                <option value="date" <?= $sort === 'date' ? 'selected' : '' ?>>Zuletzt geändert</option>
+            </select>
+        </label>
+        <label>
+            <span>Rezepte pro Seite</span>
+            <select name="perPage">
+                <?php foreach ([5, 10, 20, 50] as $choice): ?>
+                    <option value="<?= $choice ?>" <?= $perPage === $choice ? 'selected' : '' ?>><?= $choice ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <button class="button button-filter" type="submit">Anwenden</button>
+        <?php if ($search !== '' || $sort !== 'name' || $perPage !== 10): ?>
+            <a class="reset-link" href="/admin">Zurücksetzen</a>
+        <?php endif; ?>
+    </form>
+    <?php if ($totalCount === 0): ?>
+        <p class="quiet-message"><?= $search === '' ? 'Noch keine Rezepte vorhanden.' : 'Keine Rezepte für diese Suche gefunden.' ?></p>
     <?php else: ?>
         <ul class="admin-list">
             <?php foreach ($items as $item): ?>
@@ -48,6 +73,17 @@
                 </li>
             <?php endforeach; ?>
         </ul>
+    <?php endif; ?>
+    <?php if ($pageCount > 1): ?>
+        <nav class="pagination" aria-label="Seitennavigation">
+            <?php if ($page > 1): ?>
+                <a href="/admin?q=<?= urlencode($search) ?>&amp;sort=<?= urlencode($sort) ?>&amp;perPage=<?= $perPage ?>&amp;page=<?= $page - 1 ?>">Vorherige</a>
+            <?php endif; ?>
+            <span><?= $visibleStart ?>–<?= $visibleEnd ?> von <?= $totalCount ?></span>
+            <?php if ($page < $pageCount): ?>
+                <a href="/admin?q=<?= urlencode($search) ?>&amp;sort=<?= urlencode($sort) ?>&amp;perPage=<?= $perPage ?>&amp;page=<?= $page + 1 ?>">Nächste</a>
+            <?php endif; ?>
+        </nav>
     <?php endif; ?>
 </section>
 

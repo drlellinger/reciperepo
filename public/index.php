@@ -429,8 +429,46 @@ if ($path === '/admin' && $method === 'GET') {
     if (!isset($_SESSION['_csrf'])) {
         $_SESSION['_csrf'] = bin2hex(random_bytes(32));
     }
+    $allItems = $repository->all();
+    $search = $_GET['q'] ?? '';
+    $search = is_string($search) ? trim($search) : '';
+    $sort = $_GET['sort'] ?? 'name';
+    $sort = is_string($sort) && in_array($sort, ['name', 'date'], true) ? $sort : 'name';
+    $perPage = $_GET['perPage'] ?? '10';
+    $perPage = is_string($perPage) && in_array($perPage, ['5', '10', '20', '50'], true) ? (int) $perPage : 10;
+    $page = $_GET['page'] ?? '1';
+    $page = max(1, (int) $page);
+    $items = array_values(array_filter($allItems, static function (array $item) use ($search): bool {
+        if ($search === '') {
+            return true;
+        }
+
+        $haystack = $item['recipe']['title'] . ' ' . $item['slug'] . ' ' . implode(' ', $item['recipe']['tags'] ?? []);
+        return preg_match('/' . preg_quote($search, '/') . '/iu', $haystack) === 1;
+    }));
+    usort($items, static function (array $left, array $right) use ($sort): int {
+        $comparison = $sort === 'date'
+            ? $right['modifiedAt'] <=> $left['modifiedAt']
+            : strnatcasecmp($left['recipe']['title'], $right['recipe']['title']);
+
+        return $comparison !== 0 ? $comparison : strnatcasecmp($left['recipe']['title'], $right['recipe']['title']);
+    });
+    $totalCount = count($items);
+    $pageCount = $totalCount === 0 ? 1 : max(1, (int) ceil($totalCount / $perPage));
+    $page = min($page, $pageCount);
+    $visibleStart = $totalCount === 0 ? 0 : ($page - 1) * $perPage + 1;
+    $visibleEnd = min($page * $perPage, $totalCount);
+    $items = array_slice($items, ($page - 1) * $perPage, $perPage);
     renderPage('admin', 'Verwaltung', [
-        'items' => $repository->all(),
+        'items' => $items,
+        'totalCount' => $totalCount,
+        'visibleStart' => $visibleStart,
+        'visibleEnd' => $visibleEnd,
+        'page' => $page,
+        'pageCount' => $pageCount,
+        'perPage' => $perPage,
+        'search' => $search,
+        'sort' => $sort,
         'images' => (new ImageRepository($root . '/public/uploads/images'))->all(),
         'csrfToken' => $_SESSION['_csrf'],
         'flash' => takeFlash(),
