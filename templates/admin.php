@@ -37,7 +37,7 @@
     <form class="collection-controls admin-controls" method="get" action="/admin">
         <label>
             <span>Rezepte suchen</span>
-            <input type="search" name="q" value="<?= escape($search) ?>" placeholder="Titel, Slug oder Tag">
+            <input type="search" name="q" value="<?= escape($search) ?>" placeholder="Name">
         </label>
         <label>
             <span>Sortieren nach</span>
