@@ -56,3 +56,7 @@ blocks:
 Neben Text, Überschriften und Zutatenlisten sind auch Bilder, Audio, Videos und Links möglich. Ein vollständiges Beispiel findest du in [examples/zitronenreis.yaml](examples/zitronenreis.yaml).
 
 Wenn du vorhandene Notizen in Rezepte umwandeln möchtest, hilft die [KI-Anleitung für YAML-Rezepte](docs/llm-yaml-authoring.md). Ein Rezept kann anschließend über die Verwaltung hochgeladen werden. Bilder lassen sich dort ebenfalls hinzufügen.
+
+## Transparenzhinweise
+
+Diese Software wurde mithilfe künstlicher Intelligenz entwickelt.
