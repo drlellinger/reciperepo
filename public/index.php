@@ -108,6 +108,12 @@ function takeFlash(): ?array
     return is_array($flash) ? $flash : null;
 }
 
+function adminIsAuthenticated(): bool
+{
+    return is_string($_SERVER['PHP_AUTH_USER'] ?? null) && trim($_SERVER['PHP_AUTH_USER']) !== ''
+        || is_string($_SERVER['REMOTE_USER'] ?? null) && trim($_SERVER['REMOTE_USER']) !== '';
+}
+
 if (preg_match('~\A/error/(401|403|500)\z~', $path, $matches)) {
     $errorCode = $matches[1];
     http_response_code((int) $errorCode);
@@ -118,6 +124,16 @@ if (preg_match('~\A/error/(401|403|500)\z~', $path, $matches)) {
         'errorCode' => $errorCode,
         'errorTitle' => $errorPages[$errorCode]['title'],
         'errorMessage' => $errorPages[$errorCode]['message'],
+    ]);
+}
+
+if ($isAdmin && !adminIsAuthenticated()) {
+    http_response_code(401);
+    header('WWW-Authenticate: Basic realm="Recipe administration"');
+    renderPage('error', '401 · ' . $errorPages['401']['title'], [
+        'errorCode' => '401',
+        'errorTitle' => $errorPages['401']['title'],
+        'errorMessage' => $errorPages['401']['message'],
     ]);
 }
 

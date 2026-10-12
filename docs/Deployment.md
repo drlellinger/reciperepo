@@ -45,7 +45,7 @@ Beispielkonfigurationen:
 - [Apache VirtualHost](../config/apache-vhost.conf.example)
 - [Nginx mit PHP-FPM](../config/nginx.conf.example)
 
-Die Beispielkonfigurationen an Serverpfade und PHP-FPM-Socket anpassen und TLS-Zertifikate ergänzen. Zugangsdaten außerhalb des Webroots anlegen, zum Beispiel mit `htpasswd -c /etc/recipe-collection/.htpasswd admin` (Apache `htpasswd`-Werkzeug erforderlich). Bei Apache muss die Konfiguration im HTTPS-VirtualHost stehen. Nginx benötigt `auth_basic` im `/admin`-Location-Block.
+Die Beispielkonfigurationen an Serverpfade und PHP-FPM-Socket anpassen und TLS-Zertifikate ergänzen. Zugangsdaten außerhalb des Webroots anlegen, zum Beispiel mit `htpasswd -c /etc/recipe-collection/.htpasswd admin` (Apache `htpasswd`-Werkzeug erforderlich). Bei Apache muss die Konfiguration im HTTPS-VirtualHost stehen. Nginx benötigt `auth_basic` im `/admin`-Location-Block. Zusätzlich prüft die Anwendung, ob Apache/Nginx den authentifizierten Benutzer an PHP weitergegeben hat, und verweigert `/admin` andernfalls mit HTTP 401.
 
 In `config/app.php` für `site_url` die öffentliche HTTPS-Basisadresse ohne Pfad eintragen, zum Beispiel `https://rezepte.example.org`. Diese Adresse wird für absolute Open-Graph- und Twitter-Bild-/Seiten-URLs verwendet. Für iOS-Homescreen-Icons empfiehlt sich ein quadratisches PNG mit 180 × 180 Pixeln unter `apple_touch_icon`; andernfalls verwendet die Seite, sofern konfiguriert, Logo oder Favicon. Auf einzelnen Rezeptseiten wird das erste Rezeptbild für Linkvorschauen verwendet.
 
