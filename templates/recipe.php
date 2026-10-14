@@ -12,6 +12,9 @@
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+        <?php if ($totalDuration > 0): ?>
+            <div class="recipe-total-duration" aria-label="Gesamtdauer">⏱ <?= escape($totalDuration) ?> Min. Gesamt</div>
+        <?php endif; ?>
         <h1><?= escape($item['recipe']['title']) ?></h1>
         <a class="download-link" href="/download?recipe=<?= escape($item['slug']) ?>" download>
             <span aria-hidden="true">↓</span> YAML herunterladen

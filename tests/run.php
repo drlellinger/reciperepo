@@ -85,6 +85,7 @@ blocks:
     - type: heading
         text: Zubereitung
     - type: text
+        duration: 5
         text: Mit Zitrone abschmecken.
     - type: table
         headers: [Zutat, Menge]
@@ -97,6 +98,7 @@ check($recipe['title'] === 'Zitronenreis', 'Gültiges Rezept wird gelesen.');
 check(count($recipe['blocks']) === 3, 'Überschrift, Text- und Tabellenblock bleiben erhalten.');
 check($recipe['blocks'][0]['type'] === 'heading', 'Kapitelüberschrift wird akzeptiert.');
 check($recipe['tags'] === ['Beilage', 'Vegetarisch'], 'Kategorietags werden gelesen.');
+check(RecipeValidator::totalDuration($recipe) === 5, 'Blockdauern werden zur Gesamtdauer addiert.');
 $withSummary = str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: Frische Beilage mit Zitrone.\n", $yaml);
 check(RecipeValidator::parse($withSummary)['summary'] === 'Frische Beilage mit Zitrone.', 'Optionale Kurzbeschreibung wird akzeptiert.');
 rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: []\n", $yaml)), 'Kurzbeschreibung muss Text sein.');
@@ -108,6 +110,8 @@ check((bool) preg_match('/\A[a-z0-9-]+\z/', RecipeValidator::slug($recipe['title
 
 rejects(static fn () => RecipeValidator::parse("version: [\n"), 'Ungültige YAML wird abgelehnt.');
 rejects(static fn () => RecipeValidator::parse(str_replace('type: text', 'type: html', $yaml)), 'Unbekannte Blocktypen werden abgelehnt.');
+rejects(static fn () => RecipeValidator::parse(str_replace('duration: 5', 'duration: 0', $yaml)), 'Dauer null wird abgelehnt.');
+rejects(static fn () => RecipeValidator::parse(str_replace('duration: 5', 'duration: 1.5', $yaml)), 'Dezimalwerte als Dauer werden abgelehnt.');
 $unsafeMedia = <<<'YAML'
 version: 1
 title: Unsicheres Bild

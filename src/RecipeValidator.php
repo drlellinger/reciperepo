@@ -58,6 +58,16 @@ final class RecipeValidator
         return $recipe;
     }
 
+    public static function totalDuration(array $recipe): int
+    {
+        $duration = 0;
+        foreach ($recipe['blocks'] ?? [] as $block) {
+            $duration += $block['duration'] ?? 0;
+        }
+
+        return $duration;
+    }
+
     public static function slug(string $title): string
     {
         $asciiTitle = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', trim($title));
@@ -79,29 +89,29 @@ final class RecipeValidator
 
         switch ($block['type']) {
             case 'heading':
-                self::validateKeys($block, ['type', 'text'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'text', 'duration'], "Inhaltsblock {$number}");
                 self::requireString($block, 'text', $number);
                 break;
             case 'text':
-                self::validateKeys($block, ['type', 'text', 'caption'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'text', 'caption', 'duration'], "Inhaltsblock {$number}");
                 self::requireString($block, 'text', $number);
                 break;
             case 'table':
-                self::validateKeys($block, ['type', 'headers', 'rows', 'caption'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'headers', 'rows', 'caption', 'duration'], "Inhaltsblock {$number}");
                 self::validateTable($block, $number);
                 break;
             case 'image':
-                self::validateKeys($block, ['type', 'url', 'alt', 'caption'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'url', 'alt', 'caption', 'duration'], "Inhaltsblock {$number}");
                 self::validateMedia($block, $number);
                 self::requireString($block, 'alt', $number);
                 break;
             case 'video':
             case 'audio':
-                self::validateKeys($block, ['type', 'url', 'caption'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'url', 'caption', 'duration'], "Inhaltsblock {$number}");
                 self::validateMedia($block, $number);
                 break;
             case 'link':
-                self::validateKeys($block, ['type', 'url', 'label', 'caption'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'url', 'label', 'caption', 'duration'], "Inhaltsblock {$number}");
                 self::validateUrl($block['url'] ?? null, $number);
                 self::requireString($block, 'label', $number);
                 break;
@@ -111,6 +121,10 @@ final class RecipeValidator
 
         if (isset($block['caption']) && !is_string($block['caption'])) {
             throw new InvalidArgumentException("Die Beschriftung in Inhaltsblock {$number} muss Text sein.");
+        }
+
+        if (array_key_exists('duration', $block) && (!is_int($block['duration']) || $block['duration'] < 1)) {
+            throw new InvalidArgumentException("Die Dauer in Inhaltsblock {$number} muss eine positive ganze Minutenzahl sein.");
         }
     }
 

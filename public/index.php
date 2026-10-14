@@ -146,17 +146,20 @@ function renderBlocks(array $blocks): string
     $html = '';
     foreach ($blocks as $block) {
         $caption = isset($block['caption']) ? '<figcaption>' . escape($block['caption']) . '</figcaption>' : '';
+        $duration = isset($block['duration'])
+            ? '<span class="recipe-duration">⏱ ' . escape($block['duration']) . ' Min.</span>'
+            : '';
         switch ($block['type']) {
             case 'heading':
-                $html .= '<h2 class="recipe-section-heading">' . escape($block['text']) . '</h2>';
+                $html .= '<div class="recipe-section-heading"><h2>' . escape($block['text']) . '</h2>' . $duration . '</div>';
                 break;
             case 'text':
-                $html .= '<div class="recipe-copy">' . nl2br(escape($block['text']), false) . '</div>';
+                $html .= '<div class="recipe-block"><div class="recipe-copy">' . nl2br(escape($block['text']), false) . '</div>' . $duration . '</div>';
                 break;
             case 'table':
                 $tableCaption = isset($block['caption']) ? '<caption>' . escape($block['caption']) . '</caption>' : '';
                 $tableLabel = 'Tabellenbereich: ' . ($block['caption'] ?? 'Rezepttabelle');
-                $html .= '<div class="table-wrap" role="region" aria-label="' . escape($tableLabel) . '" tabindex="0"><table>' . $tableCaption . '<thead><tr>';
+                $html .= '<div class="recipe-block"><div class="table-wrap" role="region" aria-label="' . escape($tableLabel) . '" tabindex="0"><table>' . $tableCaption . '<thead><tr>';
                 foreach ($block['headers'] as $header) {
                     $html .= '<th scope="col">' . escape($header) . '</th>';
                 }
@@ -168,19 +171,19 @@ function renderBlocks(array $blocks): string
                     }
                     $html .= '</tr>';
                 }
-                $html .= '</tbody></table></div>';
+                $html .= '</tbody></table></div>' . $duration . '</div>';
                 break;
             case 'image':
-                $html .= '<figure class="recipe-media"><img src="' . escape($block['url']) . '" alt="' . escape($block['alt']) . '" loading="lazy">' . $caption . '</figure>';
+                $html .= '<div class="recipe-block"><figure class="recipe-media"><img src="' . escape($block['url']) . '" alt="' . escape($block['alt']) . '" loading="lazy">' . $caption . '</figure>' . $duration . '</div>';
                 break;
             case 'video':
-                $html .= '<figure class="recipe-media"><video aria-label="' . escape($block['caption'] ?? 'Rezeptvideo') . '" controls preload="metadata" src="' . escape($block['url']) . '"></video>' . $caption . '</figure>';
+                $html .= '<div class="recipe-block"><figure class="recipe-media"><video aria-label="' . escape($block['caption'] ?? 'Rezeptvideo') . '" controls preload="metadata" src="' . escape($block['url']) . '"></video>' . $caption . '</figure>' . $duration . '</div>';
                 break;
             case 'audio':
-                $html .= '<figure class="recipe-media"><audio aria-label="' . escape($block['caption'] ?? 'Rezeptaudio') . '" controls preload="metadata" src="' . escape($block['url']) . '"></audio>' . $caption . '</figure>';
+                $html .= '<div class="recipe-block"><figure class="recipe-media"><audio aria-label="' . escape($block['caption'] ?? 'Rezeptaudio') . '" controls preload="metadata" src="' . escape($block['url']) . '"></audio>' . $caption . '</figure>' . $duration . '</div>';
                 break;
             case 'link':
-                $html .= '<p class="recipe-link"><a href="' . escape($block['url']) . '" target="_blank" rel="noopener noreferrer">' . escape($block['label']) . ' <span class="visually-hidden">(öffnet in neuem Tab)</span><span aria-hidden="true">↗</span></a></p>';
+                $html .= '<div class="recipe-block"><p class="recipe-link"><a href="' . escape($block['url']) . '" target="_blank" rel="noopener noreferrer">' . escape($block['label']) . ' <span class="visually-hidden">(öffnet in neuem Tab)</span><span aria-hidden="true">↗</span></a></p>' . $duration . '</div>';
                 break;
         }
     }
@@ -495,6 +498,7 @@ if (preg_match('~\A/recipe/([a-z0-9]+(?:-[a-z0-9]+)*)\z~', $path, $matches) && $
         renderPage('recipe', $item['recipe']['title'], [
             'item' => $item,
             'blocksHtml' => renderBlocks($item['recipe']['blocks']),
+            'totalDuration' => RecipeValidator::totalDuration($item['recipe']),
             'description' => $item['recipe']['summary'] ?? $item['recipe']['title'],
             'socialImage' => $socialImage,
             'socialImageAlt' => $socialImageAlt !== '' ? $socialImageAlt : $appConfig['logo_alt'],
