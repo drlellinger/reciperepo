@@ -70,7 +70,7 @@ $pdfBlocks = Recipe\RecipePdfRenderer::renderBlocks([
     ['type' => 'text', 'duration' => 5, 'text' => 'Mit Zitrone abschmecken.'],
     ['type' => 'video', 'url' => 'https://example.org/video.mp4', 'caption' => 'Video'],
 ], dirname(__DIR__) . '/public', $remainingRemoteImages);
-check(str_contains($pdfBlocks, '<h2>Zubereitung</h2>') && str_contains($pdfBlocks, 'Mit Zitrone abschmecken.') && str_contains($pdfBlocks, '5 Min.'), 'PDF-Rezeptblöcke enthalten Überschrift, Text und Dauer.');
+check(str_contains($pdfBlocks, '<h2>Zubereitung</h2>') && str_contains($pdfBlocks, 'Mit Zitrone abschmecken.') && str_contains($pdfBlocks, '⏱ 5 Min.'), 'PDF-Rezeptblöcke enthalten Überschrift, Text, Uhrsymbol und Dauer.');
 check(!str_contains($pdfBlocks, '<button') && !str_contains($pdfBlocks, '<video') && !str_contains($pdfBlocks, '<audio'), 'PDF-Rezeptblöcke enthalten keine Buttons oder Medien-Steuerelemente.');
 $privateImageBlocks = Recipe\RecipePdfRenderer::renderBlocks([
     ['type' => 'image', 'url' => 'http://127.0.0.1/internal.png', 'alt' => 'Privates Bild'],
