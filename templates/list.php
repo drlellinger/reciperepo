@@ -85,19 +85,23 @@
                             <span class="recipe-row-copy">
                                 <span class="recipe-row-title"><?= escape($item['recipe']['title']) ?></span>
                                 <span class="recipe-row-meta"><?= escape($item['recipe']['summary'] ?? 'Keine Kurzbeschreibung hinterlegt.') ?></span>
-                                <?php $duration = \Recipe\RecipeValidator::totalDuration($item['recipe']); ?>
-                                <?php if ($duration > 0): ?>
-                                    <span class="recipe-row-duration">⏱ <?= escape($duration) ?> Min.</span>
-                                <?php endif; ?>
                             </span>
                             <span class="row-arrow" aria-hidden="true">↗</span>
                         </a>
-                        <?php if (!empty($item['recipe']['tags'])): ?>
-                            <span class="recipe-tags recipe-row-tags">
-                                <?php foreach ($item['recipe']['tags'] as $tag): ?>
-                                    <a class="tag-label" href="/?sort=<?= urlencode($sort) ?>&amp;tag=<?= urlencode($tag) ?>&amp;group=<?= urlencode($groupBy) ?>&amp;perPage=<?= $perPage ?>&amp;page=1"<?= $selectedTag === $tag ? ' aria-current="true"' : '' ?>><?= escape($tag) ?></a>
-                                <?php endforeach; ?>
-                            </span>
+                        <?php $duration = \Recipe\RecipeValidator::totalDuration($item['recipe']); ?>
+                        <?php if (!empty($item['recipe']['tags']) || $duration > 0): ?>
+                            <div class="recipe-row-meta-line">
+                                <?php if (!empty($item['recipe']['tags'])): ?>
+                                    <span class="recipe-tags recipe-row-tags">
+                                        <?php foreach ($item['recipe']['tags'] as $tag): ?>
+                                            <a class="tag-label" href="/?sort=<?= urlencode($sort) ?>&amp;tag=<?= urlencode($tag) ?>&amp;group=<?= urlencode($groupBy) ?>&amp;perPage=<?= $perPage ?>&amp;page=1"<?= $selectedTag === $tag ? ' aria-current="true"' : '' ?>><?= escape($tag) ?></a>
+                                        <?php endforeach; ?>
+                                    </span>
+                                <?php endif; ?>
+                                <?php if ($duration > 0): ?>
+                                    <span class="recipe-row-duration">⏱ <?= escape($duration) ?> Min.</span>
+                                <?php endif; ?>
+                            </div>
                         <?php endif; ?>
                     </article>
                 <?php endforeach; ?>

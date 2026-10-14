@@ -5,15 +5,19 @@
         <span aria-current="page"><?= escape($item['recipe']['title']) ?></span>
     </nav>
     <header class="recipe-heading">
-        <?php if (!empty($item['recipe']['tags'])): ?>
-            <div class="recipe-tags" aria-label="Kategorien">
-                <?php foreach ($item['recipe']['tags'] as $tag): ?>
-                    <a class="tag-label" href="/?tag=<?= urlencode($tag) ?>"><?= escape($tag) ?></a>
-                <?php endforeach; ?>
+        <?php if (!empty($item['recipe']['tags']) || $totalDuration > 0): ?>
+            <div class="recipe-heading-meta">
+                <?php if (!empty($item['recipe']['tags'])): ?>
+                    <div class="recipe-tags" aria-label="Kategorien">
+                        <?php foreach ($item['recipe']['tags'] as $tag): ?>
+                            <a class="tag-label" href="/?tag=<?= urlencode($tag) ?>"><?= escape($tag) ?></a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+                <?php if ($totalDuration > 0): ?>
+                    <div class="recipe-total-duration" aria-label="Gesamtdauer">⏱ <?= escape($totalDuration) ?> Min. Gesamt</div>
+                <?php endif; ?>
             </div>
-        <?php endif; ?>
-        <?php if ($totalDuration > 0): ?>
-            <div class="recipe-total-duration" aria-label="Gesamtdauer">⏱ <?= escape($totalDuration) ?> Min. Gesamt</div>
         <?php endif; ?>
         <h1><?= escape($item['recipe']['title']) ?></h1>
         <a class="download-link" href="/download?recipe=<?= escape($item['slug']) ?>" download>

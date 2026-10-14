@@ -71,10 +71,12 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .recipe-row-title { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; font-size: 1.3rem; font-weight: 650; letter-spacing: -0.02em; }
 .recipe-row-meta { color: var(--muted); font-size: 0.82rem; }
 .recipe-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
-.recipe-row-tags { margin: -8px 0 14px 96px; }
-.recipe-heading .recipe-tags { margin: 0 0 12px; }
+.recipe-row-meta-line, .recipe-heading-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.recipe-row-meta-line { margin: -8px 10px 14px 96px; }
+.recipe-row-meta-line .recipe-tags { margin: 0; }
+.recipe-heading-meta { margin-bottom: 12px; }
+.recipe-heading-meta .recipe-tags { margin: 0; }
 .recipe-total-duration, .recipe-row-duration, .recipe-duration { color: var(--green-dark); font-size: 0.8rem; font-weight: 700; }
-.recipe-total-duration { margin: 0 0 14px; }
 .recipe-block { margin-bottom: 28px; }
 .recipe-block .recipe-copy, .recipe-block .recipe-media, .recipe-block .recipe-link, .recipe-block .table-wrap { margin-bottom: 8px; }
 .recipe-section-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin: 28px 0 12px; }
@@ -183,7 +185,7 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
     .collection-controls .button-filter { align-self: start; }
     .recipe-row-link { grid-template-columns: 60px 1fr auto; gap: 14px; min-height: 84px; }
     .recipe-thumb { width: 60px; height: 58px; }
-    .recipe-row-tags { margin-left: 74px; }
+    .recipe-row-meta-line { margin-left: 74px; }
     .upload-form { align-items: stretch; flex-direction: column; }
     .upload-form .button { align-self: start; }
     .upload-panels { grid-template-columns: 1fr; gap: 0; }
