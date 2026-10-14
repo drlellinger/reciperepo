@@ -85,7 +85,7 @@
                             <span class="recipe-row-copy">
                                 <span class="recipe-row-title"><?= escape($item['recipe']['title']) ?></span>
                                 <span class="recipe-row-meta"><?= escape($item['recipe']['summary'] ?? 'Keine Kurzbeschreibung hinterlegt.') ?></span>
-                                <?php $duration = RecipeValidator::totalDuration($item['recipe']); ?>
+                                <?php $duration = \Recipe\RecipeValidator::totalDuration($item['recipe']); ?>
                                 <?php if ($duration > 0): ?>
                                     <span class="recipe-row-duration">⏱ <?= escape($duration) ?> Min.</span>
                                 <?php endif; ?>
