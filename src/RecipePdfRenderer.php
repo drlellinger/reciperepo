@@ -31,15 +31,18 @@ final class RecipePdfRenderer
         $html = '';
         foreach ($blocks as $block) {
             $caption = isset($block['caption']) ? '<figcaption>' . self::escape($block['caption']) . '</figcaption>' : '';
+            $duration = isset($block['duration'])
+                ? '<span class="recipe-duration">' . self::escape((string) $block['duration']) . ' Min.</span>'
+                : '';
             switch ($block['type']) {
                 case 'heading':
-                    $html .= '<h2>' . self::escape($block['text']) . '</h2>';
+                    $html .= '<div class="recipe-section-heading"><h2>' . self::escape($block['text']) . '</h2>' . $duration . '</div>';
                     break;
                 case 'text':
-                    $html .= '<p class="recipe-copy">' . nl2br(self::escape($block['text']), false) . '</p>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-copy">' . nl2br(self::escape($block['text']), false) . '</p></div>' . $duration . '</div>';
                     break;
                 case 'table':
-                    $html .= '<table>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><table>';
                     if (isset($block['caption'])) {
                         $html .= '<caption>' . self::escape($block['caption']) . '</caption>';
                     }
@@ -55,24 +58,24 @@ final class RecipePdfRenderer
                         }
                         $html .= '</tr>';
                     }
-                    $html .= '</tbody></table>';
+                    $html .= '</tbody></table></div>' . $duration . '</div>';
                     break;
                 case 'image':
                     $imageSource = self::imageSource($block['url'], $publicRoot, $remainingRemoteImages);
-                    $html .= '<figure class="recipe-media">';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><figure class="recipe-media">';
                     if ($imageSource !== null) {
                         $html .= '<img src="' . self::escape($imageSource) . '" alt="' . self::escape($block['alt']) . '">';
                     } else {
                         $html .= '<p class="media-note">' . self::escape($block['alt']) . '</p>';
                     }
-                    $html .= $caption . '</figure>';
+                    $html .= $caption . '</figure></div>' . $duration . '</div>';
                     break;
                 case 'video':
                 case 'audio':
-                    $html .= '<p class="media-note">' . self::escape($block['caption'] ?? 'Medieninhalt') . '</p>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="media-note">' . self::escape($block['caption'] ?? 'Medieninhalt') . '</p></div>' . $duration . '</div>';
                     break;
                 case 'link':
-                    $html .= '<p class="recipe-link"><a href="' . self::escape($block['url']) . '">' . self::escape($block['label']) . '</a></p>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-link"><a href="' . self::escape($block['url']) . '">' . self::escape($block['label']) . '</a></p></div>' . $duration . '</div>';
                     break;
             }
         }
@@ -109,6 +112,12 @@ body { color: #1d312a; font-family: "DejaVu Sans", sans-serif; font-size: 10pt; 
 h1 { margin: 0; color: #1d312a; font-size: 27pt; line-height: 1.15; }
 .recipe-content { padding-top: 15px; }
 h2 { margin: 22px 0 9px; color: #194b38; font-size: 16pt; page-break-after: avoid; }
+.recipe-section-heading { display: table; width: 100%; }
+.recipe-section-heading h2, .recipe-section-heading .recipe-duration { display: table-cell; vertical-align: middle; }
+.recipe-section-heading .recipe-duration { width: 1%; padding-left: 12px; text-align: right; white-space: nowrap; }
+.recipe-block { display: table; width: 100%; }
+.recipe-block-content, .recipe-block > .recipe-duration { display: table-cell; vertical-align: middle; }
+.recipe-block > .recipe-duration { width: 1%; padding-left: 12px; text-align: right; white-space: nowrap; }
 .recipe-copy { margin: 0 0 16px; line-height: 1.7; }
 table { width: 100%; margin: 15px 0 20px; border-collapse: collapse; page-break-inside: avoid; }
 caption { padding: 6px; color: #194b38; font-weight: bold; text-align: left; }

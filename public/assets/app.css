@@ -134,6 +134,7 @@ caption { padding: 8px; font-weight: 650; text-align: left; }
 figcaption { margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
 .recipe-link { margin: 24px 0; }
 .recipe-link a { color: var(--green); font-weight: 650; }
+.recipe-duration { white-space: nowrap; }
 .admin-heading { align-items: center; }
 .admin-heading h1 { margin-bottom: 0; }
 .admin-section { padding: 34px 0; border-bottom: 1px solid var(--line); }
@@ -194,6 +195,12 @@ input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px
     .image-list-item { grid-template-columns: 42px minmax(0, 1fr) auto; }
     .image-list-item img { width: 42px; height: 42px; }
     .site-footer { padding: 18px 20px; }
+}
+
+@media (min-width: 621px) {
+    .recipe-block { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 24px; }
+    .recipe-block > .recipe-duration { grid-column: 2; grid-row: 1; }
+    .recipe-section-heading { justify-content: space-between; }
 }
 
 @media (prefers-reduced-motion: reduce) {
