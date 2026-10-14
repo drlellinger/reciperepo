@@ -21,6 +21,7 @@
             <option value="name" <?= $sort === 'name' ? 'selected' : '' ?>>Name</option>
             <option value="date" <?= $sort === 'date' ? 'selected' : '' ?>>Zuletzt geändert</option>
             <option value="category" <?= $sort === 'category' ? 'selected' : '' ?>>Kategorie</option>
+            <option value="duration" <?= $sort === 'duration' ? 'selected' : '' ?>>Dauer</option>
         </select>
     </label>
     <label>

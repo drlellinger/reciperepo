@@ -338,7 +338,7 @@ if (preg_match('~\A/recipe/([a-z0-9]+(?:-[a-z0-9]+)*)/pdf\z~', $path, $matches) 
 if ($path === '/' && $method === 'GET') {
     $allItems = $repository->all();
     $sort = $_GET['sort'] ?? 'name';
-    $sort = is_string($sort) && in_array($sort, ['name', 'date', 'category'], true) ? $sort : 'name';
+    $sort = is_string($sort) && in_array($sort, ['name', 'date', 'category', 'duration'], true) ? $sort : 'name';
     $selectedTag = $_GET['tag'] ?? '';
     $selectedTag = is_string($selectedTag) ? $selectedTag : '';
     $groupBy = $_GET['group'] ?? 'none';
@@ -370,6 +370,8 @@ if ($path === '/' && $method === 'GET') {
             natcasesort($leftTags);
             natcasesort($rightTags);
             $comparison = strnatcasecmp((string) (reset($leftTags) ?: ''), (string) (reset($rightTags) ?: ''));
+        } elseif ($sort === 'duration') {
+            $comparison = RecipeValidator::totalDuration($left['recipe']) <=> RecipeValidator::totalDuration($right['recipe']);
         } else {
             $comparison = strnatcasecmp($left['recipe']['title'], $right['recipe']['title']);
         }
