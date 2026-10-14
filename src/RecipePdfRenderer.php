@@ -32,7 +32,7 @@ final class RecipePdfRenderer
         foreach ($blocks as $block) {
             $caption = isset($block['caption']) ? '<figcaption>' . self::escape($block['caption']) . '</figcaption>' : '';
             $duration = isset($block['duration'])
-                ? '<span class="recipe-duration">⏱ ' . self::escape((string) $block['duration']) . ' Min.</span>'
+                ? '<span class="recipe-duration">' . self::durationIcon() . ' ' . self::escape((string) $block['duration']) . ' Min.</span>'
                 : '';
             switch ($block['type']) {
                 case 'heading':
@@ -118,6 +118,7 @@ h2 { margin: 22px 0 9px; color: #194b38; font-size: 16pt; page-break-after: avoi
 .recipe-block { display: table; width: 100%; }
 .recipe-block-content, .recipe-block > .recipe-duration { display: table-cell; vertical-align: middle; }
 .recipe-block > .recipe-duration { width: 1%; padding-left: 12px; text-align: right; white-space: nowrap; }
+.duration-icon { width: 9pt; height: 9pt; vertical-align: -1pt; }
 .recipe-copy { margin: 0 0 16px; line-height: 1.7; }
 table { width: 100%; margin: 15px 0 20px; border-collapse: collapse; page-break-inside: avoid; }
 caption { padding: 6px; color: #194b38; font-weight: bold; text-align: left; }
@@ -419,5 +420,10 @@ a { color: #28664e; }
     private static function escape(string|int|float|null $value): string
     {
         return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    private static function durationIcon(): string
+    {
+        return '<svg class="duration-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8" fill="none" stroke="#194b38" stroke-width="2"/><path d="M12 13V8m0 5 3 2M9 3h6M12 3v2" fill="none" stroke="#194b38" stroke-linecap="round" stroke-width="2"/></svg>';
     }
 }
