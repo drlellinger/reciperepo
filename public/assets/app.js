@@ -1,10 +1,14 @@
 const toast = document.querySelector('[data-toast]');
 let toastTimer;
 
-function showToast(message) {
+function showToast(message, type = '') {
     if (!toast) return;
 
     toast.textContent = message;
+    toast.classList.remove('toast-success', 'toast-error');
+    if (type === 'success' || type === 'error') {
+        toast.classList.add(`toast-${type}`);
+    }
     toast.classList.add('toast-visible');
     window.clearTimeout(toastTimer);
     toastTimer = window.setTimeout(() => toast.classList.remove('toast-visible'), 5000);
@@ -12,7 +16,7 @@ function showToast(message) {
 
 const flashMessage = toast?.dataset.flashMessage;
 if (flashMessage) {
-    window.setTimeout(() => showToast(flashMessage), 50);
+    window.setTimeout(() => showToast(flashMessage, toast.dataset.flashType), 50);
 }
 
 document.querySelectorAll('form[data-confirm]').forEach((form) => {

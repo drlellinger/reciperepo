@@ -13,7 +13,8 @@
 <?php
 $flashToast = \Recipe\Toast::message($flash ?? null);
 $flashToastIsError = $flashToast !== null && !empty($flash['error']);
+$flashToastIsSuccess = $flashToast !== null && !$flashToastIsError;
 ?>
-<div class="toast<?= $flashToast !== null ? ' toast-visible' : '' ?><?= $flashToastIsError ? ' toast-error' : '' ?>" data-toast role="<?= $flashToastIsError ? 'alert' : 'status' ?>" aria-live="<?= $flashToastIsError ? 'assertive' : 'polite' ?>" aria-atomic="true" <?= $flashToast !== null ? 'data-flash-message="' . escape($flashToast) . '"' : '' ?>><?= $flashToast !== null ? escape($flashToast) : '' ?></div>
+<div class="toast<?= $flashToast !== null ? ' toast-visible' : '' ?><?= $flashToastIsError ? ' toast-error' : '' ?><?= $flashToastIsSuccess ? ' toast-success' : '' ?>" data-toast role="<?= $flashToastIsError ? 'alert' : 'status' ?>" aria-live="<?= $flashToastIsError ? 'assertive' : 'polite' ?>" aria-atomic="true" <?= $flashToast !== null ? 'data-flash-message="' . escape($flashToast) . '" data-flash-type="' . ($flashToastIsError ? 'error' : 'success') . '"' : '' ?>><?= $flashToast !== null ? escape($flashToast) : '' ?></div>
 </body>
 </html>
