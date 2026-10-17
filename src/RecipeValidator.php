@@ -23,7 +23,7 @@ final class RecipeValidator
         if (!is_array($recipe) || ($recipe['version'] ?? null) !== 1) {
             throw new InvalidArgumentException('Das Rezept muss version: 1 enthalten.');
         }
-        self::validateKeys($recipe, ['version', 'title', 'summary', 'tags', 'blocks'], 'Rezept');
+        self::validateKeys($recipe, ['version', 'title', 'summary', 'aliases', 'tags', 'blocks'], 'Rezept');
 
         if (!isset($recipe['title']) || !is_string($recipe['title']) || trim($recipe['title']) === '' || strlen($recipe['title']) > 160) {
             throw new InvalidArgumentException('Der Titel muss zwischen 1 und 160 Zeichen lang sein.');
@@ -35,6 +35,10 @@ final class RecipeValidator
 
         if (array_key_exists('summary', $recipe) && (!is_string($recipe['summary']) || trim($recipe['summary']) === '')) {
             throw new InvalidArgumentException('summary muss ein nicht leerer Text sein.');
+        }
+
+        if (array_key_exists('aliases', $recipe)) {
+            self::validateAliases($recipe['aliases']);
         }
 
         if (array_key_exists('tags', $recipe)) {
@@ -66,6 +70,22 @@ final class RecipeValidator
         }
 
         return $duration;
+    }
+
+    private static function validateAliases(mixed $aliases): void
+    {
+        if (!is_array($aliases) || !array_is_list($aliases) || $aliases === []) {
+            throw new InvalidArgumentException('aliases muss eine nicht leere Liste von Textwerten sein.');
+        }
+
+        foreach ($aliases as $alias) {
+            if (!is_string($alias) || trim($alias) === '' || trim($alias) !== $alias || strlen($alias) > 160) {
+                throw new InvalidArgumentException('Jeder Alternativname muss nicht leer und höchstens 160 UTF-8-Bytes lang sein.');
+            }
+        }
+        if (count(array_unique(array_map('strtolower', $aliases))) !== count($aliases)) {
+            throw new InvalidArgumentException('Alternativnamen dürfen nicht doppelt vorkommen.');
+        }
     }
 
     public static function slug(string $title): string

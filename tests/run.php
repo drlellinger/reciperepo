@@ -80,6 +80,7 @@ check(!str_contains($privateImageBlocks, '<img'), 'Private IP-Adressen werden be
 $yaml = <<<'YAML'
 version: 1
 title: Zitronenreis
+aliases: [Zitronen-Reis, Lemon Rice]
 tags: [Beilage, Vegetarisch]
 blocks:
     - type: heading
@@ -98,12 +99,15 @@ check($recipe['title'] === 'Zitronenreis', 'Gültiges Rezept wird gelesen.');
 check(count($recipe['blocks']) === 3, 'Überschrift, Text- und Tabellenblock bleiben erhalten.');
 check($recipe['blocks'][0]['type'] === 'heading', 'Kapitelüberschrift wird akzeptiert.');
 check($recipe['tags'] === ['Beilage', 'Vegetarisch'], 'Kategorietags werden gelesen.');
+check($recipe['aliases'] === ['Zitronen-Reis', 'Lemon Rice'], 'Alternativnamen werden gelesen.');
 check(RecipeValidator::totalDuration($recipe) === 5, 'Blockdauern werden zur Gesamtdauer addiert.');
 $withSummary = str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: Frische Beilage mit Zitrone.\n", $yaml);
 check(RecipeValidator::parse($withSummary)['summary'] === 'Frische Beilage mit Zitrone.', 'Optionale Kurzbeschreibung wird akzeptiert.');
 rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: []\n", $yaml)), 'Kurzbeschreibung muss Text sein.');
 rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: null\n", $yaml)), 'Explizit leere Kurzbeschreibung wird abgelehnt.');
 rejects(static fn () => RecipeValidator::parse(str_replace('tags: [Beilage, Vegetarisch]', 'tags: Asiatisch', $yaml)), 'Tags müssen eine Liste sein.');
+rejects(static fn () => RecipeValidator::parse(str_replace('aliases: [Zitronen-Reis, Lemon Rice]', 'aliases: [Zitronen-Reis, zitronen-reis]', $yaml)), 'Doppelte Alternativnamen werden abgelehnt.');
+rejects(static fn () => RecipeValidator::parse(str_replace('aliases: [Zitronen-Reis, Lemon Rice]', 'aliases: []', $yaml)), 'Leere Alternativnamenliste wird abgelehnt.');
 rejects(static fn () => RecipeValidator::parse(str_replace('tags: [Beilage, Vegetarisch]', 'tags: [Asiatisch, asiatisch]', $yaml)), 'Doppelte Tags werden abgelehnt.');
 rejects(static fn () => RecipeValidator::parse(str_replace('tags: [Beilage, Vegetarisch]', 'tags: [" Asiatisch", "Curry"]', $yaml)), 'Tags mit Rand-Leerzeichen werden abgelehnt.');
 check((bool) preg_match('/\A[a-z0-9-]+\z/', RecipeValidator::slug($recipe['title'])), 'Titel ergibt einen sicheren Dateinamen.');

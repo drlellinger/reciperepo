@@ -40,6 +40,7 @@ Ein Rezept besteht aus einem Titel und frei kombinierbaren Abschnitten. Dadurch 
 version: 1
 title: Zitronenreis
 summary: Zitroniger Reis als frische Beilage.
+aliases: [Zitronen-Reis, Lemon Rice]
 tags: [Beilage, Vegetarisch]
 blocks:
   - type: text

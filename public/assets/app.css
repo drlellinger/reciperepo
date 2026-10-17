@@ -111,6 +111,8 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .breadcrumbs a { color: var(--green); }
 .recipe-heading { padding-bottom: 26px; border-bottom: 1px solid var(--line); }
 .recipe-heading h1 { margin-bottom: 20px; }
+.recipe-aliases { margin: -8px 0 20px; color: var(--muted); font-size: 0.92rem; }
+.recipe-aliases span { font-weight: 700; }
 .download-link { display: inline-flex; min-height: 38px; align-items: center; gap: 8px; padding: 7px 13px; border: 1px solid #d8ded9; border-radius: 999px; background: #ecefed; color: #435047; font-size: 0.82rem; }
 .download-link:hover { background: #e0e5e1; color: #29372e; }
 .download-link span { font-size: 1.1rem; }

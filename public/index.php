@@ -452,7 +452,9 @@ if ($path === '/admin' && $method === 'GET') {
             return true;
         }
 
-        $haystack = $item['recipe']['title'] . ' ' . $item['slug'] . ' ' . implode(' ', $item['recipe']['tags'] ?? []);
+        $haystack = $item['recipe']['title'] . ' ' . $item['slug'] . ' '
+            . implode(' ', $item['recipe']['aliases'] ?? []) . ' '
+            . implode(' ', $item['recipe']['tags'] ?? []);
         return preg_match('/' . preg_quote($search, '/') . '/iu', $haystack) === 1;
     }));
     usort($items, static function (array $left, array $right) use ($sort): int {

@@ -20,6 +20,9 @@
             </div>
         <?php endif; ?>
         <h1><?= escape($item['recipe']['title']) ?></h1>
+        <?php if (!empty($item['recipe']['aliases'])): ?>
+            <p class="recipe-aliases"><span>Auch bekannt als:</span> <?= escape(implode(', ', $item['recipe']['aliases'])) ?></p>
+        <?php endif; ?>
         <a class="download-link" href="/download?recipe=<?= escape($item['slug']) ?>" download>
             <span aria-hidden="true">↓</span> YAML herunterladen
         </a>
