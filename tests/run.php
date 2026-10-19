@@ -206,10 +206,10 @@ try {
 
     $replacement = str_replace('Mit Zitrone abschmecken.', 'Mit frischer Zitrone abschmecken.', $yaml);
     $repository->save($replacement, RecipeValidator::parse($replacement));
-    check($repository->find($slug)['recipe']['blocks'][0]['text'] === 'Mit frischer Zitrone abschmecken.', 'Gleicher Titel ersetzt das bestehende Rezept.');
+    check($repository->find($slug)['recipe']['blocks'][1]['text'] === 'Mit frischer Zitrone abschmecken.', 'Gleicher Titel ersetzt das bestehende Rezept.');
     $invalidReplacement = $replacement . "unknown: true\n";
     rejects(static fn () => RecipeValidator::parse($invalidReplacement), 'Unbekannte Rezeptfelder werden abgelehnt.');
-    check($repository->find($slug)['recipe']['blocks'][0]['text'] === 'Mit frischer Zitrone abschmecken.', 'Ungültige Änderungen lassen das gespeicherte Rezept unverändert.');
+    check($repository->find($slug)['recipe']['blocks'][1]['text'] === 'Mit frischer Zitrone abschmecken.', 'Ungültige Änderungen lassen das gespeicherte Rezept unverändert.');
     check(count($repository->all()) === 1, 'Die Sammlung listet gespeicherte Rezepte.');
     check($repository->delete($slug), 'Rezept lässt sich löschen.');
     check(!$repository->delete($slug), 'Gelöschtes Rezept kann nicht erneut gelöscht werden.');
