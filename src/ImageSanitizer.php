@@ -30,7 +30,7 @@ final class ImageSanitizer
         }
 
         $saved = match ($mimeType) {
-            'image/jpeg' => imagejpeg($image, $targetPath, 90),
+            'image/jpeg' => self::writeJpeg($image, $targetPath),
             'image/png' => imagepng($image, $targetPath, 6),
             'image/webp' => imagewebp($image, $targetPath, 90),
             default => false,
@@ -40,6 +40,49 @@ final class ImageSanitizer
         if (!$saved) {
             throw new RuntimeException('Das Bild konnte nicht ohne Metadaten gespeichert werden.');
         }
+    }
+
+    private static function writeJpeg(\GdImage $image, string $targetPath): bool
+    {
+        ob_start();
+        $encoded = imagejpeg($image, null, 90);
+        $bytes = ob_get_clean();
+        if (!$encoded || !is_string($bytes)) {
+            return false;
+        }
+
+        $bytes = self::removeJpegApp1Segments($bytes);
+        return file_put_contents($targetPath, $bytes) !== false;
+    }
+
+    private static function removeJpegApp1Segments(string $bytes): string
+    {
+        if (!str_starts_with($bytes, "\xFF\xD8")) {
+            return $bytes;
+        }
+
+        $result = substr($bytes, 0, 2);
+        $offset = 2;
+        $length = strlen($bytes);
+        while ($offset + 3 < $length && $bytes[$offset] === "\xFF") {
+            $marker = ord($bytes[$offset + 1]);
+            if ($marker === 0xDA || $marker === 0xD9) {
+                $result .= substr($bytes, $offset);
+                return $result;
+            }
+
+            $segmentLength = unpack('n', substr($bytes, $offset + 2, 2))[1] ?? 0;
+            $segmentEnd = $offset + 2 + $segmentLength;
+            if ($segmentLength < 2 || $segmentEnd > $length) {
+                return $bytes;
+            }
+            if ($marker !== 0xE1) {
+                $result .= substr($bytes, $offset, $segmentEnd - $offset);
+            }
+            $offset = $segmentEnd;
+        }
+
+        return $bytes;
     }
 
     private static function applyJpegOrientation(\GdImage $image, string $imagePath): \GdImage
