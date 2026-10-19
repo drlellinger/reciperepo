@@ -2,6 +2,7 @@
   "name": "recipe/collection",
   "description": "Leichte YAML-Rezeptesammlung",
   "type": "project",
+  "license": "MPL-2.0",
   "require": {
     "php": "^8.1",
     "ext-curl": "*",
