@@ -192,7 +192,7 @@ try {
     $sanitizedJpegPath = $directory . '/' . basename($sanitizedJpegUrl);
     $sanitizedJpegDimensions = getimagesize($sanitizedJpegPath);
     check(is_array($sanitizedJpegDimensions) && $sanitizedJpegDimensions[0] === 3 && $sanitizedJpegDimensions[1] === 2, 'JPEG-Ausrichtung wird vor dem Entfernen der EXIF-Daten korrigiert.');
-    $sanitizedExif = @exif_read_data($sanitizedJpegPath, 0, true);
+    $sanitizedExif = @exif_read_data($sanitizedJpegPath, null, true);
     check(!is_array($sanitizedExif) || !isset($sanitizedExif['EXIF']), 'Hochgeladene JPEGs enthalten keine EXIF-Metadaten mehr.');
     unlink($temporaryJpeg);
     $imageYaml = "version: 1\ntitle: Bildrezept\nblocks:\n  - type: image\n    url: {$imageUrl}\n    alt: Testbild\n";
