@@ -84,14 +84,14 @@ aliases: [Zitronen-Reis, Lemon Rice]
 tags: [Beilage, Vegetarisch]
 blocks:
     - type: heading
-        text: Zubereitung
+      text: Zubereitung
     - type: text
-        duration: 5
-        text: Mit Zitrone abschmecken.
+      duration: 5
+      text: Mit Zitrone abschmecken.
     - type: table
-        headers: [Zutat, Menge]
-        rows:
-            - [Reis, "150 g"]
+      headers: [Zutat, Menge]
+      rows:
+        - [Reis, "150 g"]
 YAML;
 
 $recipe = RecipeValidator::parse($yaml);
