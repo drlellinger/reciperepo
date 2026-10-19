@@ -32,6 +32,10 @@ final class FooterMarkdownRenderer
     public static function renderLinkSetting(string $value, string $defaultLabel): string
     {
         $value = trim($value);
+        if (preg_match('/\A\[[^\]]+\]\([^\)\s]+\)\z/u', $value) === 1) {
+            return self::render($value);
+        }
+
         if (self::isSafeUrl($value)) {
             return '<a href="' . self::escape($value) . '">' . self::escape($defaultLabel) . '</a>';
         }
