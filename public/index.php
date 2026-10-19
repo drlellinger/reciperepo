@@ -147,7 +147,7 @@ function renderBlocks(array $blocks): string
     foreach ($blocks as $block) {
         $caption = isset($block['caption']) ? '<figcaption>' . escape($block['caption']) . '</figcaption>' : '';
         $duration = isset($block['duration'])
-            ? '<span class="recipe-duration">⏱ ' . escape($block['duration']) . ' Min.</span>'
+            ? '<span class="recipe-duration">⏱ ' . escape(RecipeValidator::formatDuration($block['duration'])) . '</span>'
             : '';
         switch ($block['type']) {
             case 'heading':

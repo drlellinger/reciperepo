@@ -15,7 +15,7 @@
                     </div>
                 <?php endif; ?>
                 <?php if ($totalDuration > 0): ?>
-                    <div class="recipe-total-duration" aria-label="Gesamtdauer">⏱ circa <?= escape($totalDuration) ?> Min. Gesamt</div>
+                    <div class="recipe-total-duration" aria-label="Gesamtdauer">⏱ circa <?= escape(\Recipe\RecipeValidator::formatDuration($totalDuration)) ?> Gesamt</div>
                 <?php endif; ?>
             </div>
         <?php endif; ?>

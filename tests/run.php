@@ -101,6 +101,7 @@ check($recipe['blocks'][0]['type'] === 'heading', 'Kapitelüberschrift wird akze
 check($recipe['tags'] === ['Beilage', 'Vegetarisch'], 'Kategorietags werden gelesen.');
 check($recipe['aliases'] === ['Zitronen-Reis', 'Lemon Rice'], 'Alternativnamen werden gelesen.');
 check(RecipeValidator::totalDuration($recipe) === 5, 'Blockdauern werden zur Gesamtdauer addiert.');
+check(RecipeValidator::formatDuration(120) === '120 Min.' && RecipeValidator::formatDuration(121) === '2 h 1 min.' && RecipeValidator::formatDuration(180) === '3 h 0 min.', 'Dauern werden ab mehr als 120 Minuten in Stunden und Minuten formatiert.');
 $youtubeYaml = str_replace("    - type: table\n", "    - type: youtube\n        url: https://youtu.be/dQw4w9WgXcQ\n        caption: Anleitung\n    - type: table\n", $yaml);
 $youtubeRecipe = RecipeValidator::parse($youtubeYaml);
 check($youtubeRecipe['blocks'][2]['type'] === 'youtube', 'YouTube-Block wird akzeptiert.');

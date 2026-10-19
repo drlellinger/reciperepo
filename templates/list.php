@@ -100,7 +100,7 @@
                                     </span>
                                 <?php endif; ?>
                                 <?php if ($duration > 0): ?>
-                                    <span class="recipe-row-duration">⏱ circa <?= escape($duration) ?> Min.</span>
+                                    <span class="recipe-row-duration">⏱ circa <?= escape(\Recipe\RecipeValidator::formatDuration($duration)) ?></span>
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>

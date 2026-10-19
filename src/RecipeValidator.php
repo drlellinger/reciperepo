@@ -72,6 +72,15 @@ final class RecipeValidator
         return $duration;
     }
 
+    public static function formatDuration(int $duration): string
+    {
+        if ($duration <= 120) {
+            return $duration . ' Min.';
+        }
+
+        return intdiv($duration, 60) . ' h ' . ($duration % 60) . ' min.';
+    }
+
     private static function validateAliases(mixed $aliases): void
     {
         if (!is_array($aliases) || !array_is_list($aliases) || $aliases === []) {
