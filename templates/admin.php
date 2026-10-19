@@ -1,6 +1,5 @@
 <section class="admin-heading">
     <div>
-        <p class="eyebrow">Küchenarchiv</p>
         <h1>Verwaltung</h1>
     </div>
     <span class="admin-count"><?= $totalCount ?> <?= $totalCount === 1 ? 'Rezept' : 'Rezepte' ?></span>

@@ -1,6 +1,6 @@
 # Rezept-YAML aus Textdokumenten erstellen
 
-Verwende diese Anleitung, wenn ein LLM ein Rezept aus einem beliebigen Textdokument in das Küchenarchiv-Format überträgt.
+Verwende diese Anleitung, wenn ein LLM ein Rezept aus einem beliebigen Textdokument in das yaml-Format überträgt.
 
 ## Anweisung an das LLM
 
