@@ -32,7 +32,7 @@ final class RecipePdfRenderer
         foreach ($blocks as $block) {
             $caption = isset($block['caption']) ? '<figcaption>' . self::escape($block['caption']) . '</figcaption>' : '';
             $duration = isset($block['duration'])
-                ? '<span class="recipe-duration">' . self::durationIcon() . ' ' . self::escape(RecipeValidator::formatDuration($block['duration'])) . '</span>'
+                ? '<span class="recipe-duration">' . self::durationIcon() . ' ' . self::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($block['duration']))) . '</span>'
                 : '';
             switch ($block['type']) {
                 case 'heading':
