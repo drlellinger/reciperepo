@@ -12,6 +12,9 @@ Das Dokument muss diesem Schema entsprechen:
 version: 1
 title: Rezepttitel
 summary: Kurze Beschreibung des Gerichts.
+image:
+  url: https://example.org/rezeptbild.jpg
+  alt: Sachliche Bildbeschreibung
 aliases: [Alternativname, Name in einer anderen Sprache]
 tags: [Hauptgericht, Asiatisch]
 blocks:
@@ -43,11 +46,12 @@ blocks:
 
 ## Formatregeln
 
-- `version` ist die Zahl `1`. Auf oberster Ebene sind nur `version`, `title`, die optionalen Felder `summary` und `tags` sowie `blocks` erlaubt.
+- `version` ist die Zahl `1`. Auf oberster Ebene sind nur `version`, `title`, die optionalen Felder `summary`, `aliases`, `tags` und `image` sowie `blocks` erlaubt.
 - `title` ist nicht leer und höchstens 160 UTF-8-Bytes lang.
 - `summary` ist optional. Wenn die Quelle genug Angaben enthält, formuliere daraus eine kurze Beschreibung; erfinde keine Eigenschaften. Wenn keine Kurzbeschreibung sicher ableitbar ist, lass das Feld weg. Ist es vorhanden, muss es ein nicht leerer Text sein.
 - `aliases` ist optional und eine nicht leere Liste eindeutiger Alternativnamen bis jeweils 160 UTF-8-Bytes. Verwende nur Namen, die im Quelldokument ausdrücklich genannt werden; sie werden in der Suche und auf der Rezeptseite angezeigt.
 - `tags` ist optional und eine Liste eindeutiger, nicht leerer Texte bis jeweils 80 UTF-8-Bytes. Verwende kurze Kategorienamen, die aus dem Dokument klar hervorgehen; ohne sichere Kategorie `tags` weglassen.
+- `image` ist optional und enthält genau ein Hauptbild mit `url` und nicht leerem `alt`. Es wird als Thumbnail in Listen und als Bild beim Teilen verwendet. Ohne sichere Bild-URL und sachlichen Alt-Text `image` weglassen.
 - `blocks` ist eine geordnete Liste. Jeder Block hat genau einen bekannten `type` und nur die dafür erlaubten Felder aus dem Schema.
 - `text` benötigt ein nicht leeres Textfeld `text`. Mehrzeilige Absätze oder Schritte können mit `text: |-` geschrieben werden. Optional kann das `duration`verwendet werden um eine Zeitangabe in Minuten anzugeben.
 - `heading` benötigt ein nicht leeres Textfeld `text` und wird als Kapitelüberschrift innerhalb des Rezepts dargestellt. Verwende Überschriften, wenn das Quelldokument erkennbare Abschnitte hat.

@@ -495,11 +495,16 @@ if (preg_match('~\A/recipe/([a-z0-9]+(?:-[a-z0-9]+)*)\z~', $path, $matches) && $
     if ($item !== null) {
         $socialImage = null;
         $socialImageAlt = '';
-        foreach ($item['recipe']['blocks'] as $block) {
-            if ($block['type'] === 'image') {
-                $socialImage = $block['url'];
-                $socialImageAlt = $block['alt'];
-                break;
+        if (isset($item['recipe']['image'])) {
+            $socialImage = $item['recipe']['image']['url'];
+            $socialImageAlt = $item['recipe']['image']['alt'];
+        } else {
+            foreach ($item['recipe']['blocks'] as $block) {
+                if ($block['type'] === 'image') {
+                    $socialImage = $block['url'];
+                    $socialImageAlt = $block['alt'];
+                    break;
+                }
             }
         }
         $socialImage ??= $appConfig['logo_image'] ?? $appConfig['favicon'];

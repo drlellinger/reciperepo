@@ -113,6 +113,10 @@ $youtubePdfBlocks = Recipe\RecipePdfRenderer::renderBlocks([
 check(!str_contains($youtubePdfBlocks, '<iframe') && !str_contains($youtubePdfBlocks, '<video') && str_contains($youtubePdfBlocks, 'href="https://youtu.be/dQw4w9WgXcQ"') && str_contains($youtubePdfBlocks, '>Anleitung</a>'), 'YouTube-Videos werden im PDF nicht gerendert, sondern mit der Beschreibung verlinkt.');
 $withSummary = str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: Frische Beilage mit Zitrone.\n", $yaml);
 check(RecipeValidator::parse($withSummary)['summary'] === 'Frische Beilage mit Zitrone.', 'Optionale Kurzbeschreibung wird akzeptiert.');
+$withMainImage = str_replace("title: Zitronenreis\n", "title: Zitronenreis\nimage:\n  url: https://example.org/zitronenreis.jpg\n  alt: Zitronenreis mit Zitrone\n", $yaml);
+check(RecipeValidator::parse($withMainImage)['image']['url'] === 'https://example.org/zitronenreis.jpg', 'Optionales Hauptbild wird akzeptiert.');
+rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nimage:\n  url: https://example.org/zitronenreis.jpg\n", $yaml)), 'Das Hauptbild benötigt einen Alt-Text.');
+rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nimage:\n  url: /private/image.jpg\n  alt: Bild\n", $yaml)), 'Das Hauptbild akzeptiert keine unbekannten lokalen Pfade.');
 rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: []\n", $yaml)), 'Kurzbeschreibung muss Text sein.');
 rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: null\n", $yaml)), 'Explizit leere Kurzbeschreibung wird abgelehnt.');
 rejects(static fn () => RecipeValidator::parse(str_replace('tags: [Beilage, Vegetarisch]', 'tags: Asiatisch', $yaml)), 'Tags müssen eine Liste sein.');

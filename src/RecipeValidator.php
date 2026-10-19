@@ -23,7 +23,7 @@ final class RecipeValidator
         if (!is_array($recipe) || ($recipe['version'] ?? null) !== 1) {
             throw new InvalidArgumentException('Das Rezept muss version: 1 enthalten.');
         }
-        self::validateKeys($recipe, ['version', 'title', 'summary', 'aliases', 'tags', 'blocks'], 'Rezept');
+        self::validateKeys($recipe, ['version', 'title', 'summary', 'aliases', 'tags', 'image', 'blocks'], 'Rezept');
 
         if (!isset($recipe['title']) || !is_string($recipe['title']) || trim($recipe['title']) === '' || strlen($recipe['title']) > 160) {
             throw new InvalidArgumentException('Der Titel muss zwischen 1 und 160 Zeichen lang sein.');
@@ -39,6 +39,10 @@ final class RecipeValidator
 
         if (array_key_exists('aliases', $recipe)) {
             self::validateAliases($recipe['aliases']);
+        }
+
+        if (array_key_exists('image', $recipe)) {
+            self::validateRecipeImage($recipe['image']);
         }
 
         if (array_key_exists('tags', $recipe)) {
@@ -193,6 +197,18 @@ final class RecipeValidator
     private static function validateMedia(array $block, int $number): void
     {
         self::validateUrl($block['url'] ?? null, $number, $block['type'] === 'image');
+    }
+
+    private static function validateRecipeImage(mixed $image): void
+    {
+        if (!is_array($image)) {
+            throw new InvalidArgumentException('image muss url und alt enthalten.');
+        }
+        self::validateKeys($image, ['url', 'alt'], 'Rezeptbild');
+        self::validateUrl($image['url'] ?? null, 0, true);
+        if (!isset($image['alt']) || !is_string($image['alt']) || trim($image['alt']) === '') {
+            throw new InvalidArgumentException('Das Rezeptbild benötigt einen nicht leeren Alt-Text.');
+        }
     }
 
     public static function youtubeEmbedUrl(mixed $url, int $number = 0): string

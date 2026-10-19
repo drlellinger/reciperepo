@@ -68,11 +68,13 @@
             <div class="recipe-list">
                 <?php foreach ($groupItems as $item): ?>
                     <?php
-                    $image = null;
-                    foreach ($item['recipe']['blocks'] as $block) {
-                        if ($block['type'] === 'image') {
-                            $image = $block;
-                            break;
+                    $image = $item['recipe']['image'] ?? null;
+                    if ($image === null) {
+                        foreach ($item['recipe']['blocks'] as $block) {
+                            if ($block['type'] === 'image') {
+                                $image = $block;
+                                break;
+                            }
                         }
                     }
                     ?>

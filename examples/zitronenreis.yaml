@@ -1,6 +1,9 @@
 version: 1
 title: Zitronenreis
 summary: Zitroniger Reis als frische Beilage.
+image:
+  url: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Lemon.jpg"
+  alt: "Eine Zitrone"
 aliases: [Zitronen-Reis, Lemon Rice]
 tags: [Beilage, Vegetarisch]
 blocks:
