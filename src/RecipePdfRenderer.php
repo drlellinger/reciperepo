@@ -71,6 +71,10 @@ final class RecipePdfRenderer
                     $html .= $caption . '</figure></div>' . $duration . '</div>';
                     break;
                 case 'video':
+                case 'youtube':
+                    $mediaLabel = $block['caption'] ?? 'Medieninhalt';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-link"><a href="' . self::escape($block['url']) . '">' . self::escape($mediaLabel) . '</a></p></div>' . $duration . '</div>';
+                    break;
                 case 'audio':
                     $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="media-note">' . self::escape($block['caption'] ?? 'Medieninhalt') . '</p></div>' . $duration . '</div>';
                     break;

@@ -31,6 +31,9 @@ blocks:
   - type: video
     url: https://example.org/anleitung.mp4
     caption: Optionale Beschreibung
+  - type: youtube
+    url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    caption: Optionaler Videotitel
   - type: audio
     url: https://example.org/anleitung.mp3
   - type: link
@@ -49,9 +52,10 @@ blocks:
 - `text` benötigt ein nicht leeres Textfeld `text`. Mehrzeilige Absätze oder Schritte können mit `text: |-` geschrieben werden. Optional kann das `duration`verwendet werden um eine Zeitangabe in Minuten anzugeben.
 - `heading` benötigt ein nicht leeres Textfeld `text` und wird als Kapitelüberschrift innerhalb des Rezepts dargestellt. Verwende Überschriften, wenn das Quelldokument erkennbare Abschnitte hat.
 - `table` benötigt eine nicht leere Liste von Textüberschriften `headers` und eine Liste `rows`. Jede Zeile muss gleich viele Zellen wie Überschriften haben. Zellen sind Text oder Zahlen. Mengen mit Einheiten als Text quotieren, zum Beispiel `"200 g"`.
-- `image` benötigt `url` und ein nicht leeres `alt`; `caption` ist optional. `video` und `audio` benötigen `url`; `caption` ist optional. `link` benötigt `url` und nicht leeres `label`.
+- `image` benötigt `url` und ein nicht leeres `alt`; `caption` ist optional. `video` und `audio` benötigen `url`; `caption` ist optional. `youtube` benötigt eine YouTube-URL zu einem Video; unterstützt werden normale Video-URLs, Kurzlinks sowie `shorts`- und `embed`-URLs. `caption` ist optional. `link` benötigt `url` und nicht leeres `label`.
 - Ein Bild nur dann ausgeben, wenn eine echte URL vorliegt und sich ein sachlicher Alt-Text aus der Quelle ableiten lässt; sonst den Bildblock weglassen.
 - Externe URLs müssen vollständig und absolut sein, mit `http://` oder `https://` beginnen und einen Host enthalten. URLs niemals ausdenken. Für ein zuvor in der Verwaltung hochgeladenes Bild darf dessen Pfad `/uploads/images/<Dateiname>` als `image.url` übernommen werden. Nur direkte Medien-URLs als `image`, `video` oder `audio` verwenden; andere Webseiten als `link` ausgeben.
+- YouTube-Videos werden nur in der Webansicht eingebettet. Im PDF erscheint kein gerendertes Video, sondern höchstens die optionale Beschriftung.
 - YAML-Text mit Doppelpunkten, `#`, Anführungszeichen oder möglichen YAML-Sonderwerten sicher quotieren. Beliebiges HTML, iframes, zusätzliche Felder und unbekannte Blocktypen sind nicht erlaubt.
 - Eine Datei darf höchstens 1 MB groß sein.
 

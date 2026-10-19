@@ -9,7 +9,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: strict-origin-when-cross-origin');
-header("Content-Security-Policy: default-src 'self'; img-src 'self' https: http:; media-src 'self' https: http:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'");
+header("Content-Security-Policy: default-src 'self'; img-src 'self' https: http:; media-src 'self' https: http:; frame-src https://www.youtube-nocookie.com; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'");
 
 $root = dirname(__DIR__);
 $appConfig = require $root . '/config/app.php';
@@ -178,6 +178,10 @@ function renderBlocks(array $blocks): string
                 break;
             case 'video':
                 $html .= '<div class="recipe-block"><figure class="recipe-media"><video aria-label="' . escape($block['caption'] ?? 'Rezeptvideo') . '" controls preload="metadata" src="' . escape($block['url']) . '"></video>' . $caption . '</figure>' . $duration . '</div>';
+                break;
+            case 'youtube':
+                $embedUrl = RecipeValidator::youtubeEmbedUrl($block['url']);
+                $html .= '<div class="recipe-block"><figure class="recipe-media"><div class="recipe-video-embed"><iframe src="' . escape($embedUrl) . '" title="' . escape($block['caption'] ?? 'YouTube-Video') . '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' . $caption . '</figure>' . $duration . '</div>';
                 break;
             case 'audio':
                 $html .= '<div class="recipe-block"><figure class="recipe-media"><audio aria-label="' . escape($block['caption'] ?? 'Rezeptaudio') . '" controls preload="metadata" src="' . escape($block['url']) . '"></audio>' . $caption . '</figure>' . $duration . '</div>';

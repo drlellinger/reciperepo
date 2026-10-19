@@ -130,6 +130,10 @@ final class RecipeValidator
                 self::validateKeys($block, ['type', 'url', 'caption', 'duration'], "Inhaltsblock {$number}");
                 self::validateMedia($block, $number);
                 break;
+            case 'youtube':
+                self::validateKeys($block, ['type', 'url', 'caption', 'duration'], "Inhaltsblock {$number}");
+                self::youtubeEmbedUrl($block['url'] ?? null, $number);
+                break;
             case 'link':
                 self::validateKeys($block, ['type', 'url', 'label', 'caption', 'duration'], "Inhaltsblock {$number}");
                 self::validateUrl($block['url'] ?? null, $number);
@@ -177,6 +181,40 @@ final class RecipeValidator
     private static function validateMedia(array $block, int $number): void
     {
         self::validateUrl($block['url'] ?? null, $number, $block['type'] === 'image');
+    }
+
+    public static function youtubeEmbedUrl(mixed $url, int $number = 0): string
+    {
+        if (!is_string($url)) {
+            throw new InvalidArgumentException($number > 0
+                ? "Inhaltsblock {$number} benötigt eine YouTube-URL."
+                : 'Der YouTube-Block benötigt eine URL.');
+        }
+
+        $parts = parse_url($url);
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        $path = trim((string) ($parts['path'] ?? ''), '/');
+        $videoId = null;
+
+        if (in_array($host, ['youtube.com', 'www.youtube.com', 'm.youtube.com'], true)) {
+            $segments = $path === '' ? [] : explode('/', $path);
+            if ($path === 'watch') {
+                parse_str((string) ($parts['query'] ?? ''), $query);
+                $videoId = $query['v'] ?? null;
+            } elseif (count($segments) === 2 && in_array($segments[0], ['embed', 'shorts'], true)) {
+                $videoId = $segments[1];
+            }
+        } elseif ($host === 'youtu.be' && $path !== '' && !str_contains($path, '/')) {
+            $videoId = $path;
+        }
+
+        if (!is_string($videoId) || !preg_match('/\A[A-Za-z0-9_-]{11}\z/', $videoId)) {
+            throw new InvalidArgumentException($number > 0
+                ? "Inhaltsblock {$number} benötigt eine gültige YouTube-URL."
+                : 'Der YouTube-Block benötigt eine gültige YouTube-URL.');
+        }
+
+        return 'https://www.youtube-nocookie.com/embed/' . $videoId;
     }
 
     private static function validateUrl(mixed $url, int $number, bool $allowManagedImage = false): void

@@ -101,6 +101,15 @@ check($recipe['blocks'][0]['type'] === 'heading', 'Kapitelüberschrift wird akze
 check($recipe['tags'] === ['Beilage', 'Vegetarisch'], 'Kategorietags werden gelesen.');
 check($recipe['aliases'] === ['Zitronen-Reis', 'Lemon Rice'], 'Alternativnamen werden gelesen.');
 check(RecipeValidator::totalDuration($recipe) === 5, 'Blockdauern werden zur Gesamtdauer addiert.');
+$youtubeYaml = str_replace("    - type: table\n", "    - type: youtube\n        url: https://youtu.be/dQw4w9WgXcQ\n        caption: Anleitung\n    - type: table\n", $yaml);
+$youtubeRecipe = RecipeValidator::parse($youtubeYaml);
+check($youtubeRecipe['blocks'][2]['type'] === 'youtube', 'YouTube-Block wird akzeptiert.');
+check(RecipeValidator::youtubeEmbedUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ') === 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ', 'YouTube-URL wird in eine datensparsame Embed-URL umgewandelt.');
+rejects(static fn () => RecipeValidator::youtubeEmbedUrl('https://example.org/video'), 'Nicht-YouTube-URLs werden für YouTube-Blöcke abgelehnt.');
+$youtubePdfBlocks = Recipe\RecipePdfRenderer::renderBlocks([
+    ['type' => 'youtube', 'url' => 'https://youtu.be/dQw4w9WgXcQ', 'caption' => 'Anleitung'],
+], dirname(__DIR__) . '/public', $remainingRemoteImages);
+check(!str_contains($youtubePdfBlocks, '<iframe') && !str_contains($youtubePdfBlocks, '<video') && str_contains($youtubePdfBlocks, 'href="https://youtu.be/dQw4w9WgXcQ"') && str_contains($youtubePdfBlocks, '>Anleitung</a>'), 'YouTube-Videos werden im PDF nicht gerendert, sondern mit der Beschreibung verlinkt.');
 $withSummary = str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: Frische Beilage mit Zitrone.\n", $yaml);
 check(RecipeValidator::parse($withSummary)['summary'] === 'Frische Beilage mit Zitrone.', 'Optionale Kurzbeschreibung wird akzeptiert.');
 rejects(static fn () => RecipeValidator::parse(str_replace("title: Zitronenreis\n", "title: Zitronenreis\nsummary: []\n", $yaml)), 'Kurzbeschreibung muss Text sein.');
