@@ -56,9 +56,11 @@ blocks:
   - type: heading
     text: Zubereitung
   - type: text
-    text: |
-     Reis abspülen und in Brühe garen.
-     Mit Zitronensaft abschmecken.
+    duration: 5
+    text: Reis abspülen und in Brühe garen.
+  - type: text
+    duration: 3
+    text: Mit Zitronensaft abschmecken.
   - type: image
     url: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Lemon.jpg"
     alt: "Eine Zitrone"
