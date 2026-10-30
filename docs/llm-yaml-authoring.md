@@ -23,6 +23,9 @@ blocks:
   - type: text
     duration: 20
     text: "Ein Absatz oder Zubereitungsschritt."
+  - type: text
+    waiting: 180
+    text: "Anweisung für die Warte-/Reifezeit."
   - type: table
     headers: [Zutat, Menge]
     rows:
@@ -53,7 +56,7 @@ blocks:
 - `tags` ist optional und eine Liste eindeutiger, nicht leerer Texte bis jeweils 80 UTF-8-Bytes. Verwende kurze Kategorienamen, die aus dem Dokument klar hervorgehen; ohne sichere Kategorie `tags` weglassen.
 - `image` ist optional und enthält genau ein Hauptbild mit `url` und nicht leerem `alt`. Es wird als Thumbnail in Listen und als Bild beim Teilen verwendet. Ohne sichere Bild-URL und sachlichen Alt-Text `image` weglassen.
 - `blocks` ist eine geordnete Liste. Jeder Block hat genau einen bekannten `type` und nur die dafür erlaubten Felder aus dem Schema.
-- `text` benötigt ein nicht leeres Textfeld `text`. Mehrzeilige Absätze oder Schritte können mit `text: |-` geschrieben werden. Optional kann das `duration`verwendet werden um eine Zeitangabe in Minuten anzugeben.
+- `text` benötigt ein nicht leeres Textfeld `text`. Mehrzeilige Absätze oder Schritte können mit `text: |-` geschrieben werden. Optional kann das `duration`und `waiting`verwendet werden um eine Zeitangabe in Minuten für die geschätzte Dauer oder Wartezeit eines Arbeitsschritts anzugeben.
 - `heading` benötigt ein nicht leeres Textfeld `text` und wird als Kapitelüberschrift innerhalb des Rezepts dargestellt. Verwende Überschriften, wenn das Quelldokument erkennbare Abschnitte hat.
 - `table` benötigt eine nicht leere Liste von Textüberschriften `headers` und eine Liste `rows`. Jede Zeile muss gleich viele Zellen wie Überschriften haben. Zellen sind Text oder Zahlen. Mengen mit Einheiten als Text quotieren, zum Beispiel `"200 g"`.
 - `image` benötigt `url` und ein nicht leeres `alt`; `caption` ist optional. `video` und `audio` benötigen `url`; `caption` ist optional. `youtube` benötigt eine YouTube-URL zu einem Video; unterstützt werden normale Video-URLs, Kurzlinks sowie `shorts`- und `embed`-URLs. `caption` ist optional. `link` benötigt `url` und nicht leeres `label`.
