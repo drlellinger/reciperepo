@@ -400,7 +400,11 @@ a { color: #28664e; }
             $name = strtolower($attribute->nodeName);
             $value = trim($attribute->nodeValue ?? '');
             $isFragmentReference = preg_match('/\A#[A-Za-z_][A-Za-z0-9_.:-]*\z/', $value) === 1;
-            $isEmbeddedImage = preg_match('/\Adata:image\/(?:png|jpeg|gif|webp);base64,[A-Za-z0-9+\/\s]+=*\z/i', $value) === 1;
+            $isEmbeddedImage = false;
+            if (preg_match('/\Adata:image\/(?:png|jpeg|gif|webp);base64,(.*)\z/is', $value, $embeddedImageMatch) === 1) {
+                $base64Image = preg_replace('/\s+/', '', $embeddedImageMatch[1]);
+                $isEmbeddedImage = is_string($base64Image) && base64_decode($base64Image, true) !== false;
+            }
             $isLocalUrl = preg_match('/\Aurl\(\s*#[A-Za-z_][A-Za-z0-9_.:-]*\s*\)\z/i', $value) === 1;
             if (!in_array($name, $allowedAttributes, true)
                 || (in_array($name, ['href', 'xlink:href'], true) && !$isFragmentReference && !$isEmbeddedImage)
