@@ -156,7 +156,8 @@ figcaption { margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
 .file-field { display: grid; flex: 1; gap: 8px; }
 .file-field-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .file-field-label { font-size: 0.88rem; font-weight: 650; }
-.file-field-header .button-copy { flex: 0 0 auto; }
+.file-field-header .button-copy { flex: 0 0 auto; min-height: auto; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--muted); font-size: 0.88rem; font-weight: 650; line-height: 1.4; }
+.file-field-header .button-copy:hover { background: transparent; color: var(--green); text-decoration: underline; }
 input[type="file"] { width: 100%; min-height: 46px; padding: 8px; border: 1px solid #bdcec1; border-radius: var(--radius); background: var(--surface); color: var(--ink); }
 input[type="file"]::file-selector-button { margin-right: 10px; padding: 7px 10px; border: 0; border-radius: 5px; background: #e8f0e9; color: var(--green-dark); cursor: pointer; font-weight: 650; }
 .notice { margin: 22px 0 0; padding: 12px 15px; border-left: 3px solid var(--green); background: #e7f2e9; }
