@@ -516,6 +516,7 @@ if (preg_match('~\A/recipe/([a-z0-9]+(?:-[a-z0-9]+)*)\z~', $path, $matches) && $
             'item' => $item,
             'blocksHtml' => renderBlocks($item['recipe']['blocks']),
             'totalDuration' => RecipeValidator::totalDuration($item['recipe']),
+            'totalWaiting' => RecipeValidator::totalWaiting($item['recipe']),
             'description' => $item['recipe']['summary'] ?? $item['recipe']['title'],
             'socialImage' => $socialImage,
             'socialImageAlt' => $socialImageAlt !== '' ? $socialImageAlt : $appConfig['logo_alt'],

@@ -76,6 +76,16 @@ final class RecipeValidator
         return $duration;
     }
 
+    public static function totalWaiting(array $recipe): int
+    {
+        $waiting = 0;
+        foreach ($recipe['blocks'] ?? [] as $block) {
+            $waiting += $block['waiting'] ?? 0;
+        }
+
+        return $waiting;
+    }
+
     public static function formatDuration(int $duration): string
     {
         if ($duration <= 120) {

@@ -5,7 +5,7 @@
         <span aria-current="page"><?= escape($item['recipe']['title']) ?></span>
     </nav>
     <header class="recipe-heading">
-        <?php if (!empty($item['recipe']['tags']) || $totalDuration > 0): ?>
+        <?php if (!empty($item['recipe']['tags']) || $totalDuration > 0 || $totalWaiting > 0): ?>
             <div class="recipe-heading-meta">
                 <?php if (!empty($item['recipe']['tags'])): ?>
                     <div class="recipe-tags" aria-label="Kategorien">
@@ -14,8 +14,15 @@
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
-                <?php if ($totalDuration > 0): ?>
-                    <div class="recipe-total-duration" aria-label="Gesamtdauer">⏱ circa <?= escape(\Recipe\RecipeValidator::formatDuration($totalDuration)) ?> Gesamt</div>
+                <?php if ($totalDuration > 0 || $totalWaiting > 0): ?>
+                    <div class="recipe-times recipe-summary-times">
+                        <?php if ($totalDuration > 0): ?>
+                            <span class="recipe-duration" aria-label="Gesamtdauer">⏱ circa <?= escape(\Recipe\RecipeValidator::formatDuration($totalDuration)) ?> Gesamt</span>
+                        <?php endif; ?>
+                        <?php if ($totalWaiting > 0): ?>
+                            <span class="recipe-waiting" aria-label="Gesamtwartezeit">Wartezeit: <?= escape(\Recipe\RecipeValidator::formatDuration($totalWaiting)) ?> Gesamt</span>
+                        <?php endif; ?>
+                    </div>
                 <?php endif; ?>
             </div>
         <?php endif; ?>

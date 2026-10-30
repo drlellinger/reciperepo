@@ -92,7 +92,8 @@
                             <span class="row-arrow" aria-hidden="true">↗</span>
                         </a>
                         <?php $duration = \Recipe\RecipeValidator::totalDuration($item['recipe']); ?>
-                        <?php if (!empty($item['recipe']['tags']) || $duration > 0): ?>
+                        <?php $waiting = \Recipe\RecipeValidator::totalWaiting($item['recipe']); ?>
+                        <?php if (!empty($item['recipe']['tags']) || $duration > 0 || $waiting > 0): ?>
                             <div class="recipe-row-meta-line">
                                 <?php if (!empty($item['recipe']['tags'])): ?>
                                     <span class="recipe-tags recipe-row-tags">
@@ -101,8 +102,15 @@
                                         <?php endforeach; ?>
                                     </span>
                                 <?php endif; ?>
-                                <?php if ($duration > 0): ?>
-                                    <span class="recipe-row-duration">⏱ circa <?= escape(\Recipe\RecipeValidator::formatDuration($duration)) ?></span>
+                                <?php if ($duration > 0 || $waiting > 0): ?>
+                                    <span class="recipe-times recipe-summary-times">
+                                        <?php if ($duration > 0): ?>
+                                            <span class="recipe-duration">⏱ circa <?= escape(\Recipe\RecipeValidator::formatDuration($duration)) ?></span>
+                                        <?php endif; ?>
+                                        <?php if ($waiting > 0): ?>
+                                            <span class="recipe-waiting">Wartezeit: <?= escape(\Recipe\RecipeValidator::formatDuration($waiting)) ?></span>
+                                        <?php endif; ?>
+                                    </span>
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>

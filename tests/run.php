@@ -100,6 +100,7 @@ check($recipe['tags'] === ['Beilage', 'Vegetarisch'], 'Kategorietags werden gele
 check($recipe['aliases'] === ['Zitronen-Reis', 'Lemon Rice'], 'Alternativnamen werden gelesen.');
 check(RecipeValidator::totalDuration($recipe) === 5, 'Blockdauern werden zur Gesamtdauer addiert.');
 check($recipe['blocks'][1]['waiting'] === 10, 'Blockwartezeiten werden gelesen und nicht zur Gesamtdauer addiert.');
+check(RecipeValidator::totalWaiting($recipe) === 10, 'Blockwartezeiten werden separat summiert.');
 rejects(static fn () => RecipeValidator::parse(str_replace('duration: 5', 'duration: 0', $yaml)), 'Dauer null wird abgelehnt.');
 rejects(static fn () => RecipeValidator::parse(str_replace('duration: 5', 'duration: 1.5', $yaml)), 'Dezimalwerte als Dauer werden abgelehnt.');
 rejects(static fn () => RecipeValidator::parse(str_replace('waiting: 10', 'waiting: 0', $yaml)), 'Wartezeit null wird abgelehnt.');
