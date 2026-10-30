@@ -13,7 +13,7 @@
             <div class="file-field">
                 <div class="file-field-header">
                     <label class="file-field-label" for="recipe-file">YAML-Dateien · jeweils maximal 1 MB</label>
-                    <button class="button button-copy" type="button" data-copy="<?= escape($llmAuthoring) ?>" data-copy-message="Anweisungen für YAML-Konvertierung für KI-Sprachmodelle kopiert.">Anleitung für KI-Sprachmodelle kopieren</button>
+                    <button class="button button-copy" type="button" data-copy="<?= escape($llmAuthoring) ?>" data-copy-message="Anweisungen für YAML-Konvertierung für KI-Sprachmodelle kopiert.">LLM-Anleitung kopieren</button>
                 </div>
                 <input id="recipe-file" type="file" name="recipe[]" accept=".yaml,.yml,application/yaml,text/yaml" multiple required>
             </div>
