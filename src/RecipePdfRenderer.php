@@ -134,7 +134,7 @@ body { color: #1d312a; font-family: "DejaVu Sans", sans-serif; font-size: 10pt; 
 h1 { margin: 0; color: #1d312a; font-size: 27pt; line-height: 1.15; }
 .recipe-content { padding-top: 15px; }
 h2 { margin: 22px 0 9px; color: #194b38; font-size: 16pt; page-break-after: avoid; }
-.recipe-section-heading { display: table; width: 100%; }
+.recipe-section-heading { display: table; width: 100%; page-break-inside: avoid; page-break-after: avoid; }
 .recipe-section-heading h2, .recipe-section-heading .recipe-times { display: table-cell; vertical-align: middle; }
 .recipe-section-heading .recipe-times { width: 1%; padding-left: 12px; text-align: right; white-space: nowrap; }
 .recipe-block { display: table; width: 100%; }
