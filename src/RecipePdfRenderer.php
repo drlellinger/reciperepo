@@ -126,7 +126,10 @@ h2 { margin: 22px 0 9px; color: #194b38; font-size: 16pt; page-break-after: avoi
 .recipe-block { display: table; width: 100%; }
 .recipe-block-content, .recipe-block > .recipe-times { display: table-cell; vertical-align: middle; }
 .recipe-block > .recipe-times { width: 1%; padding-left: 12px; color: #194b38; font-weight: bold; text-align: right; white-space: nowrap; }
-.recipe-times { display: inline-flex; flex-direction: column; gap: 2px; }
+.recipe-times { display: inline-flex; flex-direction: column; gap: 4px; }
+.recipe-duration, .recipe-waiting { display: inline-block; padding: 3px 7px; border: 1px solid #d5dfd8; border-radius: 10px; white-space: nowrap; }
+.recipe-duration { background: #e5eee7; color: #194b38; }
+.recipe-waiting { border-color: #e5d7a8; background: #f7efd7; color: #765518; }
 .duration-icon { width: 9pt; height: 9pt; vertical-align: -1pt; }
 .recipe-copy { margin: 0 0 16px; line-height: 1.7; }
 table { width: 100%; margin: 15px 0 20px; border-collapse: collapse; page-break-inside: avoid; }
