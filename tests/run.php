@@ -87,7 +87,7 @@ blocks:
       text: Zubereitung
     - type: text
       duration: 5
-        waiting: 10
+            waiting: 10
       text: Mit Zitrone abschmecken.
     - type: table
       headers: [Zutat, Menge]
