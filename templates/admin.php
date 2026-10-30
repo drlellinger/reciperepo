@@ -10,10 +10,13 @@
         <h2 id="recipe-upload-title">Rezept-YAML</h2>
         <form class="upload-form" method="post" action="/admin/upload" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<?= escape($csrfToken) ?>">
-            <label class="file-field" for="recipe-file">
-                <span class="file-field-label">YAML-Dateien · jeweils maximal 1 MB</span>
+            <div class="file-field">
+                <div class="file-field-header">
+                    <label class="file-field-label" for="recipe-file">YAML-Dateien · jeweils maximal 1 MB</label>
+                    <button class="button button-copy" type="button" data-copy="<?= escape($llmAuthoring) ?>" data-copy-message="Anweisungen für YAML-Konvertierung für KI-Sprachmodelle kopiert.">Anleitung für KI-Sprachmodelle kopieren</button>
+                </div>
                 <input id="recipe-file" type="file" name="recipe[]" accept=".yaml,.yml,application/yaml,text/yaml" multiple required>
-            </label>
+            </div>
             <button class="button button-primary" type="submit">Rezept importieren</button>
         </form>
     </section>

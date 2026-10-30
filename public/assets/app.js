@@ -31,7 +31,7 @@ document.querySelectorAll('button[data-copy]').forEach((button) => {
     button.addEventListener('click', async () => {
         try {
             await navigator.clipboard.writeText(button.dataset.copy);
-            showToast('Bild-URL kopiert.');
+            showToast(button.dataset.copyMessage || 'Bild-URL kopiert.');
         } catch {
             const input = button.parentElement.querySelector('input');
             input?.focus();

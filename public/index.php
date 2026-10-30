@@ -489,6 +489,7 @@ if ($path === '/admin' && $method === 'GET') {
         'search' => $search,
         'sort' => $sort,
         'images' => (new ImageRepository($root . '/public/uploads/images'))->all(),
+        'llmAuthoring' => file_get_contents($root . '/docs/llm-yaml-authoring.md') ?: '',
         'csrfToken' => $_SESSION['_csrf'],
         'flash' => takeFlash(),
     ]);
