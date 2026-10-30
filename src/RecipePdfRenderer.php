@@ -34,12 +34,16 @@ final class RecipePdfRenderer
             $duration = isset($block['duration'])
                 ? '<span class="recipe-duration">' . self::durationIcon() . ' ' . self::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($block['duration']))) . '</span>'
                 : '';
+            $waiting = isset($block['waiting'])
+                ? '<span class="recipe-waiting">Wartezeit: ' . self::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($block['waiting']))) . '</span>'
+                : '';
+            $times = $duration !== '' || $waiting !== '' ? '<div class="recipe-times">' . $duration . $waiting . '</div>' : '';
             switch ($block['type']) {
                 case 'heading':
-                    $html .= '<div class="recipe-section-heading"><h2>' . self::escape($block['text']) . '</h2>' . $duration . '</div>';
+                    $html .= '<div class="recipe-section-heading"><h2>' . self::escape($block['text']) . '</h2>' . $times . '</div>';
                     break;
                 case 'text':
-                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-copy">' . nl2br(self::escape($block['text']), false) . '</p></div>' . $duration . '</div>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-copy">' . nl2br(self::escape($block['text']), false) . '</p></div>' . $times . '</div>';
                     break;
                 case 'table':
                     $html .= '<div class="recipe-block"><div class="recipe-block-content"><table>';
@@ -58,7 +62,7 @@ final class RecipePdfRenderer
                         }
                         $html .= '</tr>';
                     }
-                    $html .= '</tbody></table></div>' . $duration . '</div>';
+                    $html .= '</tbody></table></div>' . $times . '</div>';
                     break;
                 case 'image':
                     $imageSource = self::imageSource($block['url'], $publicRoot, $remainingRemoteImages);
@@ -68,18 +72,18 @@ final class RecipePdfRenderer
                     } else {
                         $html .= '<p class="media-note">' . self::escape($block['alt']) . '</p>';
                     }
-                    $html .= $caption . '</figure></div>' . $duration . '</div>';
+                    $html .= $caption . '</figure></div>' . $times . '</div>';
                     break;
                 case 'video':
                 case 'youtube':
                     $mediaLabel = $block['caption'] ?? 'Medieninhalt';
-                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-link"><a href="' . self::escape($block['url']) . '">' . self::escape($mediaLabel) . '</a></p></div>' . $duration . '</div>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-link"><a href="' . self::escape($block['url']) . '">' . self::escape($mediaLabel) . '</a></p></div>' . $times . '</div>';
                     break;
                 case 'audio':
-                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="media-note">' . self::escape($block['caption'] ?? 'Medieninhalt') . '</p></div>' . $duration . '</div>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="media-note">' . self::escape($block['caption'] ?? 'Medieninhalt') . '</p></div>' . $times . '</div>';
                     break;
                 case 'link':
-                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-link"><a href="' . self::escape($block['url']) . '">' . self::escape($block['label']) . '</a></p></div>' . $duration . '</div>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-link"><a href="' . self::escape($block['url']) . '">' . self::escape($block['label']) . '</a></p></div>' . $times . '</div>';
                     break;
             }
         }
@@ -117,12 +121,12 @@ h1 { margin: 0; color: #1d312a; font-size: 27pt; line-height: 1.15; }
 .recipe-content { padding-top: 15px; }
 h2 { margin: 22px 0 9px; color: #194b38; font-size: 16pt; page-break-after: avoid; }
 .recipe-section-heading { display: table; width: 100%; }
-.recipe-section-heading h2, .recipe-section-heading .recipe-duration { display: table-cell; vertical-align: middle; }
-.recipe-section-heading .recipe-duration { width: 1%; padding-left: 12px; text-align: right; white-space: nowrap; }
+.recipe-section-heading h2, .recipe-section-heading .recipe-times { display: table-cell; vertical-align: middle; }
+.recipe-section-heading .recipe-times { width: 1%; padding-left: 12px; text-align: right; white-space: nowrap; }
 .recipe-block { display: table; width: 100%; }
-.recipe-block-content, .recipe-block > .recipe-duration { display: table-cell; vertical-align: middle; }
-.recipe-block > .recipe-duration { width: 1%; padding-left: 12px; color: #194b38; font-weight: bold; text-align: right; white-space: nowrap; }
-.recipe-section-heading .recipe-duration { color: #194b38; font-weight: bold; }
+.recipe-block-content, .recipe-block > .recipe-times { display: table-cell; vertical-align: middle; }
+.recipe-block > .recipe-times { width: 1%; padding-left: 12px; color: #194b38; font-weight: bold; text-align: right; white-space: nowrap; }
+.recipe-times { display: inline-flex; flex-direction: column; gap: 2px; }
 .duration-icon { width: 9pt; height: 9pt; vertical-align: -1pt; }
 .recipe-copy { margin: 0 0 16px; line-height: 1.7; }
 table { width: 100%; margin: 15px 0 20px; border-collapse: collapse; page-break-inside: avoid; }

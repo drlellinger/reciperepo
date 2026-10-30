@@ -57,6 +57,7 @@ blocks:
     text: Zubereitung
   - type: text
     duration: 5
+    waiting: 10
     text: Reis abspülen und in Brühe garen.
   - type: text
     duration: 3

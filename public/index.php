@@ -149,12 +149,16 @@ function renderBlocks(array $blocks): string
         $duration = isset($block['duration'])
             ? '<span class="recipe-duration">⏱ ' . escape(RecipeValidator::formatDuration($block['duration'])) . '</span>'
             : '';
+        $waiting = isset($block['waiting'])
+            ? '<span class="recipe-waiting">Wartezeit: ' . escape(RecipeValidator::formatDuration($block['waiting'])) . '</span>'
+            : '';
+        $times = $duration !== '' || $waiting !== '' ? '<div class="recipe-times">' . $duration . $waiting . '</div>' : '';
         switch ($block['type']) {
             case 'heading':
-                $html .= '<div class="recipe-section-heading"><h2>' . escape($block['text']) . '</h2>' . $duration . '</div>';
+                $html .= '<div class="recipe-section-heading"><h2>' . escape($block['text']) . '</h2>' . $times . '</div>';
                 break;
             case 'text':
-                $html .= '<div class="recipe-block"><div class="recipe-copy">' . nl2br(escape($block['text']), false) . '</div>' . $duration . '</div>';
+                $html .= '<div class="recipe-block"><div class="recipe-copy">' . nl2br(escape($block['text']), false) . '</div>' . $times . '</div>';
                 break;
             case 'table':
                 $tableCaption = isset($block['caption']) ? '<caption>' . escape($block['caption']) . '</caption>' : '';
@@ -171,23 +175,23 @@ function renderBlocks(array $blocks): string
                     }
                     $html .= '</tr>';
                 }
-                $html .= '</tbody></table></div>' . $duration . '</div>';
+                $html .= '</tbody></table></div>' . $times . '</div>';
                 break;
             case 'image':
-                $html .= '<div class="recipe-block"><figure class="recipe-media"><img src="' . escape($block['url']) . '" alt="' . escape($block['alt']) . '" loading="lazy">' . $caption . '</figure>' . $duration . '</div>';
+                $html .= '<div class="recipe-block"><figure class="recipe-media"><img src="' . escape($block['url']) . '" alt="' . escape($block['alt']) . '" loading="lazy">' . $caption . '</figure>' . $times . '</div>';
                 break;
             case 'video':
-                $html .= '<div class="recipe-block"><figure class="recipe-media"><video aria-label="' . escape($block['caption'] ?? 'Rezeptvideo') . '" controls preload="metadata" src="' . escape($block['url']) . '"></video>' . $caption . '</figure>' . $duration . '</div>';
+                $html .= '<div class="recipe-block"><figure class="recipe-media"><video aria-label="' . escape($block['caption'] ?? 'Rezeptvideo') . '" controls preload="metadata" src="' . escape($block['url']) . '"></video>' . $caption . '</figure>' . $times . '</div>';
                 break;
             case 'youtube':
                 $embedUrl = RecipeValidator::youtubeEmbedUrl($block['url']);
-                $html .= '<div class="recipe-block"><figure class="recipe-media"><div class="recipe-video-embed"><iframe src="' . escape($embedUrl) . '" title="' . escape($block['caption'] ?? 'YouTube-Video') . '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' . $caption . '</figure>' . $duration . '</div>';
+                $html .= '<div class="recipe-block"><figure class="recipe-media"><div class="recipe-video-embed"><iframe src="' . escape($embedUrl) . '" title="' . escape($block['caption'] ?? 'YouTube-Video') . '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>' . $caption . '</figure>' . $times . '</div>';
                 break;
             case 'audio':
-                $html .= '<div class="recipe-block"><figure class="recipe-media"><audio aria-label="' . escape($block['caption'] ?? 'Rezeptaudio') . '" controls preload="metadata" src="' . escape($block['url']) . '"></audio>' . $caption . '</figure>' . $duration . '</div>';
+                $html .= '<div class="recipe-block"><figure class="recipe-media"><audio aria-label="' . escape($block['caption'] ?? 'Rezeptaudio') . '" controls preload="metadata" src="' . escape($block['url']) . '"></audio>' . $caption . '</figure>' . $times . '</div>';
                 break;
             case 'link':
-                $html .= '<div class="recipe-block"><p class="recipe-link"><a href="' . escape($block['url']) . '" target="_blank" rel="noopener noreferrer">' . escape($block['label']) . ' <span class="visually-hidden">(öffnet in neuem Tab)</span><span aria-hidden="true">↗</span></a></p>' . $duration . '</div>';
+                $html .= '<div class="recipe-block"><p class="recipe-link"><a href="' . escape($block['url']) . '" target="_blank" rel="noopener noreferrer">' . escape($block['label']) . ' <span class="visually-hidden">(öffnet in neuem Tab)</span><span aria-hidden="true">↗</span></a></p>' . $times . '</div>';
                 break;
         }
     }

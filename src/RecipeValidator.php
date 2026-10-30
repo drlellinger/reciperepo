@@ -125,33 +125,33 @@ final class RecipeValidator
 
         switch ($block['type']) {
             case 'heading':
-                self::validateKeys($block, ['type', 'text', 'duration'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'text', 'duration', 'waiting'], "Inhaltsblock {$number}");
                 self::requireString($block, 'text', $number);
                 break;
             case 'text':
-                self::validateKeys($block, ['type', 'text', 'caption', 'duration'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'text', 'caption', 'duration', 'waiting'], "Inhaltsblock {$number}");
                 self::requireString($block, 'text', $number);
                 break;
             case 'table':
-                self::validateKeys($block, ['type', 'headers', 'rows', 'caption', 'duration'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'headers', 'rows', 'caption', 'duration', 'waiting'], "Inhaltsblock {$number}");
                 self::validateTable($block, $number);
                 break;
             case 'image':
-                self::validateKeys($block, ['type', 'url', 'alt', 'caption', 'duration'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'url', 'alt', 'caption', 'duration', 'waiting'], "Inhaltsblock {$number}");
                 self::validateMedia($block, $number);
                 self::requireString($block, 'alt', $number);
                 break;
             case 'video':
             case 'audio':
-                self::validateKeys($block, ['type', 'url', 'caption', 'duration'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'url', 'caption', 'duration', 'waiting'], "Inhaltsblock {$number}");
                 self::validateMedia($block, $number);
                 break;
             case 'youtube':
-                self::validateKeys($block, ['type', 'url', 'caption', 'duration'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'url', 'caption', 'duration', 'waiting'], "Inhaltsblock {$number}");
                 self::youtubeEmbedUrl($block['url'] ?? null, $number);
                 break;
             case 'link':
-                self::validateKeys($block, ['type', 'url', 'label', 'caption', 'duration'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'url', 'label', 'caption', 'duration', 'waiting'], "Inhaltsblock {$number}");
                 self::validateUrl($block['url'] ?? null, $number);
                 self::requireString($block, 'label', $number);
                 break;
@@ -165,6 +165,9 @@ final class RecipeValidator
 
         if (array_key_exists('duration', $block) && (!is_int($block['duration']) || $block['duration'] < 1)) {
             throw new InvalidArgumentException("Die Dauer in Inhaltsblock {$number} muss eine positive ganze Minutenzahl sein.");
+        }
+        if (array_key_exists('waiting', $block) && (!is_int($block['waiting']) || $block['waiting'] < 1)) {
+            throw new InvalidArgumentException("Die Wartezeit in Inhaltsblock {$number} muss eine positive ganze Minutenzahl sein.");
         }
     }
 

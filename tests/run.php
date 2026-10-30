@@ -67,10 +67,10 @@ check(UploadedFiles::normalize(null) === [], 'Fehlende Uploads ergeben eine leer
 $remainingRemoteImages = 6;
 $pdfBlocks = Recipe\RecipePdfRenderer::renderBlocks([
     ['type' => 'heading', 'text' => 'Zubereitung'],
-    ['type' => 'text', 'duration' => 5, 'text' => 'Mit Zitrone abschmecken.'],
+    ['type' => 'text', 'duration' => 5, 'waiting' => 10, 'text' => 'Mit Zitrone abschmecken.'],
     ['type' => 'video', 'url' => 'https://example.org/video.mp4', 'caption' => 'Video'],
 ], dirname(__DIR__) . '/public', $remainingRemoteImages);
-check(str_contains($pdfBlocks, '<h2>Zubereitung</h2>') && str_contains($pdfBlocks, 'Mit Zitrone abschmecken.') && str_contains($pdfBlocks, 'duration-icon') && str_contains($pdfBlocks, '5 Min.'), 'PDF-Rezeptblöcke enthalten Überschrift, Text, Uhrsymbol und Dauer.');
+check(str_contains($pdfBlocks, '<h2>Zubereitung</h2>') && str_contains($pdfBlocks, 'Mit Zitrone abschmecken.') && str_contains($pdfBlocks, 'duration-icon') && str_contains($pdfBlocks, '5 Min.') && str_contains($pdfBlocks, 'recipe-waiting') && str_contains($pdfBlocks, 'Wartezeit: 10 Min.'), 'PDF-Rezeptblöcke rendern Dauer und Wartezeit getrennt.');
 check(!str_contains($pdfBlocks, '<button') && !str_contains($pdfBlocks, '<video') && !str_contains($pdfBlocks, '<audio'), 'PDF-Rezeptblöcke enthalten keine Buttons oder Medien-Steuerelemente.');
 $privateImageBlocks = Recipe\RecipePdfRenderer::renderBlocks([
     ['type' => 'image', 'url' => 'http://127.0.0.1/internal.png', 'alt' => 'Privates Bild'],
@@ -85,9 +85,7 @@ tags: [Beilage, Vegetarisch]
 blocks:
     - type: heading
       text: Zubereitung
-    - type: text
-      duration: 5
-      text: Mit Zitrone abschmecken.
+    - { type: text, duration: 5, waiting: 10, text: 'Mit Zitrone abschmecken.' }
     - type: table
       headers: [Zutat, Menge]
       rows:
@@ -101,6 +99,11 @@ check($recipe['blocks'][0]['type'] === 'heading', 'Kapitelüberschrift wird akze
 check($recipe['tags'] === ['Beilage', 'Vegetarisch'], 'Kategorietags werden gelesen.');
 check($recipe['aliases'] === ['Zitronen-Reis', 'Lemon Rice'], 'Alternativnamen werden gelesen.');
 check(RecipeValidator::totalDuration($recipe) === 5, 'Blockdauern werden zur Gesamtdauer addiert.');
+check($recipe['blocks'][1]['waiting'] === 10, 'Blockwartezeiten werden gelesen und nicht zur Gesamtdauer addiert.');
+rejects(static fn () => RecipeValidator::parse(str_replace('duration: 5', 'duration: 0', $yaml)), 'Dauer null wird abgelehnt.');
+rejects(static fn () => RecipeValidator::parse(str_replace('duration: 5', 'duration: 1.5', $yaml)), 'Dezimalwerte als Dauer werden abgelehnt.');
+rejects(static fn () => RecipeValidator::parse(str_replace('waiting: 10', 'waiting: 0', $yaml)), 'Wartezeit null wird abgelehnt.');
+rejects(static fn () => RecipeValidator::parse(str_replace('waiting: 10', 'waiting: 1.5', $yaml)), 'Dezimalwerte als Wartezeit werden abgelehnt.');
 check(RecipeValidator::formatDuration(120) === '120 min' && RecipeValidator::formatDuration(121) === '2 h 1 min' && RecipeValidator::formatDuration(180) === '3 h', 'Dauereinheiten werden kleingeschrieben und volle Stunden ohne null Minuten formatiert.');
 $youtubeYaml = str_replace("    - type: table\n", "    - type: youtube\n      url: https://youtu.be/dQw4w9WgXcQ\n      caption: Anleitung\n    - type: table\n", $yaml);
 $youtubeRecipe = RecipeValidator::parse($youtubeYaml);
