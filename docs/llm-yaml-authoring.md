@@ -53,7 +53,7 @@ blocks:
 - `title` ist nicht leer und höchstens 160 UTF-8-Bytes lang.
 - `summary` ist optional. Wenn die Quelle genug Angaben enthält, formuliere daraus eine kurze Beschreibung; erfinde keine Eigenschaften. Wenn keine Kurzbeschreibung sicher ableitbar ist, lass das Feld weg. Ist es vorhanden, muss es ein nicht leerer Text sein.
 - `aliases` ist optional und eine nicht leere Liste eindeutiger Alternativnamen bis jeweils 160 UTF-8-Bytes. Verwende nur Namen, die im Quelldokument ausdrücklich genannt werden; sie werden in der Suche und auf der Rezeptseite angezeigt.
-- `tags` ist optional und eine Liste eindeutiger, nicht leerer Texte bis jeweils 80 UTF-8-Bytes. Verwende kurze Kategorienamen, die aus dem Dokument klar hervorgehen; ohne sichere Kategorie `tags` weglassen.
+- `tags` ist optional und eine Liste eindeutiger, nicht leerer Texte bis jeweils 80 UTF-8-Bytes. Verwende kurze Kategorienamen, die aus dem Dokument klar hervorgehen; ohne sichere Kategorie `tags` weglassen. Sinnvolle Kategorien sind beispielsweise *vegan*, *vegetarisch*, *halal* oder *koscher* sowie die Ausprägung welche Landesküche das Rezept repräsentiert (z.B. *Deutsch*, *Italienisch* oder *Indisch*)
 - `image` ist optional und enthält genau ein Hauptbild mit `url` und nicht leerem `alt`. Es wird als Thumbnail in Listen und als Bild beim Teilen verwendet. Ohne sichere Bild-URL und sachlichen Alt-Text `image` weglassen.
 - `blocks` ist eine geordnete Liste. Jeder Block hat genau einen bekannten `type` und nur die dafür erlaubten Felder aus dem Schema.
 - `text` benötigt ein nicht leeres Textfeld `text`. Mehrzeilige Absätze oder Schritte können mit `text: |-` geschrieben werden. Optional kann das `duration`und `waiting`verwendet werden um eine Zeitangabe in Minuten für die geschätzte Dauer oder Wartezeit eines Arbeitsschritts anzugeben.
@@ -69,3 +69,5 @@ blocks:
 ## Abschlussprüfung
 
 Vor der Ausgabe kontrollieren: YAML ist syntaktisch gültig; Titel und Version sind vorhanden; jedes Feld passt exakt zum Blocktyp; Tabellenzeilen haben die richtige Spaltenzahl; URLs stammen aus der Quelle und sind HTTP(S); keine Information wurde hinzuerfunden. Ist etwas nicht erfüllbar, nicht raten, sondern nachfragen oder den betreffenden optionalen Inhalt weglassen.
+
+Stelle bei der Ausgabe sicher, dass die Ausgabe in einem Codeblock erfolgt und keine Artefakte aus anderen Sprachen wie Markdown mehr vorhanden sind.
