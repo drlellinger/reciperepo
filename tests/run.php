@@ -85,10 +85,7 @@ tags: [Beilage, Vegetarisch]
 blocks:
     - type: heading
       text: Zubereitung
-    - type: text
-      duration: 5
-            waiting: 10
-      text: Mit Zitrone abschmecken.
+    - { type: text, duration: 5, waiting: 10, text: 'Mit Zitrone abschmecken.' }
     - type: table
       headers: [Zutat, Menge]
       rows:
