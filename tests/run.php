@@ -165,6 +165,10 @@ try {
         ? base64_decode($svgMatch[1], true)
         : false;
     check(is_string($svgSource) && !str_contains($svgSource, '<script') && str_contains($svgSource, '<path'), 'SVG-Logos behalten Grafikpfade, aber keine Skripte.');
+    $embeddedLogoBlocks = Recipe\RecipePdfRenderer::renderBlocks([
+        ['type' => 'image', 'url' => '/assets/logo.svg', 'alt' => 'Logo'],
+    ], dirname(__DIR__) . '/public', $remainingRemoteImages);
+    check(str_contains($embeddedLogoBlocks, '<image') && str_contains($embeddedLogoBlocks, 'data:image/png;base64,'), 'SVG-Logos mit eingebettetem Rasterbild bleiben im PDF erhalten.');
     unlink($temporarySvg);
     $jpegImage = imagecreatetruecolor(2, 3);
     ob_start();

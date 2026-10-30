@@ -106,6 +106,20 @@ final class RecipePdfRenderer
             $tags .= '<span class="tag">' . self::escape($tag) . '</span>';
         }
 
+        $totalDuration = RecipeValidator::totalDuration($item['recipe']);
+        $totalWaiting = RecipeValidator::totalWaiting($item['recipe']);
+        $summaryTimes = '';
+        if ($totalDuration > 0 || $totalWaiting > 0) {
+            $summaryTimes .= '<div class="recipe-summary-times">';
+            if ($totalDuration > 0) {
+                $summaryTimes .= '<span class="recipe-duration">' . self::durationIcon() . ' Gesamtdauer: circa ' . self::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($totalDuration))) . '</span>';
+            }
+            if ($totalWaiting > 0) {
+                $summaryTimes .= '<span class="recipe-waiting">Gesamtwartezeit: ' . self::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($totalWaiting))) . '</span>';
+            }
+            $summaryTimes .= '</div>';
+        }
+
         return '<!doctype html>
 <html lang="de"><head><meta charset="UTF-8"><style>
 @page { size: A4 portrait; margin: 17mm 18mm 19mm; }
@@ -126,7 +140,8 @@ h2 { margin: 22px 0 9px; color: #194b38; font-size: 16pt; page-break-after: avoi
 .recipe-block { display: table; width: 100%; }
 .recipe-block-content, .recipe-block > .recipe-times { display: table-cell; vertical-align: middle; }
 .recipe-block > .recipe-times { width: 1%; padding-left: 12px; color: #194b38; font-weight: bold; text-align: right; white-space: nowrap; }
-.recipe-times { display: inline-flex; flex-direction: column; gap: 4px; }
+.recipe-times, .recipe-summary-times { display: inline-flex; flex-direction: column; gap: 4px; }
+.recipe-summary-times { margin-top: 10px; }
 .recipe-duration, .recipe-waiting { display: inline-block; padding: 3px 7px; border: 1px solid #d5dfd8; border-radius: 10px; white-space: nowrap; }
 .recipe-duration { background: #e5eee7; color: #194b38; }
 .recipe-waiting { border-color: #e5d7a8; background: #f7efd7; color: #765518; }
@@ -144,7 +159,7 @@ figcaption, .media-note { color: #5f7067; font-size: 9pt; }
 a { color: #28664e; }
 </style></head><body>
 <header class="brand">' . $brandMark . '<span>' . self::escape($appConfig['site_name'] ?? '') . '</span></header>
-<section class="recipe-heading"><div class="tags">' . $tags . '</div><h1>' . self::escape($item['recipe']['title']) . '</h1></section>
+<section class="recipe-heading"><div class="tags">' . $tags . '</div><h1>' . self::escape($item['recipe']['title']) . '</h1>' . $summaryTimes . '</section>
 <main class="recipe-content">' . self::renderBlocks($item['recipe']['blocks'], $publicRoot, $remainingRemoteImages) . '</main>
 </body></html>';
     }
@@ -362,7 +377,7 @@ a { color: #28664e; }
     private static function sanitizeSvgElement(\DOMElement $element): void
     {
         $allowedElements = [
-            'svg', 'g', 'path', 'circle', 'rect', 'ellipse', 'line', 'polyline', 'polygon',
+            'svg', 'g', 'path', 'circle', 'rect', 'ellipse', 'line', 'polyline', 'polygon', 'image',
             'defs', 'lineargradient', 'radialgradient', 'stop', 'clippath', 'mask', 'pattern',
             'use', 'symbol', 'title', 'desc', 'text', 'tspan',
         ];
@@ -385,9 +400,10 @@ a { color: #28664e; }
             $name = strtolower($attribute->nodeName);
             $value = trim($attribute->nodeValue ?? '');
             $isFragmentReference = preg_match('/\A#[A-Za-z_][A-Za-z0-9_.:-]*\z/', $value) === 1;
+            $isEmbeddedImage = preg_match('/\Adata:image\/(?:png|jpeg|gif|webp);base64,[A-Za-z0-9+\/\s]+=*\z/i', $value) === 1;
             $isLocalUrl = preg_match('/\Aurl\(\s*#[A-Za-z_][A-Za-z0-9_.:-]*\s*\)\z/i', $value) === 1;
             if (!in_array($name, $allowedAttributes, true)
-                || (in_array($name, ['href', 'xlink:href'], true) && !$isFragmentReference)
+                || (in_array($name, ['href', 'xlink:href'], true) && !$isFragmentReference && !$isEmbeddedImage)
                 || (stripos($value, 'url(') !== false && !$isLocalUrl)) {
                 $element->removeAttributeNode($attribute);
             }
