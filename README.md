@@ -75,9 +75,7 @@ Neben Text, Überschriften und Zutatenlisten sind auch Bilder, Audio, Videos und
 
 Wenn du vorhandene Notizen in Rezepte umwandeln möchtest, hilft die [KI-Anleitung für YAML-Rezepte](docs/llm-yaml-authoring.md).
 
-## Alternativ mit Docker starten
-
-Docker benötigt eine lokale `.env`-Datei. Vorlage kopieren, Zugangsdaten und bei Bedarf weitere Werte anpassen:
+## Mit Docker starten
 
 ```sh
 cp docs/.env.example .env
@@ -85,7 +83,9 @@ cp docs/.env.example .env
 docker compose up --build -d
 ```
 
-Die Anwendung ist anschließend unter [http://localhost:8080](http://localhost:8080) erreichbar. Weitere Hinweise zu Ports, persistenten Volumes und dem produktiven Betrieb stehen in der [Deployment-Dokumentation](docs/Deployment.md).
+Die Anwendung ist anschließend unter [http://localhost:8080](http://localhost:8080) erreichbar.
+
+Weitere Hinweise  sowie eine Anleitung für Deployments ohne Docker stehen in der [Deployment-Dokumentation](docs/Deployment.md).
 
 ## Transparenzhinweise
 

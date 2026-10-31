@@ -1,13 +1,3 @@
-## Lokal testen
-
-```sh
-composer install
-composer test
-php -S 127.0.0.1:8000 -t public public/router.php
-```
-
-Die lokale PHP-Entwicklungsserver-Variante schützt `/admin` nicht mit HTTP-Basisauthentifizierung und ist nur für lokale Entwicklung gedacht. Nicht öffentlich erreichbar machen.
-
 ## Deployment auf einem Webserver
 
 Den Webroot auf `public/` setzen. `recipes/`, `.htpasswd` und alle übrigen Projektdateien müssen außerhalb des öffentlichen Webroots bleiben. Der PHP-FPM-Benutzer benötigt Schreibrechte auf `recipes/` und `public/uploads/images/`. Das Bildverzeichnis liegt absichtlich im Webroot, damit hochgeladene Bilder direkt ausgeliefert werden können. Verzeichnisse vor dem ersten Aufruf von `/admin` anlegen und dem PHP-FPM-Benutzer übergeben, zum Beispiel:
@@ -61,13 +51,14 @@ cp docs/.env.example .env
 docker compose up --build -d
 ```
 
-Die Anwendung ist danach unter [http://localhost:8080](http://localhost:8080) erreichbar. Der Port kann mit `RECIPEREPO_PORT` geändert werden. Zum Beenden:
+Die Anwendung ist danach unter [http://localhost:8080](http://localhost:8080) erreichbar. 
+Zum Beenden:
 
 ```sh
 docker compose down
 ```
 
-Die Volumes werden dabei nicht gelöscht. Für den produktiven öffentlichen Betrieb weiterhin HTTPS vor den Container setzen; die Docker-Variante bringt bewusst kein TLS-Zertifikat mit.
+Die Volumes werden dabei nicht gelöscht. Für den produktiven öffentlichen Betrieb einen Proxy mit aktiviertem HTTPS vor den Container setzen; die Lösung bringt kein TLS-Zertifikat mit.
 
 Alle anpassbaren Docker-Einstellungen stehen in `.env`; die vollständige Vorlage liegt in `.env.example`. Neben `ADMIN_USER` und `ADMIN_PASSWORD` können dort unter anderem `RECIPEREPO_SITE_NAME`, `RECIPEREPO_SITE_URL`, `RECIPEREPO_LOGO_IMAGE`, `RECIPEREPO_FAVICON`, `RECIPEREPO_APPLE_TOUCH_ICON`, `RECIPEREPO_FOOTER_NAME`, `RECIPEREPO_PRIVACY_URL` und `RECIPEREPO_IMPRINT_URL` geändert werden. Die mitgelieferten Standardbilder liegen unter `public/assets/` und sind in der Vorlage automatisch eingetragen. Ohne `.env` beendet Docker Compose den Start mit einer Fehlermeldung.
 
@@ -111,7 +102,9 @@ Die wichtigsten Angaben sind:
 
 Das mitgelieferte Icon liegt in [public/assets/logo.svg](public/assets/logo.svg). Zusätzlich sind [favicon.ico](../public/assets/favicon.ico) und [apple-touch-icon.png](../public/assets/apple-touch-icon.png) enthalten.
 
-## 413 Fehler bei Uploads
+## Häufige Fehler
+
+### 413 Fehler bei Uploads
 
 Wenn beim Hochladen von YAML oder Bildern ein HTTP 413 erscheint, liegt das normalerweise nicht am PHP-Code der App, sondern an Server-Limits:
 
