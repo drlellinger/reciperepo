@@ -1,23 +1,25 @@
 services:
   reciperepo:
     build: .
+    env_file:
+      - .env
     ports:
-      - "${RECIPEREPO_PORT:-8080}:80"
+      - "${RECIPEREPO_PORT}:80"
     environment:
       # Required administration credentials.
-      ADMIN_USER: ${ADMIN_USER:?ADMIN_USER muss gesetzt sein}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD muss gesetzt sein}
+      ADMIN_USER: ${ADMIN_USER:?ADMIN_USER muss in .env gesetzt sein}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD muss in .env gesetzt sein}
       # Public URL and branding. Paths are relative to /public in the image.
-      RECIPEREPO_SITE_NAME: "${RECIPEREPO_SITE_NAME:-reciperepo}"
-      RECIPEREPO_LOGO_TEXT: "${RECIPEREPO_LOGO_TEXT:-R}"
-      RECIPEREPO_LOGO_IMAGE: "${RECIPEREPO_LOGO_IMAGE:-/assets/logo.svg}"
-      RECIPEREPO_LOGO_ALT: "${RECIPEREPO_LOGO_ALT:-reciperepo}"
-      RECIPEREPO_FAVICON: "${RECIPEREPO_FAVICON:-/assets/favicon.ico}"
-      RECIPEREPO_APPLE_TOUCH_ICON: "${RECIPEREPO_APPLE_TOUCH_ICON:-/assets/apple-touch-icon.png}"
-      RECIPEREPO_SITE_URL: "${RECIPEREPO_SITE_URL:-}"
-      RECIPEREPO_FOOTER_NAME: "${RECIPEREPO_FOOTER_NAME:-[Github](https://github.com/drlellinger/reciperepo)}"
-      RECIPEREPO_PRIVACY_URL: "${RECIPEREPO_PRIVACY_URL:-}"
-      RECIPEREPO_IMPRINT_URL: "${RECIPEREPO_IMPRINT_URL:-}"
+      RECIPEREPO_SITE_NAME: "${RECIPEREPO_SITE_NAME}"
+      RECIPEREPO_LOGO_TEXT: "${RECIPEREPO_LOGO_TEXT}"
+      RECIPEREPO_LOGO_IMAGE: "${RECIPEREPO_LOGO_IMAGE}"
+      RECIPEREPO_LOGO_ALT: "${RECIPEREPO_LOGO_ALT}"
+      RECIPEREPO_FAVICON: "${RECIPEREPO_FAVICON}"
+      RECIPEREPO_APPLE_TOUCH_ICON: "${RECIPEREPO_APPLE_TOUCH_ICON}"
+      RECIPEREPO_SITE_URL: "${RECIPEREPO_SITE_URL}"
+      RECIPEREPO_FOOTER_NAME: "${RECIPEREPO_FOOTER_NAME}"
+      RECIPEREPO_PRIVACY_URL: "${RECIPEREPO_PRIVACY_URL}"
+      RECIPEREPO_IMPRINT_URL: "${RECIPEREPO_IMPRINT_URL}"
     volumes:
       - reciperepo-recipes:/var/www/html/recipes
       - reciperepo-images:/var/www/html/public/uploads/images

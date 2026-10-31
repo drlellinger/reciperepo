@@ -54,9 +54,10 @@ In `config/app.php` für `site_url` die öffentliche HTTPS-Basisadresse ohne Pfa
 Alternativ kann die Anwendung mit Docker Compose als einzelner Apache/PHP-Container gestartet werden.
 
 Im Projektverzeichnis starten:
-
 ```sh
-ADMIN_USER=admin ADMIN_PASSWORD='ein-langes-passwort' docker compose up --build -d
+cp .env.example .env
+# .env bearbeiten  und dabei ein sicheres Passwort vergeben!
+docker compose up --build -d
 ```
 
 Die Anwendung ist danach unter [http://localhost:8080](http://localhost:8080) erreichbar. Der Port kann mit `RECIPEREPO_PORT` geändert werden. Zum Beenden:
@@ -67,7 +68,7 @@ docker compose down
 
 Die Volumes werden dabei nicht gelöscht. Für den produktiven öffentlichen Betrieb weiterhin HTTPS vor den Container setzen; die Docker-Variante bringt bewusst kein TLS-Zertifikat mit.
 
-Alle anpassbaren Docker-Einstellungen stehen im `environment`-Block von `docker-compose.yml`. Neben `ADMIN_USER` und `ADMIN_PASSWORD` können dort unter anderem `RECIPEREPO_SITE_NAME`, `RECIPEREPO_SITE_URL`, `RECIPEREPO_LOGO_IMAGE`, `RECIPEREPO_FAVICON`, `RECIPEREPO_APPLE_TOUCH_ICON`, `RECIPEREPO_FOOTER_NAME`, `RECIPEREPO_PRIVACY_URL` und `RECIPEREPO_IMPRINT_URL` geändert werden. Die mitgelieferten Standardbilder liegen unter `public/assets/` und sind im Container automatisch vorkonfiguriert.
+Alle anpassbaren Docker-Einstellungen stehen in `.env`; die vollständige Vorlage liegt in `.env.example`. Neben `ADMIN_USER` und `ADMIN_PASSWORD` können dort unter anderem `RECIPEREPO_SITE_NAME`, `RECIPEREPO_SITE_URL`, `RECIPEREPO_LOGO_IMAGE`, `RECIPEREPO_FAVICON`, `RECIPEREPO_APPLE_TOUCH_ICON`, `RECIPEREPO_FOOTER_NAME`, `RECIPEREPO_PRIVACY_URL` und `RECIPEREPO_IMPRINT_URL` geändert werden. Die mitgelieferten Standardbilder liegen unter `public/assets/` und sind in der Vorlage automatisch eingetragen. Ohne `.env` beendet Docker Compose den Start mit einer Fehlermeldung.
 
 ## Namen und Erscheinungsbild anpassen
 

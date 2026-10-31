@@ -77,8 +77,12 @@ Wenn du vorhandene Notizen in Rezepte umwandeln möchtest, hilft die [KI-Anleitu
 
 ## Alternativ mit Docker starten
 
+Docker benötigt eine lokale `.env`-Datei. Vorlage kopieren, Zugangsdaten und bei Bedarf weitere Werte anpassen:
+
 ```sh
-ADMIN_USER=admin ADMIN_PASSWORD='ein-langes-passwort' docker compose up --build -d
+cp .env.example .env
+# .env bearbeiten und dabei ein sicheres Passwort vergeben!
+docker compose up --build -d
 ```
 
 Die Anwendung ist anschließend unter [http://localhost:8080](http://localhost:8080) erreichbar. Weitere Hinweise zu Ports, persistenten Volumes und dem produktiven Betrieb stehen in der [Deployment-Dokumentation](docs/Deployment.md).
