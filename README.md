@@ -75,6 +75,14 @@ Neben Text, Überschriften und Zutatenlisten sind auch Bilder, Audio, Videos und
 
 Wenn du vorhandene Notizen in Rezepte umwandeln möchtest, hilft die [KI-Anleitung für YAML-Rezepte](docs/llm-yaml-authoring.md).
 
+## Alternativ mit Docker starten
+
+```sh
+ADMIN_USER=admin ADMIN_PASSWORD='ein-langes-passwort' docker compose up --build -d
+```
+
+Die Anwendung ist anschließend unter [http://localhost:8080](http://localhost:8080) erreichbar. Weitere Hinweise zu Ports, persistenten Volumes und dem produktiven Betrieb stehen in der [Deployment-Dokumentation](docs/Deployment.md).
+
 ## Transparenzhinweise
 
 Diese Software wurde mithilfe künstlicher Intelligenz entwickelt.

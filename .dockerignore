@@ -1,0 +1,9 @@
+.git
+.github
+.DS_Store
+.env*
+vendor
+recipes
+public/uploads/images
+tests
+docs

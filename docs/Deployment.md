@@ -49,16 +49,66 @@ Die Beispielkonfigurationen an Serverpfade und PHP-FPM-Socket anpassen und TLS-Z
 
 In `config/app.php` für `site_url` die öffentliche HTTPS-Basisadresse ohne Pfad eintragen, zum Beispiel `https://rezepte.example.org`. Diese Adresse wird für absolute Open-Graph- und Twitter-Bild-/Seiten-URLs verwendet. Für iOS-Homescreen-Icons empfiehlt sich ein quadratisches PNG mit 180 × 180 Pixeln unter `apple_touch_icon`; andernfalls verwendet die Seite, sofern konfiguriert, Logo oder Favicon. Auf einzelnen Rezeptseiten wird das erste Rezeptbild für Linkvorschauen verwendet.
 
+## Alternativ: Docker-Deployment
+
+Alternativ kann die Anwendung mit Docker Compose als einzelner Apache/PHP-Container gestartet werden.
+
+Im Projektverzeichnis starten:
+
+```sh
+ADMIN_USER=admin ADMIN_PASSWORD='ein-langes-passwort' docker compose up --build -d
+```
+
+Die Anwendung ist danach unter [http://localhost:8080](http://localhost:8080) erreichbar. Der Port kann mit `RECIPEREPO_PORT` geändert werden. Zum Beenden:
+
+```sh
+docker compose down
+```
+
+Die Volumes werden dabei nicht gelöscht. Für den produktiven öffentlichen Betrieb weiterhin HTTPS vor den Container setzen; die Docker-Variante bringt bewusst kein TLS-Zertifikat mit.
+
+Alle anpassbaren Docker-Einstellungen stehen im `environment`-Block von `docker-compose.yml`. Neben `ADMIN_USER` und `ADMIN_PASSWORD` können dort unter anderem `RECIPEREPO_SITE_NAME`, `RECIPEREPO_SITE_URL`, `RECIPEREPO_LOGO_IMAGE`, `RECIPEREPO_FAVICON`, `RECIPEREPO_APPLE_TOUCH_ICON`, `RECIPEREPO_FOOTER_NAME`, `RECIPEREPO_PRIVACY_URL` und `RECIPEREPO_IMPRINT_URL` geändert werden. Die mitgelieferten Standardbilder liegen unter `public/assets/` und sind im Container automatisch vorkonfiguriert.
+
 ## Namen und Erscheinungsbild anpassen
 
-Die wichtigsten Angaben liegen in [config/app.php](config/app.php):
+`config/app.php` ist die gemeinsame Standardkonfiguration. Bei einer klassischen Installation ohne Docker bearbeitest du die Werte dort direkt. Ohne weitere Anpassung werden die mitgelieferten Standardbilder verwendet.
+
+Im Docker-Betrieb musst du `config/app.php` nicht ändern: Die gleichnamigen `RECIPEREPO_*`-Variablen im `environment`-Block von `docker-compose.yml` überschreiben die Standardwerte nur für den Container.
+
+### `app.php` einfach ändern
+
+Wenn du **kein Docker** verwendest, gehst du so vor:
+
+1. Öffne im Projekt die Datei `config/app.php`.
+2. Ändere nur den Wert hinter dem Komma. Zum Beispiel:
+
+	```php
+	'site_name' => $environmentValue('RECIPEREPO_SITE_NAME', 'Meine Rezeptsammlung'),
+	'logo_text' => $environmentValue('RECIPEREPO_LOGO_TEXT', 'M'),
+	'logo_image' => $environmentValue('RECIPEREPO_LOGO_IMAGE', '/assets/logo.svg'),
+	'logo_alt' => $environmentValue('RECIPEREPO_LOGO_ALT', 'Meine Rezeptsammlung'),
+	'site_url' => $environmentValue('RECIPEREPO_SITE_URL', 'https://rezepte.example.org'),
+	```
+
+3. Speichere die Datei.
+4. Lade die Website neu. Bei PHP-FPM kann je nach Server ein Neustart von PHP-FPM erforderlich sein.
+
+Die Bildpfade beginnen mit `/assets/` und zeigen auf Dateien im Verzeichnis `public/assets/`. Wenn du kein eigenes Bild hast, lass `/assets/logo.svg`, `/assets/favicon.ico` und `/assets/apple-touch-icon.png` stehen. Datenschutz- und Impressums-URLs kannst du leer lassen, wenn du sie nicht verwendest.
+
+Wenn du **Docker** verwendest, ändere stattdessen die entsprechenden `RECIPEREPO_*`-Werte in `docker-compose.yml` und starte den Container neu:
+
+```sh
+docker compose up -d --build
+```
+
+Die wichtigsten Angaben sind:
 
 - Name der Sammlung und Logo
 - Browser-Titel und Linkvorschauen
 - Footer, Datenschutz und Impressum
 - öffentliche Adresse der Installation
 
-Das mitgelieferte Icon liegt in [public/assets/logo.svg](public/assets/logo.svg). Zusätzlich sind ein Favicon und ein Apple-Touch-Icon enthalten.
+Das mitgelieferte Icon liegt in [public/assets/logo.svg](public/assets/logo.svg). Zusätzlich sind [favicon.ico](../public/assets/favicon.ico) und [apple-touch-icon.png](../public/assets/apple-touch-icon.png) enthalten.
 
 ## 413 Fehler bei Uploads
 
