@@ -145,7 +145,7 @@ function renderBlocks(array $blocks): string
 {
     $html = '';
     foreach ($blocks as $block) {
-        $caption = isset($block['caption']) ? '<figcaption>' . escape($block['caption']) . '</figcaption>' : '';
+        $caption = isset($block['caption']) ? '<figcaption>' . Recipe\InlineMarkdownRenderer::render($block['caption']) . '</figcaption>' : '';
         $duration = isset($block['duration'])
             ? '<span class="recipe-duration">⏱ ' . escape(RecipeValidator::formatDuration($block['duration'])) . '</span>'
             : '';
@@ -155,23 +155,23 @@ function renderBlocks(array $blocks): string
         $times = $duration !== '' || $waiting !== '' ? '<div class="recipe-times">' . $duration . $waiting . '</div>' : '';
         switch ($block['type']) {
             case 'heading':
-                $html .= '<div class="recipe-section-heading"><h2>' . escape($block['text']) . '</h2>' . $times . '</div>';
+                $html .= '<div class="recipe-section-heading"><h2>' . Recipe\InlineMarkdownRenderer::render($block['text']) . '</h2>' . $times . '</div>';
                 break;
             case 'text':
-                $html .= '<div class="recipe-block"><div class="recipe-copy">' . nl2br(escape($block['text']), false) . '</div>' . $times . '</div>';
+                $html .= '<div class="recipe-block"><div class="recipe-copy">' . nl2br(Recipe\InlineMarkdownRenderer::render($block['text']), false) . '</div>' . $times . '</div>';
                 break;
             case 'table':
-                $tableCaption = isset($block['caption']) ? '<caption>' . escape($block['caption']) . '</caption>' : '';
+                $tableCaption = isset($block['caption']) ? '<caption>' . Recipe\InlineMarkdownRenderer::render($block['caption']) . '</caption>' : '';
                 $tableLabel = 'Tabellenbereich: ' . ($block['caption'] ?? 'Rezepttabelle');
                 $html .= '<div class="recipe-block"><div class="table-wrap" role="region" aria-label="' . escape($tableLabel) . '" tabindex="0"><table>' . $tableCaption . '<thead><tr>';
                 foreach ($block['headers'] as $header) {
-                    $html .= '<th scope="col">' . escape($header) . '</th>';
+                    $html .= '<th scope="col">' . Recipe\InlineMarkdownRenderer::render($header) . '</th>';
                 }
                 $html .= '</tr></thead><tbody>';
                 foreach ($block['rows'] as $row) {
                     $html .= '<tr>';
                     foreach ($row as $cell) {
-                        $html .= '<td>' . escape($cell) . '</td>';
+                        $html .= '<td>' . Recipe\InlineMarkdownRenderer::render((string) $cell) . '</td>';
                     }
                     $html .= '</tr>';
                 }

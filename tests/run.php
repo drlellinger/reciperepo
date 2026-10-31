@@ -55,6 +55,8 @@ $legacyPrivacyLink = Recipe\FooterMarkdownRenderer::renderLinkSetting('https://e
 check($legacyPrivacyLink === '<a href="https://example.org/privacy">Datenschutzerklärung</a>', 'Bisherige reine Footer-URLs behalten ihr Standardlabel.');
 $unsafeFooterLink = Recipe\FooterMarkdownRenderer::render('[Unsicher](javascript:alert(1))');
 check(!str_contains($unsafeFooterLink, '<a ') && str_contains($unsafeFooterLink, 'javascript:'), 'Unsichere Markdown-Linkprotokolle werden nicht als Links ausgegeben.');
+$formattedText = Recipe\InlineMarkdownRenderer::render('**Fett**, *kursiv*, ***beides*** und ~~alt~~ <script>alert(1)</script>');
+check($formattedText === '<strong>Fett</strong>, <em>kursiv</em>, <strong><em>beides</em></strong> und <del>alt</del> &lt;script&gt;alert(1)&lt;/script&gt;', 'Markdown-Textformatierung wird sicher gerendert.');
 $normalizedUploads = UploadedFiles::normalize([
     'name' => ['one.yaml', 'two.yaml'],
     'type' => ['application/yaml', 'application/yaml'],

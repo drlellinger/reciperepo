@@ -6,6 +6,8 @@ Verwende diese Anleitung, wenn ein LLM ein Rezept aus einem beliebigen Textdokum
 
 Übertrage ausschließlich Informationen, die im Quelldokument stehen. Erfinde keine Zutaten, Mengen, Zeiten, Portionen, Zubereitungsschritte oder URLs. Bewahre Reihenfolge und Bedeutung. Wenn eine wichtige Angabe unklar oder widersprüchlich ist, frage nach; wenn keine Rückfrage möglich ist, lass sie weg. Gib als Ergebnis nur eine YAML-Datei ohne Markdown-Zaun oder zusätzliche Erklärung aus.
 
+Rezepttexte, Überschriften, Tabellenzellen und Beschriftungen dürfen `**fett**`, `*kursiv*`, `***fett und kursiv***` und `~~durchgestrichen~~` als Inline-Formatierung verwenden. HTML wird nicht unterstützt und sicher als Text ausgegeben.
+
 Das Dokument muss diesem Schema entsprechen:
 
 ```yaml

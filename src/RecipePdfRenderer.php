@@ -30,7 +30,7 @@ final class RecipePdfRenderer
     {
         $html = '';
         foreach ($blocks as $block) {
-            $caption = isset($block['caption']) ? '<figcaption>' . self::escape($block['caption']) . '</figcaption>' : '';
+            $caption = isset($block['caption']) ? '<figcaption>' . InlineMarkdownRenderer::render($block['caption']) . '</figcaption>' : '';
             $duration = isset($block['duration'])
                 ? '<span class="recipe-duration">' . self::durationIcon() . ' ' . self::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($block['duration']))) . '</span>'
                 : '';
@@ -40,25 +40,25 @@ final class RecipePdfRenderer
             $times = $duration !== '' || $waiting !== '' ? '<div class="recipe-times">' . $duration . $waiting . '</div>' : '';
             switch ($block['type']) {
                 case 'heading':
-                    $html .= '<div class="recipe-section-heading"><h2>' . self::escape($block['text']) . '</h2>' . $times . '</div>';
+                    $html .= '<div class="recipe-section-heading"><h2>' . InlineMarkdownRenderer::render($block['text']) . '</h2>' . $times . '</div>';
                     break;
                 case 'text':
-                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-copy">' . nl2br(self::escape($block['text']), false) . '</p></div>' . $times . '</div>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-copy">' . nl2br(InlineMarkdownRenderer::render($block['text']), false) . '</p></div>' . $times . '</div>';
                     break;
                 case 'table':
                     $html .= '<div class="recipe-block"><div class="recipe-block-content"><table>';
                     if (isset($block['caption'])) {
-                        $html .= '<caption>' . self::escape($block['caption']) . '</caption>';
+                        $html .= '<caption>' . InlineMarkdownRenderer::render($block['caption']) . '</caption>';
                     }
                     $html .= '<thead><tr>';
                     foreach ($block['headers'] as $header) {
-                        $html .= '<th>' . self::escape($header) . '</th>';
+                        $html .= '<th>' . InlineMarkdownRenderer::render($header) . '</th>';
                     }
                     $html .= '</tr></thead><tbody>';
                     foreach ($block['rows'] as $row) {
                         $html .= '<tr>';
                         foreach ($row as $cell) {
-                            $html .= '<td>' . self::escape($cell) . '</td>';
+                            $html .= '<td>' . InlineMarkdownRenderer::render((string) $cell) . '</td>';
                         }
                         $html .= '</tr>';
                     }
