@@ -80,7 +80,7 @@ Wenn du vorhandene Notizen in Rezepte umwandeln möchtest, hilft die [KI-Anleitu
 Docker benötigt eine lokale `.env`-Datei. Vorlage kopieren, Zugangsdaten und bei Bedarf weitere Werte anpassen:
 
 ```sh
-cp .env.example .env
+cp docs/.env.example .env
 # .env bearbeiten und dabei ein sicheres Passwort vergeben!
 docker compose up --build -d
 ```

@@ -54,8 +54,9 @@ In `config/app.php` für `site_url` die öffentliche HTTPS-Basisadresse ohne Pfa
 Alternativ kann die Anwendung mit Docker Compose als einzelner Apache/PHP-Container gestartet werden.
 
 Im Projektverzeichnis starten:
+
 ```sh
-cp .env.example .env
+cp docs/.env.example .env
 # .env bearbeiten  und dabei ein sicheres Passwort vergeben!
 docker compose up --build -d
 ```
@@ -83,14 +84,13 @@ Wenn du **kein Docker** verwendest, gehst du so vor:
 1. Öffne im Projekt die Datei `config/app.php`.
 2. Ändere nur den Wert hinter dem Komma. Zum Beispiel:
 
-	```php
-	'site_name' => $environmentValue('RECIPEREPO_SITE_NAME', 'Meine Rezeptsammlung'),
-	'logo_text' => $environmentValue('RECIPEREPO_LOGO_TEXT', 'M'),
-	'logo_image' => $environmentValue('RECIPEREPO_LOGO_IMAGE', '/assets/logo.svg'),
-	'logo_alt' => $environmentValue('RECIPEREPO_LOGO_ALT', 'Meine Rezeptsammlung'),
-	'site_url' => $environmentValue('RECIPEREPO_SITE_URL', 'https://rezepte.example.org'),
-	```
-
+   ```php
+   'site_name' => $environmentValue('RECIPEREPO_SITE_NAME', 'Meine Rezeptsammlung'),
+   'logo_text' => $environmentValue('RECIPEREPO_LOGO_TEXT', 'M'),
+   'logo_image' => $environmentValue('RECIPEREPO_LOGO_IMAGE', '/assets/logo.svg'),
+   'logo_alt' => $environmentValue('RECIPEREPO_LOGO_ALT', 'Meine Rezeptsammlung'),
+   'site_url' => $environmentValue('RECIPEREPO_SITE_URL', 'https://rezepte.example.org'),
+   ```
 3. Speichere die Datei.
 4. Lade die Website neu. Bei PHP-FPM kann je nach Server ein Neustart von PHP-FPM erforderlich sein.
 
