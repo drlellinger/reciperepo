@@ -7,6 +7,7 @@ $environmentValue = static function (string $name, mixed $default = null): mixed
 };
 
 return [
+    'version' => require __DIR__ . '/version.php',
     'site_name' => $environmentValue('RECIPEREPO_SITE_NAME', 'reciperepo'),
     'logo_text' => $environmentValue('RECIPEREPO_LOGO_TEXT', 'R'),
     'logo_image' => $environmentValue('RECIPEREPO_LOGO_IMAGE', '/assets/logo.svg'),

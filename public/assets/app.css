@@ -51,6 +51,9 @@ h1, h2 { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helv
 h1 { max-width: 740px; margin-bottom: 14px; font-size: 3.4rem; line-height: 1.06; }
 h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .collection-count, .admin-count { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.admin-meta { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 12px; color: var(--muted); font-size: 0.9rem; }
+.admin-meta span + span::before { content: '·'; margin-right: 12px; color: var(--line-strong); }
+.admin-version { white-space: nowrap; }
 .collection-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 18px 18px 16px; border: 1px solid rgba(112, 138, 126, 0.24); border-radius: 20px; background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(18px) saturate(1.15); box-shadow: var(--shadow-soft); }
 .collection-controls label { display: grid; gap: 5px; }
 .collection-controls label span { color: var(--muted); font-size: 0.78rem; font-weight: 650; letter-spacing: 0.01em; }

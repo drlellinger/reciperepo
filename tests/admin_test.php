@@ -18,6 +18,7 @@ function runAdminTests(): void
     $visibleStart = 0;
     $visibleEnd = 0;
     $images = [];
+    $appConfig = ['version' => require dirname(__DIR__) . '/config/version.php'];
 
     ob_start();
     require dirname(__DIR__) . '/templates/admin.php';
@@ -31,4 +32,5 @@ function runAdminTests(): void
     check($matched === 1, 'Admin-Ansicht rendert den Kopierbutton für die LLM-Anleitung.');
     check(htmlspecialchars_decode($match[1], ENT_QUOTES) === $llmAuthoring, 'Kopierbutton enthält den vollständigen Inhalt der LLM-Anleitung.');
     check($match[2] === 'Anweisungen für YAML-Konvertierung für KI-Sprachmodelle kopiert.', 'Kopierbutton enthält die passende Erfolgsmeldung.');
+    check(str_contains($html, '<span class="admin-version">Version 1.0.0</span>'), 'Admin-Ansicht zeigt die Version aus der separaten Konfigurationsdatei.');
 }

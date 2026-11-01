@@ -2,7 +2,10 @@
     <div>
         <h1>Verwaltung</h1>
     </div>
-    <span class="admin-count"><?= $totalCount ?> <?= $totalCount === 1 ? 'Rezept' : 'Rezepte' ?></span>
+    <div class="admin-meta">
+        <span class="admin-count"><?= $totalCount ?> <?= $totalCount === 1 ? 'Rezept' : 'Rezepte' ?></span>
+        <span class="admin-version">Version <?= Recipe\Html::escape($appConfig['version'] ?? '') ?></span>
+    </div>
 </section>
 
 <div class="upload-panels">
