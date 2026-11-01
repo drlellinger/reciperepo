@@ -73,7 +73,8 @@ version: 1
 title: Alle Blocktypen
 blocks:
     - { type: heading, text: Abschnitt }
-    - { type: text, text: Beschreibung }
+        - type: text
+            text: Beschreibung
     - type: table
       headers: [Zutat]
       rows: [[Reis]]
