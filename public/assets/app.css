@@ -151,7 +151,7 @@ figcaption { margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
 .upload-panel .upload-form { align-items: stretch; flex-direction: column; }
 .upload-panel .upload-form .button { align-self: start; }
 .admin-controls { margin-bottom: 20px; border-radius: 16px; }
-.admin-controls input[type="search"] { min-width: min(280px, 40vw); min-height: 42px; padding: 8px 10px; border: 1px solid rgba(100, 128, 116, 0.28); border-radius: 12px; background: rgba(255, 255, 255, 0.8); color: var(--ink); }
+.admin-controls input[type="search"] { min-width: min(280px, 40vw); min-height: 42px; padding: 8px 10px; border: 1px solid rgba(100, 128, 116, 0.28); border-color: var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); }
 .upload-form { display: flex; align-items: end; gap: 14px; }
 .file-field { display: grid; flex: 1; gap: 8px; }
 .file-field-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
