@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 function runRendererTests(): void
 {
-    check(uploadErrorMessage(UPLOAD_ERR_INI_SIZE) === 'Das Bild ist größer als das vom Server erlaubte Limit.', 'PHP-Uploadfehler für zu große Dateien wird korrekt erfasst.');
-    check(uploadErrorMessage(UPLOAD_ERR_NO_FILE) === 'Es wurde keine Datei ausgewählt.', 'Fehlender Upload wird korrekt erkannt.');
+    check(Recipe\UploadErrorMessage::forCode(UPLOAD_ERR_INI_SIZE) === 'Die Datei ist größer als das vom Server erlaubte Limit. Bitte upload_max_filesize und post_max_size prüfen.', 'PHP-Uploadfehler für zu große Dateien wird korrekt erfasst.');
+    check(Recipe\UploadErrorMessage::forCode(UPLOAD_ERR_NO_FILE) === 'Es wurde keine Datei ausgewählt.', 'Fehlender Upload wird korrekt erkannt.');
     check(\Recipe\Toast::message(['message' => 'Rezept gelöscht.']) === 'Rezept gelöscht.', 'Flash-Nachrichten werden als Toast-Meldung übernommen.');
     check(\Recipe\Toast::message(['message' => '   ']) === null, 'Leere Flash-Nachrichten werden als Toast ignoriert.');
 
@@ -47,4 +47,18 @@ function runRendererTests(): void
         ['type' => 'youtube', 'url' => 'https://youtu.be/dQw4w9WgXcQ', 'caption' => 'Anleitung'],
     ], dirname(__DIR__) . '/public', $remainingRemoteImages);
     check(!str_contains($youtubePdfBlocks, '<iframe') && !str_contains($youtubePdfBlocks, '<video') && str_contains($youtubePdfBlocks, 'href="https://youtu.be/dQw4w9WgXcQ"') && str_contains($youtubePdfBlocks, '>Anleitung</a>'), 'YouTube-Videos werden im PDF nicht gerendert, sondern mit der Beschreibung verlinkt.');
+
+    $additionalPdfBlocks = Recipe\RecipePdfRenderer::renderBlocks([
+        [
+            'type' => 'table',
+            'caption' => 'Zutaten & Hinweise',
+            'headers' => ['Zutat'],
+            'rows' => [['Reis & Salz']],
+        ],
+        ['type' => 'audio', 'url' => 'https://example.org/audio.mp3', 'caption' => 'Audio <Test>'],
+        ['type' => 'link', 'url' => 'https://example.org/source', 'label' => 'Quelle <Test>'],
+    ], dirname(__DIR__) . '/public', $remainingRemoteImages);
+    check(str_contains($additionalPdfBlocks, '<caption>Zutaten &amp; Hinweise</caption>') && str_contains($additionalPdfBlocks, '<td>Reis &amp; Salz</td>'), 'PDF-Tabellen enthalten Caption und sicher escapte Zellen.');
+    check(str_contains($additionalPdfBlocks, 'Audio &lt;Test&gt;') && !str_contains($additionalPdfBlocks, '<audio'), 'PDF-Audio wird als sicherer Hinweis ohne Steuerelement gerendert.');
+    check(str_contains($additionalPdfBlocks, 'href="https://example.org/source"') && str_contains($additionalPdfBlocks, '>Quelle &lt;Test&gt;</a>'), 'PDF-Links werden mit sicher escaptem Label gerendert.');
 }

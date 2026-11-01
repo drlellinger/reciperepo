@@ -48,7 +48,7 @@ if ($isAdmin) {
 
 function escape(string|int|float|null $value): string
 {
-    return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    return Recipe\Html::escape($value);
 }
 
 function siteOrigin(): string
@@ -205,18 +205,6 @@ function validCsrfToken(): bool
     return is_string($provided) && is_string($expected) && $expected !== '' && hash_equals($expected, $provided);
 }
 
-function uploadErrorMessage(int $errorCode): string
-{
-    return match ($errorCode) {
-        UPLOAD_ERR_INI_SIZE => 'Die Datei ist größer als das vom Server erlaubte Limit. Bitte upload_max_filesize und post_max_size prüfen.',
-        UPLOAD_ERR_FORM_SIZE => 'Die Datei überschreitet das vom Formular erlaubte Limit.',
-        UPLOAD_ERR_PARTIAL => 'Der Upload wurde nur teilweise übertragen. Bitte erneut versuchen.',
-        UPLOAD_ERR_NO_FILE => 'Es wurde keine Datei ausgewählt.',
-        UPLOAD_ERR_CANT_WRITE => 'Das temporäre Verzeichnis für den Upload ist nicht beschreibbar.',
-        UPLOAD_ERR_EXTENSION => 'Ein PHP-Upload-Filter hat den Upload blockiert.',
-        default => 'Das Bild konnte nicht hochgeladen werden.',
-    };
-}
 
 if ($method === 'POST' && $isAdmin) {
     if (!validCsrfToken()) {
@@ -236,7 +224,7 @@ if ($method === 'POST' && $isAdmin) {
                 $filename = (string) ($upload['name'] ?? 'Datei');
                 try {
                     if (($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-                        throw new RuntimeException(uploadErrorMessage((int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE)));
+                        throw new RuntimeException(Recipe\UploadErrorMessage::forCode((int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE)));
                     }
                     $temporaryPath = (string) ($upload['tmp_name'] ?? '');
                     if ($temporaryPath === '' || !is_uploaded_file($temporaryPath)) {
@@ -280,7 +268,7 @@ if ($method === 'POST' && $isAdmin) {
                 $filename = (string) ($upload['name'] ?? 'Datei');
                 try {
                     if (($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-                        throw new RuntimeException(uploadErrorMessage((int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE)));
+                        throw new RuntimeException(Recipe\UploadErrorMessage::forCode((int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE)));
                     }
                     $temporaryPath = (string) ($upload['tmp_name'] ?? '');
                     if ($temporaryPath === '' || !is_uploaded_file($temporaryPath)) {

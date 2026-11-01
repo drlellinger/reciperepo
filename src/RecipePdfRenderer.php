@@ -32,10 +32,10 @@ final class RecipePdfRenderer
         foreach ($blocks as $block) {
             $caption = isset($block['caption']) ? '<figcaption>' . InlineMarkdownRenderer::render($block['caption']) . '</figcaption>' : '';
             $duration = isset($block['duration'])
-                ? '<span class="recipe-duration">' . self::durationIcon() . ' ' . self::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($block['duration']))) . '</span>'
+                ? '<span class="recipe-duration">' . self::durationIcon() . ' ' . Html::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($block['duration']))) . '</span>'
                 : '';
             $waiting = isset($block['waiting'])
-                ? '<span class="recipe-waiting">Wartezeit: ' . self::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($block['waiting']))) . '</span>'
+                ? '<span class="recipe-waiting">Wartezeit: ' . Html::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($block['waiting']))) . '</span>'
                 : '';
             $times = $duration !== '' || $waiting !== '' ? '<div class="recipe-times">' . $duration . $waiting . '</div>' : '';
             switch ($block['type']) {
@@ -68,22 +68,22 @@ final class RecipePdfRenderer
                     $imageSource = self::imageSource($block['url'], $publicRoot, $remainingRemoteImages);
                     $html .= '<div class="recipe-block"><div class="recipe-block-content"><figure class="recipe-media">';
                     if ($imageSource !== null) {
-                        $html .= '<img src="' . self::escape($imageSource) . '" alt="' . self::escape($block['alt']) . '">';
+                        $html .= '<img src="' . Html::escape($imageSource) . '" alt="' . Html::escape($block['alt']) . '">';
                     } else {
-                        $html .= '<p class="media-note">' . self::escape($block['alt']) . '</p>';
+                        $html .= '<p class="media-note">' . Html::escape($block['alt']) . '</p>';
                     }
                     $html .= $caption . '</figure></div>' . $times . '</div>';
                     break;
                 case 'video':
                 case 'youtube':
                     $mediaLabel = $block['caption'] ?? 'Medieninhalt';
-                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-link"><a href="' . self::escape($block['url']) . '">' . self::escape($mediaLabel) . '</a></p></div>' . $times . '</div>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-link"><a href="' . Html::escape($block['url']) . '">' . Html::escape($mediaLabel) . '</a></p></div>' . $times . '</div>';
                     break;
                 case 'audio':
-                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="media-note">' . self::escape($block['caption'] ?? 'Medieninhalt') . '</p></div>' . $times . '</div>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="media-note">' . Html::escape($block['caption'] ?? 'Medieninhalt') . '</p></div>' . $times . '</div>';
                     break;
                 case 'link':
-                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-link"><a href="' . self::escape($block['url']) . '">' . self::escape($block['label']) . '</a></p></div>' . $times . '</div>';
+                    $html .= '<div class="recipe-block"><div class="recipe-block-content"><p class="recipe-link"><a href="' . Html::escape($block['url']) . '">' . Html::escape($block['label']) . '</a></p></div>' . $times . '</div>';
                     break;
             }
         }
@@ -98,12 +98,12 @@ final class RecipePdfRenderer
             ? self::imageSource($appConfig['logo_image'], $publicRoot, $remainingRemoteImages)
             : null;
         $brandMark = $logoPath !== null
-            ? '<img class="brand-logo" src="' . self::escape($logoPath) . '" alt="' . self::escape($appConfig['logo_alt'] ?? '') . '">'
-            : '<span class="brand-mark">' . self::escape($appConfig['logo_text'] ?? '') . '</span>';
+            ? '<img class="brand-logo" src="' . Html::escape($logoPath) . '" alt="' . Html::escape($appConfig['logo_alt'] ?? '') . '">' 
+            : '<span class="brand-mark">' . Html::escape($appConfig['logo_text'] ?? '') . '</span>';
 
         $tags = '';
         foreach ($item['recipe']['tags'] ?? [] as $tag) {
-            $tags .= '<span class="tag">' . self::escape($tag) . '</span>';
+            $tags .= '<span class="tag">' . Html::escape($tag) . '</span>';
         }
 
         $totalDuration = RecipeValidator::totalDuration($item['recipe']);
@@ -112,10 +112,10 @@ final class RecipePdfRenderer
         if ($totalDuration > 0 || $totalWaiting > 0) {
             $summaryTimes .= '<div class="recipe-summary-times">';
             if ($totalDuration > 0) {
-                $summaryTimes .= '<span class="recipe-duration">' . self::durationIcon() . ' Gesamtdauer: circa ' . self::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($totalDuration))) . '</span>';
+                $summaryTimes .= '<span class="recipe-duration">' . self::durationIcon() . ' Gesamtdauer: circa ' . Html::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($totalDuration))) . '</span>';
             }
             if ($totalWaiting > 0) {
-                $summaryTimes .= '<span class="recipe-waiting">Gesamtwartezeit: ' . self::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($totalWaiting))) . '</span>';
+                $summaryTimes .= '<span class="recipe-waiting">Gesamtwartezeit: ' . Html::escape(str_replace(' min', ' Min.', RecipeValidator::formatDuration($totalWaiting))) . '</span>';
             }
             $summaryTimes .= '</div>';
         }
@@ -158,8 +158,8 @@ figcaption, .media-note { color: #5f7067; font-size: 9pt; }
 .recipe-link { margin: 12px 0; }
 a { color: #28664e; }
 </style></head><body>
-<header class="brand">' . $brandMark . '<span>' . self::escape($appConfig['site_name'] ?? '') . '</span></header>
-<section class="recipe-heading"><div class="tags">' . $tags . '</div><h1>' . self::escape($item['recipe']['title']) . '</h1>' . $summaryTimes . '</section>
+<header class="brand">' . $brandMark . '<span>' . Html::escape($appConfig['site_name'] ?? '') . '</span></header>
+<section class="recipe-heading"><div class="tags">' . $tags . '</div><h1>' . Html::escape($item['recipe']['title']) . '</h1>' . $summaryTimes . '</section>
 <main class="recipe-content">' . self::renderBlocks($item['recipe']['blocks'], $publicRoot, $remainingRemoteImages) . '</main>
 </body></html>';
     }
@@ -447,11 +447,6 @@ a { color: #28664e; }
 
         $mimeType = mime_content_type($realPath);
         return is_string($mimeType) && str_starts_with($mimeType, 'image/') ? $realPath : null;
-    }
-
-    private static function escape(string|int|float|null $value): string
-    {
-        return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     private static function durationIcon(): string

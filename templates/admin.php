@@ -9,11 +9,11 @@
     <section class="admin-section upload-panel" aria-labelledby="recipe-upload-title">
         <h2 id="recipe-upload-title">Rezept-YAML</h2>
         <form class="upload-form" method="post" action="/admin/upload" enctype="multipart/form-data">
-            <input type="hidden" name="_csrf" value="<?= escape($csrfToken) ?>">
+            <input type="hidden" name="_csrf" value="<?= Recipe\Html::escape($csrfToken) ?>">
             <div class="file-field">
                 <div class="file-field-header">
                     <label class="file-field-label" for="recipe-file">YAML-Dateien · jeweils maximal 1 MB</label>
-                    <button class="button button-copy" type="button" data-copy="<?= escape($llmAuthoring) ?>" data-copy-message="Anweisungen für YAML-Konvertierung für KI-Sprachmodelle kopiert.">LLM-Anleitung kopieren</button>
+                    <button class="button button-copy" type="button" data-copy="<?= Recipe\Html::escape($llmAuthoring) ?>" data-copy-message="Anweisungen für YAML-Konvertierung für KI-Sprachmodelle kopiert.">LLM-Anleitung kopieren</button>
                 </div>
                 <input id="recipe-file" type="file" name="recipe[]" accept=".yaml,.yml,application/yaml,text/yaml" multiple required>
             </div>
@@ -24,7 +24,7 @@
     <section class="admin-section upload-panel" aria-labelledby="image-upload-title">
         <h2 id="image-upload-title">Rezeptbilder</h2>
         <form class="upload-form" method="post" action="/admin/upload-image" enctype="multipart/form-data">
-            <input type="hidden" name="_csrf" value="<?= escape($csrfToken) ?>">
+            <input type="hidden" name="_csrf" value="<?= Recipe\Html::escape($csrfToken) ?>">
             <label class="file-field" for="image-file">
                 <span class="file-field-label">Bilder · JPEG, PNG, GIF oder WebP · jeweils maximal 8 MB</span>
                 <input id="image-file" type="file" name="image[]" accept="image/jpeg,image/png,image/gif,image/webp" multiple required>
@@ -39,7 +39,7 @@
     <form class="collection-controls admin-controls" method="get" action="/admin">
         <label>
             <span>Rezepte suchen</span>
-            <input type="search" name="q" value="<?= escape($search) ?>" placeholder="Name">
+            <input type="search" name="q" value="<?= Recipe\Html::escape($search) ?>" placeholder="Name">
         </label>
         <label>
             <span>Sortieren nach</span>
@@ -67,10 +67,10 @@
         <ul class="admin-list">
             <?php foreach ($items as $item): ?>
                 <li>
-                    <a href="/recipe/<?= escape($item['slug']) ?>"><?= escape($item['recipe']['title']) ?></a>
-                    <form method="post" action="/admin/delete/<?= escape($item['slug']) ?>" data-confirm="Dieses Rezept löschen?">
-                        <input type="hidden" name="_csrf" value="<?= escape($csrfToken) ?>">
-                        <button class="button button-quiet-danger" type="submit" aria-label="<?= escape('Rezept ' . $item['recipe']['title'] . ' löschen') ?>">Löschen</button>
+                    <a href="/recipe/<?= Recipe\Html::escape($item['slug']) ?>"><?= Recipe\Html::escape($item['recipe']['title']) ?></a>
+                    <form method="post" action="/admin/delete/<?= Recipe\Html::escape($item['slug']) ?>" data-confirm="Dieses Rezept löschen?">
+                        <input type="hidden" name="_csrf" value="<?= Recipe\Html::escape($csrfToken) ?>">
+                        <button class="button button-quiet-danger" type="submit" aria-label="<?= Recipe\Html::escape('Rezept ' . $item['recipe']['title'] . ' löschen') ?>">Löschen</button>
                     </form>
                 </li>
             <?php endforeach; ?>
@@ -96,9 +96,9 @@
             <?php foreach ($images as $image): ?>
                 <?php $imageUrl = absolutePublicUrl($image['url'], $siteOrigin); ?>
                 <li class="image-list-item">
-                    <img src="<?= escape($image['url']) ?>" alt="" loading="lazy">
-                    <input type="text" value="<?= escape($imageUrl) ?>" readonly aria-label="Bild-URL">
-                    <button class="button button-copy" type="button" data-copy="<?= escape($imageUrl) ?>">Kopieren</button>
+                    <img src="<?= Recipe\Html::escape($image['url']) ?>" alt="" loading="lazy">
+                    <input type="text" value="<?= Recipe\Html::escape($imageUrl) ?>" readonly aria-label="Bild-URL">
+                    <button class="button button-copy" type="button" data-copy="<?= Recipe\Html::escape($imageUrl) ?>">Kopieren</button>
                 </li>
             <?php endforeach; ?>
         </ul>

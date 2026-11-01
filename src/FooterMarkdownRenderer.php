@@ -9,24 +9,24 @@ final class FooterMarkdownRenderer
     {
         preg_match_all('/\[([^\]]+)\]\(([^)\s]+)\)/u', $markdown, $matches, PREG_OFFSET_CAPTURE);
         if ($matches[0] === []) {
-            return self::escape($markdown);
+            return Html::escape($markdown);
         }
 
         $html = '';
         $offset = 0;
         foreach ($matches[0] as $index => [$match, $matchOffset]) {
-            $html .= self::escape(substr($markdown, $offset, $matchOffset - $offset));
+            $html .= Html::escape(substr($markdown, $offset, $matchOffset - $offset));
             $label = $matches[1][$index][0];
             $url = $matches[2][$index][0];
             if (self::isSafeUrl($url)) {
-                $html .= '<a href="' . self::escape($url) . '">' . self::escape($label) . '</a>';
+                $html .= '<a href="' . Html::escape($url) . '">' . Html::escape($label) . '</a>';
             } else {
-                $html .= self::escape($match);
+                $html .= Html::escape($match);
             }
             $offset = $matchOffset + strlen($match);
         }
 
-        return $html . self::escape(substr($markdown, $offset));
+        return $html . Html::escape(substr($markdown, $offset));
     }
 
     public static function renderLinkSetting(string $value, string $defaultLabel): string
@@ -37,7 +37,7 @@ final class FooterMarkdownRenderer
         }
 
         if (self::isSafeUrl($value)) {
-            return '<a href="' . self::escape($value) . '">' . self::escape($defaultLabel) . '</a>';
+            return '<a href="' . Html::escape($value) . '">' . Html::escape($defaultLabel) . '</a>';
         }
 
         return self::render($value);
@@ -56,8 +56,4 @@ final class FooterMarkdownRenderer
         return true;
     }
 
-    private static function escape(string $value): string
-    {
-        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-    }
 }

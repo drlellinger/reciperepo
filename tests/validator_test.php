@@ -67,4 +67,29 @@ blocks:
         alt: Bild
 YAML;
     rejects(static fn () => Recipe\RecipeValidator::parse($unsafeMedia), 'Nicht-HTTP-Medien-URLs werden abgelehnt.');
+
+    $allBlockTypes = <<<'YAML'
+version: 1
+title: Alle Blocktypen
+blocks:
+    - { type: heading, text: Abschnitt }
+    - { type: text, text: Beschreibung }
+    - type: table
+      headers: [Zutat]
+      rows: [[Reis]]
+    - { type: image, url: https://example.org/image.jpg, alt: Bild }
+    - { type: video, url: https://example.org/video.mp4 }
+    - { type: audio, url: https://example.org/audio.mp3 }
+    - { type: youtube, url: https://youtu.be/dQw4w9WgXcQ }
+    - { type: link, url: https://example.org, label: Quelle }
+YAML;
+    check(count(Recipe\RecipeValidator::parse($allBlockTypes)['blocks']) === 8, 'Alle unterstützten Rezeptblocktypen werden akzeptiert.');
+    rejects(static fn () => Recipe\RecipeValidator::parse(str_replace('text: Beschreibung', "text: Beschreibung\n      extra: true", $allBlockTypes)), 'Unbekannte Blockfelder werden abgelehnt.');
+    rejects(static fn () => Recipe\RecipeValidator::parse(str_replace('headers: [Zutat]', 'headers: []', $allBlockTypes)), 'Tabellen ohne Spaltenüberschrift werden abgelehnt.');
+    rejects(static fn () => Recipe\RecipeValidator::parse(str_replace('rows: [[Reis]]', 'rows: [[Reis, 1]]', $allBlockTypes)), 'Tabellenzeilen mit falscher Spaltenzahl werden abgelehnt.');
+    rejects(static fn () => Recipe\RecipeValidator::parse(str_replace('label: Quelle', 'label: ""', $allBlockTypes)), 'Links ohne Label werden abgelehnt.');
+    rejects(static fn () => Recipe\RecipeValidator::parse(str_replace('url: https://example.org/video.mp4', 'url: ftp://example.org/video.mp4', $allBlockTypes)), 'Medien-URLs mit unsicherem Protokoll werden abgelehnt.');
+    rejects(static fn () => Recipe\RecipeValidator::parse(str_replace('url: https://example.org/image.jpg', 'url: https://user:pass@example.org/image.jpg', $allBlockTypes)), 'Medien-URLs mit Zugangsdaten werden abgelehnt.');
+    check(Recipe\RecipeValidator::youtubeEmbedUrl('https://youtube.com/shorts/dQw4w9WgXcQ') === 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ', 'YouTube-Shorts werden in datensparsame Embed-URLs umgewandelt.');
+    check(Recipe\RecipeValidator::youtubeEmbedUrl('https://www.youtube.com/embed/dQw4w9WgXcQ') === 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ', 'YouTube-Embed-URLs werden akzeptiert.');
 }
