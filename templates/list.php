@@ -83,7 +83,7 @@
                             <?php if ($image !== null): ?>
                                 <img class="recipe-thumb" src="<?= escape($image['url']) ?>" alt="" loading="lazy">
                             <?php else: ?>
-                                <span class="recipe-thumb recipe-thumb-empty" aria-hidden="true">K</span>
+                                <span class="recipe-thumb recipe-thumb-empty" aria-hidden="true">R</span>
                             <?php endif; ?>
                             <span class="recipe-row-copy">
                                 <span class="recipe-row-title"><?= escape($item['recipe']['title']) ?></span>
