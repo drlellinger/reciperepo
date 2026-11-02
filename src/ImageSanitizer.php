@@ -35,7 +35,6 @@ final class ImageSanitizer
             'image/webp' => imagewebp($image, $targetPath, 90),
             default => false,
         };
-        imagedestroy($image);
 
         if (!$saved) {
             throw new RuntimeException('Das Bild konnte nicht ohne Metadaten gespeichert werden.');
@@ -115,7 +114,6 @@ final class ImageSanitizer
             return $image;
         }
 
-        imagedestroy($image);
         return $rotated;
     }
 }

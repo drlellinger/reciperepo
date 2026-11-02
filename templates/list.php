@@ -56,7 +56,7 @@
 
 <?php if ($items === []): ?>
     <section class="empty-state" aria-labelledby="empty-title">
-        <p class="empty-kicker" aria-hidden="true">K</p>
+        <p class="empty-kicker" aria-hidden="true">R</p>
         <h2 id="empty-title"><?= $totalCount === 0 ? 'Dein Archiv beginnt hier.' : 'Keine Rezepte für diesen Filter.' ?></h2>
     </section>
 <?php else: ?>
