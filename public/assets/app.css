@@ -116,10 +116,10 @@ h2 { margin-bottom: 18px; font-size: 1.65rem; line-height: 1.18; }
 .recipe-heading h1 { margin-bottom: 20px; }
 .recipe-aliases { margin: -8px 0 20px; color: var(--muted); font-size: 0.92rem; }
 .recipe-aliases span { font-weight: 700; }
-.download-link { display: inline-flex; min-height: 38px; align-items: center; gap: 8px; padding: 7px 13px; border: 1px solid #d8ded9; border-radius: 999px; background: #ecefed; color: #435047; font-size: 0.82rem; }
+.download-link { display: inline-flex; min-height: 38px; align-items: center; gap: 8px; padding: 7px 13px; border: 1px solid #d8ded9; border-radius: 999px; background: #ecefed; color: #435047; font-size: 0.82rem; margin: 2px; }
 .download-link:hover { background: #e0e5e1; color: #29372e; }
 .download-link span { font-size: 1.1rem; }
-.share-button { margin-left: 8px; cursor: pointer; }
+.share-button { cursor: pointer; }
 .share-fallback { margin-top: 8px; }
 .share-fallback label { display: grid; max-width: 460px; gap: 5px; color: var(--muted); font-size: 0.8rem; font-weight: 650; }
 .share-fallback input { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid #bdcec1; border-radius: var(--radius); background: var(--surface); color: var(--ink); }
