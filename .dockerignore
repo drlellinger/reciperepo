@@ -6,3 +6,6 @@ vendor
 recipes
 public/uploads/images
 tests
+src/apple-touch-icon.psd
+examples
+config/*.example
