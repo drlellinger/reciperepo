@@ -178,7 +178,13 @@ function renderBlocks(array $blocks): string
                 $html .= '</tbody></table></div>' . $times . '</div>';
                 break;
             case 'image':
-                $html .= '<div class="recipe-block"><figure class="recipe-media"><img src="' . escape($block['url']) . '" alt="' . escape($block['alt']) . '" loading="lazy">' . $caption . '</figure>' . $times . '</div>';
+                $ratioAttribute = '';
+                if (($block['ratio'] ?? null) === 'original' || ($block['ratio'] ?? null) === 'auto') {
+                    $ratioAttribute = ' class="recipe-media-original"';
+                } elseif (isset($block['ratio'])) {
+                    $ratioAttribute = ' style="aspect-ratio: ' . escape($block['ratio']) . ';"';
+                }
+                $html .= '<div class="recipe-block"><figure class="recipe-media"><img' . $ratioAttribute . ' src="' . escape($block['url']) . '" alt="' . escape($block['alt']) . '" loading="lazy">' . $caption . '</figure>' . $times . '</div>';
                 break;
             case 'video':
                 $html .= '<div class="recipe-block"><figure class="recipe-media"><video aria-label="' . escape($block['caption'] ?? 'Rezeptvideo') . '" controls preload="metadata" src="' . escape($block['url']) . '"></video>' . $caption . '</figure>' . $times . '</div>';

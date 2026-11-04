@@ -68,7 +68,10 @@ final class RecipePdfRenderer
                     $imageSource = self::imageSource($block['url'], $publicRoot, $remainingRemoteImages);
                     $html .= '<div class="recipe-block"><div class="recipe-block-content"><figure class="recipe-media">';
                     if ($imageSource !== null) {
-                        $html .= '<img src="' . Html::escape($imageSource) . '" alt="' . Html::escape($block['alt']) . '">';
+                        $ratioStyle = isset($block['ratio']) && $block['ratio'] !== 'original' && $block['ratio'] !== 'auto'
+                            ? ' style="aspect-ratio: ' . Html::escape($block['ratio']) . ';"'
+                            : '';
+                        $html .= '<img' . $ratioStyle . ' src="' . Html::escape($imageSource) . '" alt="' . Html::escape($block['alt']) . '">';
                     } else {
                         $html .= '<p class="media-note">' . Html::escape($block['alt']) . '</p>';
                     }

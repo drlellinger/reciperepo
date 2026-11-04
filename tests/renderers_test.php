@@ -38,6 +38,11 @@ function runRendererTests(): void
     check(str_contains($pdfBlocks, '<h2>Zubereitung</h2>') && str_contains($pdfBlocks, 'Mit Zitrone abschmecken.') && str_contains($pdfBlocks, 'duration-icon') && str_contains($pdfBlocks, '5 Min.') && str_contains($pdfBlocks, 'recipe-waiting') && str_contains($pdfBlocks, 'Wartezeit: 10 Min.'), 'PDF-Rezeptblöcke rendern Dauer und Wartezeit getrennt.');
     check(!str_contains($pdfBlocks, '<button') && !str_contains($pdfBlocks, '<video') && !str_contains($pdfBlocks, '<audio'), 'PDF-Rezeptblöcke enthalten keine Buttons oder Medien-Steuerelemente.');
 
+    $ratioPdfBlocks = Recipe\RecipePdfRenderer::renderBlocks([
+        ['type' => 'image', 'url' => '/assets/logo.svg', 'alt' => 'Bild', 'ratio' => '4 / 3'],
+    ], dirname(__DIR__) . '/public', $remainingRemoteImages);
+    check(str_contains($ratioPdfBlocks, 'aspect-ratio: 4 / 3;'), 'PDF-Bilder übernehmen ein validiertes Seitenverhältnis.');
+
     $privateImageBlocks = Recipe\RecipePdfRenderer::renderBlocks([
         ['type' => 'image', 'url' => 'http://127.0.0.1/internal.png', 'alt' => 'Privates Bild'],
     ], dirname(__DIR__) . '/public', $remainingRemoteImages);

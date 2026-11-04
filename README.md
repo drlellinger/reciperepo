@@ -65,6 +65,7 @@ blocks:
   - type: image
     url: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Lemon.jpg"
     alt: "Eine Zitrone"
+    ratio: original
     Caption: "Mmmmh lecker"
   - type: link
     url: "https://de.wikipedia.org/wiki/Lemon_Tree_(Fools-Garden-Lied)"

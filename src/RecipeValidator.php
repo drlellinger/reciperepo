@@ -147,9 +147,10 @@ final class RecipeValidator
                 self::validateTable($block, $number);
                 break;
             case 'image':
-                self::validateKeys($block, ['type', 'url', 'alt', 'caption', 'duration', 'waiting'], "Inhaltsblock {$number}");
+                self::validateKeys($block, ['type', 'url', 'alt', 'caption', 'ratio', 'duration', 'waiting'], "Inhaltsblock {$number}");
                 self::validateMedia($block, $number);
                 self::requireString($block, 'alt', $number);
+                self::validateImageRatio($block['ratio'] ?? null, $number);
                 break;
             case 'video':
             case 'audio':
@@ -217,10 +218,24 @@ final class RecipeValidator
         if (!is_array($image)) {
             throw new InvalidArgumentException('image muss url und alt enthalten.');
         }
-        self::validateKeys($image, ['url', 'alt'], 'Rezeptbild');
+        self::validateKeys($image, ['url', 'alt', 'ratio'], 'Rezeptbild');
         self::validateUrl($image['url'] ?? null, 0, true);
         if (!isset($image['alt']) || !is_string($image['alt']) || trim($image['alt']) === '') {
             throw new InvalidArgumentException('Das Rezeptbild benötigt einen nicht leeren Alt-Text.');
+        }
+        self::validateImageRatio($image['ratio'] ?? null, 0);
+    }
+
+    private static function validateImageRatio(mixed $ratio, int $number): void
+    {
+        if ($ratio === null) {
+            return;
+        }
+
+        if (!is_string($ratio) || ($ratio !== 'original' && $ratio !== 'auto' && !preg_match('/\A(?:\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?)\z/', $ratio))) {
+            throw new InvalidArgumentException($number > 0
+                ? "Das Seitenverhältnis in Inhaltsblock {$number} muss original, auto oder ein Zahlenverhältnis wie 4 / 3 sein."
+                : 'Das Seitenverhältnis im Rezeptbild muss original, auto oder ein Zahlenverhältnis wie 4 / 3 sein.');
         }
     }
 

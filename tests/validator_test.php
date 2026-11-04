@@ -78,13 +78,17 @@ blocks:
     - type: table
       headers: [Zutat]
       rows: [[Reis]]
-    - { type: image, url: https://example.org/image.jpg, alt: Bild }
+    - { type: image, url: https://example.org/image.jpg, alt: Bild, ratio: original }
     - { type: video, url: https://example.org/video.mp4 }
     - { type: audio, url: https://example.org/audio.mp3 }
     - { type: youtube, url: https://youtu.be/dQw4w9WgXcQ }
     - { type: link, url: https://example.org, label: Quelle }
 YAML;
-    check(count(Recipe\RecipeValidator::parse($allBlockTypes)['blocks']) === 8, 'Alle unterstützten Rezeptblocktypen werden akzeptiert.');
+    $allBlockTypesRecipe = Recipe\RecipeValidator::parse($allBlockTypes);
+    check(count($allBlockTypesRecipe['blocks']) === 8 && $allBlockTypesRecipe['blocks'][3]['ratio'] === 'original', 'Alle unterstützten Rezeptblocktypen und originale Bildverhältnisse werden akzeptiert.');
+    $ratioRecipe = Recipe\RecipeValidator::parse(str_replace('ratio: original', 'ratio: 4 / 3', $allBlockTypes));
+    check($ratioRecipe['blocks'][3]['ratio'] === '4 / 3', 'Numerische Bildverhältnisse werden akzeptiert.');
+    rejects(static fn () => Recipe\RecipeValidator::parse(str_replace('ratio: original', 'ratio: expression(alert(1))', $allBlockTypes)), 'Unsichere Bildverhältnisse werden abgelehnt.');
     rejects(static fn () => Recipe\RecipeValidator::parse(str_replace('text: Beschreibung', "text: Beschreibung\n      extra: true", $allBlockTypes)), 'Unbekannte Blockfelder werden abgelehnt.');
     rejects(static fn () => Recipe\RecipeValidator::parse(str_replace('headers: [Zutat]', 'headers: []', $allBlockTypes)), 'Tabellen ohne Spaltenüberschrift werden abgelehnt.');
     rejects(static fn () => Recipe\RecipeValidator::parse(str_replace('rows: [[Reis]]', 'rows: [[Reis, 1]]', $allBlockTypes)), 'Tabellenzeilen mit falscher Spaltenzahl werden abgelehnt.');
