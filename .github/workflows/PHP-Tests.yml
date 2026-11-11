@@ -39,5 +39,10 @@ jobs:
           find . -path './vendor' -prune -o -name '*.php' -print0 \
             | xargs -0 -n1 php -l
 
+      - name: Mess Detector (PHPMD)
+        run: |
+           composer require --dev phpmd/phpmd --no-interaction
+           vendor/bin/phpmd src/ text cleancode,codesize,controversial,design,naming,unusedcode
+      
       - name: Run tests
         run: composer test
