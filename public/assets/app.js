@@ -27,6 +27,20 @@ document.querySelectorAll('form[data-confirm]').forEach((form) => {
     });
 });
 
+document.querySelectorAll('[data-skeleton]').forEach((asset) => {
+    const ready = asset instanceof HTMLImageElement
+        ? asset.complete
+        : asset instanceof HTMLMediaElement && (asset.readyState >= 2 || Boolean(asset.error));
+    if (ready) return;
+
+    const finish = () => asset.classList.remove('asset-skeleton');
+    const events = asset instanceof HTMLIFrameElement
+        ? ['load']
+        : asset instanceof HTMLMediaElement ? ['loadeddata', 'error'] : ['load', 'error'];
+    events.forEach((event) => asset.addEventListener(event, finish, { once: true }));
+    asset.classList.add('asset-skeleton');
+});
+
 document.querySelectorAll('button[data-copy]').forEach((button) => {
     button.addEventListener('click', async () => {
         try {

@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
 
+if (!function_exists('absolutePublicUrl')) {
+    function absolutePublicUrl(string $url, string $origin): string
+    {
+        return $origin . $url;
+    }
+}
+
 function runAdminTests(): void
 {
     $llmAuthoringPath = dirname(__DIR__) . '/docs/llm-yaml-authoring.md';
@@ -17,7 +24,8 @@ function runAdminTests(): void
     $pageCount = 1;
     $visibleStart = 0;
     $visibleEnd = 0;
-    $images = [];
+    $images = [['url' => '/uploads/images/test.jpg']];
+    $siteOrigin = 'https://example.org';
     $appConfig = ['version' => require dirname(__DIR__) . '/config/version.php'];
 
     ob_start();
@@ -33,4 +41,5 @@ function runAdminTests(): void
     check(htmlspecialchars_decode($match[1], ENT_QUOTES) === $llmAuthoring, 'Kopierbutton enthält den vollständigen Inhalt der LLM-Anleitung.');
     check($match[2] === 'Anweisungen für YAML-Konvertierung für KI-Sprachmodelle kopiert.', 'Kopierbutton enthält die passende Erfolgsmeldung.');
     check(str_contains($html, '<span class="admin-version">Version 1.0.0</span>'), 'Admin-Ansicht zeigt die Version aus der separaten Konfigurationsdatei.');
+    check(str_contains($html, '<img src="/uploads/images/test.jpg" alt="" loading="lazy" data-skeleton>'), 'Admin-Bildvorschauen erhalten den Skeleton-Ladezustand.');
 }

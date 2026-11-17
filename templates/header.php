@@ -42,7 +42,7 @@
 <header class="site-header">
     <a class="wordmark" href="/" aria-label="<?= escape($appConfig['site_name']) ?>, Übersicht">
         <?php if (is_string($appConfig['logo_image']) && $appConfig['logo_image'] !== ''): ?>
-            <img class="wordmark-logo" src="<?= escape($appConfig['logo_image']) ?>" alt="<?= escape($appConfig['logo_alt']) ?>">
+            <img class="wordmark-logo" src="<?= escape($appConfig['logo_image']) ?>" alt="<?= escape($appConfig['logo_alt']) ?>" data-skeleton>
         <?php else: ?>
             <span class="wordmark-mark" aria-hidden="true"><?= escape($appConfig['logo_text']) ?></span>
         <?php endif; ?>

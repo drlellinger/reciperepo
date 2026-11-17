@@ -81,7 +81,7 @@
                     <article class="recipe-row">
                         <a class="recipe-row-link" href="/recipe/<?= escape($item['slug']) ?>">
                             <?php if ($image !== null): ?>
-                                <img class="recipe-thumb" src="<?= escape($image['url']) ?>" alt="" loading="lazy">
+                                <img class="recipe-thumb" src="<?= escape($image['url']) ?>" alt="" loading="lazy" data-skeleton>
                             <?php else: ?>
                                 <span class="recipe-thumb recipe-thumb-empty" aria-hidden="true">R</span>
                             <?php endif; ?>
