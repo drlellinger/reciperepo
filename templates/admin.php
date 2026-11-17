@@ -99,7 +99,7 @@
             <?php foreach ($images as $image): ?>
                 <?php $imageUrl = absolutePublicUrl($image['url'], $siteOrigin); ?>
                 <li class="image-list-item">
-                    <img src="<?= Recipe\Html::escape($image['url']) ?>" alt="" loading="lazy">
+                    <img src="<?= Recipe\Html::escape($image['url']) ?>" alt="" loading="lazy" data-skeleton>
                     <input type="text" value="<?= Recipe\Html::escape($imageUrl) ?>" readonly aria-label="Bild-URL">
                     <button class="button button-copy" type="button" data-copy="<?= Recipe\Html::escape($imageUrl) ?>">Kopieren</button>
                 </li>
